@@ -1,0 +1,183 @@
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Digital_Services_BD.Models
+{
+    public class AppDbContext : IdentityDbContext
+    {
+        public DbSet<Address> Addresses;
+        public DbSet<Customer> Customers;
+        public DbSet<Language> Languages;
+        public DbSet<ProductGroup> ProductGroups;
+        public DbSet<ProductCategory> ProductCategories;
+        public DbSet<ProductItem> ProductItems;
+        public DbSet<ProductItemPrice> ProductItemPrices;
+        public DbSet<PromoOffer> PromoOffers;
+        public DbSet<SearchTagProductItem> SearchTagProductItems;
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.HasDefaultSchema("StoreDb");
+            //Address table property design
+            builder.Entity<Address>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.AddressLineOne).IsUnicode().HasMaxLength(128);
+                entity.Property(e => e.AddressLineTwo).IsUnicode().HasMaxLength(128);
+                entity.Property(e => e.Mobile).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.AltMobile).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.Zip).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.City).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.State).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.Country).IsUnicode().HasMaxLength(16);
+            });
+            //Customer table property design
+            builder.Entity<Customer>(entity => {
+                entity.Property(e => e.FirstName).IsUnicode().IsRequired().HasMaxLength(16);
+                entity.Property(e => e.LastName).IsUnicode().IsRequired().HasMaxLength(16);
+                entity.Property(e => e.Gender).IsUnicode().HasMaxLength(8);
+                entity.Property(e => e.ProfilePicLink).HasMaxLength(64);
+                entity.Property(e => e.BirthDate).IsUnicode();
+                entity.Property(e => e.IdCardNo).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.IdCardVerifyPic).HasMaxLength(64);
+                entity.Property(e => e.IdCardType).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.IsVerified).HasDefaultValue<bool>(false);
+
+                entity.HasOne(c => c.HomeAddress)
+                      .WithOne(a => a.HomeCustomer)
+                      .HasForeignKey<Customer>(c => c.HomeAddrId)
+                      .HasConstraintName("FK_Customer_HomeAddrId")
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(c => c.BillingAddress)
+                      .WithOne(a => a.BillingCustomer)
+                      .HasForeignKey<Customer>(c => c.BillingAddrId)
+                      .HasConstraintName("FK_Customer_BillingAddrId")
+                      .OnDelete(DeleteBehavior.NoAction);
+            });
+            //ProductItem table property design
+            builder.Entity<ProductItem>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.ProductCategoryId).IsRequired();
+                entity.Property(e => e.StockCount).IsRequired();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
+                entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
+                entity.Property(e => e.HowToConsume).HasMaxLength(256);
+                entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
+                entity.Property(e => e.Limitations).HasMaxLength(256);
+                entity.Property(e => e.Manufacturer).HasMaxLength(64);
+                entity.Property(e => e.ImageUrl).HasMaxLength(64);
+                entity.Property(e => e.ProductItemPriceId).IsRequired();
+                entity.Property(e => e.IsActive).IsRequired();
+                entity.Property(e => e.IsShippable).IsRequired();
+            });
+
+            //ProductItemPrice table property design
+            builder.Entity<ProductItemPrice>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.PriceCurrency).IsRequired().HasMaxLength(16);
+                entity.Property(e => e.CurrencyCountry).IsRequired().HasMaxLength(32);
+                entity.Property(e => e.Discount).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.Vat).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.ProductItemId).IsRequired();
+            });
+            //ProductCategory table property design
+            builder.Entity<ProductCategory>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.GroupId).IsRequired();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
+                entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
+                entity.Property(e => e.HowToConsume).HasMaxLength(256);
+                entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
+                entity.Property(e => e.Limitations).HasMaxLength(256);
+                entity.Property(e => e.ImageUrl).HasMaxLength(64);
+            });
+
+            //ProductItemJoinProductCategory table key, foreign key design
+            builder.Entity<ProductItemJoinProductCategory>(entity => {
+                entity.HasKey(e => new { e.ProductItemId, e.ProductCategoryId });
+                entity.HasOne(e => e.ProductItem)
+                      .WithMany(e => e.ProductItemJoinProductCategory)
+                      .HasForeignKey(e => e.ProductItemId)
+                      .HasConstraintName("FK_ProductItemJoinProductCategory_ProductItemId");
+                entity.HasOne(e => e.ProductCategory)
+                      .WithMany(e => e.ProductItemJoinProductCategory)
+                      .HasForeignKey(e => e.ProductCategoryId)
+                      .HasConstraintName("FK_ProductItemJoinProductCategory_ProductCategoryId");
+            });
+
+            //ProductGroup table property design
+            builder.Entity<ProductGroup>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
+                entity.Property(e => e.ImageUrl).HasMaxLength(64);
+                entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
+                entity.Property(e => e.HowToConsume).HasMaxLength(256);
+                entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
+                entity.Property(e => e.Limitations).HasMaxLength(256);
+            });
+
+            //ProductCategoryJoinProductGroup table key, foreign key design
+            builder.Entity<ProductCategoryJoinProductGroup>(entity => {
+                entity.HasKey(e => new { e.ProductCategoryId, e.ProductGroupId });
+                entity.HasOne(e => e.ProductGroup)
+                      .WithMany(e => e.ProductCategoryJoinProductGroup)
+                      .HasForeignKey(e => e.ProductGroupId)
+                      .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductGroupId");
+                entity.HasOne(e => e.ProductCategory)
+                      .WithMany(e => e.ProductCategoryJoinProductGroup)
+                      .HasForeignKey(e => e.ProductCategoryId)
+                      .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductCategoryId");
+            });
+
+            //SearchTagProductItem table property design
+            builder.Entity<SearchTagProductItem>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.TagName).IsRequired().HasMaxLength(128);
+            });
+
+            //ProductItemJoinSearchTagProductItem table key, foreign key design
+            builder.Entity<ProductItemJoinSearchTagProductItem>(entity => {
+                entity.HasKey(e => new { e.ProductItemId, e.SearchTagProductItemId });
+                entity.HasOne(e => e.ProductItem)
+                      .WithMany(e => e.ProductItemJoinSearchTagProductItem)
+                      .HasForeignKey(e => e.ProductItemId)
+                      .HasConstraintName("FK_ProductItemJoinSearchTagProductItem_ProductItemId");
+                entity.HasOne(e => e.SearchTagProductItem)
+                      .WithMany(e => e.ProductItemJoinSearchTagProductItem)
+                      .HasForeignKey(e => e.SearchTagProductItemId)
+                      .HasConstraintName("FK_ProductItemJoinSearchTagProductItem_SearchTagProductItemId");
+            });
+            //PromoOffer table property design
+            builder.Entity<PromoOffer>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.ProductItemId).IsRequired();
+                entity.Property(e => e.PromoCode).IsRequired().HasMaxLength(16);
+                entity.Property(e => e.OfferCurrency).IsRequired().HasMaxLength(16);
+                entity.Property(e => e.CurrencyCountry).IsRequired().HasMaxLength(16);
+                entity.Property(e => e.OfferBeginsAt).IsRequired();
+                entity.Property(e => e.OfferEndsAt).IsRequired();
+                entity.Property(e => e.Discount).IsRequired().HasColumnType("decimal(19, 4)");
+            });
+
+            builder.Entity<ProductItemJoinPromoOffer>(entity => {
+                entity.HasKey(e => new { e.ProductItemId, e.PromoOfferId });
+                entity.HasOne(e => e.ProductItem)
+                      .WithMany(e => e.ProductItemJoinPromoOffer)
+                      .HasForeignKey(e => e.ProductItemId)
+                      .HasConstraintName("FK_ProductItemJoinPromoOffer_ProductItemId");
+                entity.HasOne(e => e.PromoOffer)
+                      .WithMany(e => e.ProductItemJoinPromoOffer)
+                      .HasForeignKey(e => e.PromoOfferId)
+                      .HasConstraintName("FK_ProductItemJoinPromoOffer_PromoOfferId");
+            });
+        }
+    }
+}

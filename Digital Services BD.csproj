@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Digital_Services_BD</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200526034100_CustomerAdd.cs" />
+    <Compile Remove="Migrations\20200526034100_CustomerAdd.Designer.cs" />
+    <Compile Remove="Migrations\20200526035459_Initial.cs" />
+    <Compile Remove="Migrations\20200526035459_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200526043827_Initial.cs" />
+    <Compile Remove="Migrations\20200526043827_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200526044957_Initial.cs" />
+    <Compile Remove="Migrations\20200526044957_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200526050101_initial2.cs" />
+    <Compile Remove="Migrations\20200526050101_initial2.Designer.cs" />
+    <Compile Remove="Migrations\20200529110756_product.cs" />
+    <Compile Remove="Migrations\20200529110756_product.Designer.cs" />
+    <Compile Remove="Migrations\20200529123603_product.cs" />
+    <Compile Remove="Migrations\20200529123603_product.Designer.cs" />
+    <Compile Remove="Migrations\20200529123909_product.cs" />
+    <Compile Remove="Migrations\20200529123909_product.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="Security\" />
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
+</Project>

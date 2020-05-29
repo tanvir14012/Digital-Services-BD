@@ -1,0 +1,70 @@
+﻿
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+@media (max-width: 576px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+.mt-56px {
+   margin-top:56px !important;
+}
+
+.pt-112px {
+    padding-top: 112px !important;
+}
+
+.navbar-space {
+    margin-top: 40px !important;
+}
+
+@media screen and (max-width: 576px) {
+    .navbar-space {
+        margin-top: 70px !important;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .navbar-space {
+        margin-top: 112px !important;
+    }
+}
+
+@media screen and (max-width: 192px) {
+    .navbar-space {
+        margin-top: 142px !important;
+    }
+}
+
+.z-1 {
+    z-index: 1 !important;
+    background: white;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: white !important;
+    background-color: black !important;
+}
+
+.nav-pills li a.nav-link:hover {
+    color: white !important;
+    background-color: #696969 !important;
+}
+
+.nav-pills li a.nav-link {
+    color: black !important;
+}
+
+.nav-pills .nav-link.active, .dropdown-item.active, .dropdown-item:active {
+    color: white !important;
+    background-color: #696969 !important;
+}
