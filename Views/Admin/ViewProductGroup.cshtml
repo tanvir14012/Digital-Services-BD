@@ -1,0 +1,65 @@
+﻿@model ProductGroup
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <span class="mr-2">@Model.Id</span>
+                <span>@Model.Name</span>
+            </div>
+            <div class="card-body">
+                <img class="card-img-top img-thumbnail" alt="No Image" src="\@Model.ImageUrl" />
+            </div>
+            <div class="card-body">
+                <span class="float-left">Created on: @Model.CreatedOn</span>
+                <span class="float-right">Last Modified on: @Model.LastModifiedOn</span>
+            </div>
+            <div class="card-body">
+                <h4>Overview</h4><hr />
+                <p>@Model.Overview</p>
+
+                <h4>What Can Be Done</h4><hr />
+                <p>@Model.WhatCanBeDone</p>
+
+                <h4>How To Consume</h4><hr />
+                <p>@Model.HowToConsume</p>
+
+                <h4>Limitations</h4><hr />
+                <p>@Model.Limitations</p>
+            </div>
+            <div class="card-footer">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item p-0 mr-2">
+                        <a asp-action="EditProductGroup" asp-controller="Admin" asp-route-id="@Model.Id"
+                           class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item p-0 mr-2">
+                        <a asp-action="DeleteProductGroup" asp-controller="Admin" asp-route-id="@Model.Id"
+                           class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item p-0 mr-2">
+                        <a asp-action="ProductGroup" asp-controller="Admin"
+                           class="btn btn-secondary text-white" data-toggle="tooltip" data-placement="auto" title="Back to product group">
+                            <i class="fas fa-backward"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

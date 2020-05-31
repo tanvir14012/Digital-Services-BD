@@ -51,11 +51,15 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\ru
 D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Controllers.Home.bn.resources
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.bn.resources
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.en.resources
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Views.Home.Index.bn.resources
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Views.Home.Index.en.resources
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.GenerateResource.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.AssemblyInfoInputs.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.AssemblyInfo.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.CoreCompileInputs.cache
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.MvcApplicationPartsAssemblyInfo.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorAssemblyInfo.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorAssemblyInfo.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\bn\Digital Services BD.resources.dll
@@ -63,8 +67,11 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\en
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.input.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.output.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorCoreGenerate.cache
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductGroup.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductGroup.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\AdminLayout.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
@@ -80,7 +87,8 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Di
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.pdb
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.genruntimeconfig.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csprojAssemblyReference.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.CoreCompileInputs.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.MvcApplicationPartsAssemblyInfo.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.bn.resources
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.en.resources
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductGroup.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Confirmation.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\SuccessFailure.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NotFound.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductGroup.cshtml.g.cs

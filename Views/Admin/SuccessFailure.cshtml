@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+
+<div class="row p-2 mt-4">
+    <div class="col-12 alert @ViewBag.HeadingClass">
+        <h4 class="alert-heading">@ViewBag.Heading</h4>
+        <p class="">@ViewBag.Message</p>
+    </div>
+
+    <div class="col-12">
+        <ul class="list-group list-group-horizontal-md list-unstyled">
+            <li class="list-group-item p-0 border-0">
+                <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
+            </li>
+            <li class="list-group-item p-0 border-0">
+                <a class="nav-link" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller">@ViewBag.BackText</a>
+            </li>
+        </ul>
+    </div>
+</div>

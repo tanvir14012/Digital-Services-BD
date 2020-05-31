@@ -71,7 +71,43 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FawIconClass")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FontFamily")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductCategory", b =>
@@ -97,8 +133,8 @@ namespace Digital_Services_BD.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
@@ -123,7 +159,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductCategoryJoinProductGroup", b =>
@@ -151,25 +187,31 @@ namespace Digital_Services_BD.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("HowToConsume")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Limitations")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Overview")
                         .IsRequired()
@@ -182,7 +224,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductGroup");
+                    b.ToTable("ProductGroups");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItem", b =>
@@ -202,8 +244,8 @@ namespace Digital_Services_BD.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("IsActive")
                         .IsRequired()
@@ -255,7 +297,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductItem");
+                    b.ToTable("ProductItems");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemJoinProductCategory", b =>
@@ -344,7 +386,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("ProductItemPrice");
+                    b.ToTable("ProductItemPrices");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.PromoOffer", b =>
@@ -388,7 +430,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PromoOffer");
+                    b.ToTable("PromoOffers");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.SearchTagProductItem", b =>
@@ -413,7 +455,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SearchTagProductItem");
+                    b.ToTable("SearchTagProductItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

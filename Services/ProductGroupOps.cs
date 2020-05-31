@@ -1,8 +1,12 @@
 ﻿using Digital_Services_BD.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace Digital_Services_BD.Services
@@ -10,18 +14,44 @@ namespace Digital_Services_BD.Services
     public class ProductGroupOps : IProductGroupOps
     {
         private readonly AppDbContext context;
-
-        public ProductGroupOps(AppDbContext context)
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public ProductGroupOps(AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             this.context = context;
+            this.webHostEnvironment = webHostEnvironment;
         }
+        /// <summary>
+        /// Adds a productgroup to database, saves the image to wwwroot/imageresource/productgroup folder,
+        /// stores the relative link to database column imageUrl
+        /// </summary>
+        /// <param name="productGroup">the ProductGroup model</param>
+        /// <returns>returns added item if successful, otherwise returns null</returns>
         public ProductGroup AddProductGroup(ProductGroup productGroup)
         {
+            if(productGroup.Image != null)
+            {
+                productGroup.ImageUrl = SaveProductImage(productGroup.Image);
+            }
             context.ProductGroups.Add(productGroup);
-            context.SaveChanges();
-            return productGroup;
+            try
+            {
+                var isSaved = context.SaveChanges() > 0;
+                return isSaved ? productGroup : null;
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
         }
-
+        /// <summary>
+        /// Delete productgroup from database
+        /// </summary>
+        /// <param name="id">
+        /// Id of ProductGroup in database
+        /// </param>
+        /// <returns>
+        /// returns deleted item if successful, otherwise returns null
+        /// </returns>
         public ProductGroup DeleteProductGroup(int id)
         {
             var productGroup = context.ProductGroups.Find(id);
@@ -29,15 +59,34 @@ namespace Digital_Services_BD.Services
             {
                 context.ProductGroups.Remove(productGroup);
             }
-            context.SaveChanges();
-            return productGroup;
+            try
+            {
+                if (context.SaveChanges() > 0)
+                {
+                    DeleteFile(productGroup.ImageUrl);
+                    return productGroup;
+                };
+                return null;
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
+            
         }
-
+        /// <summary>
+        /// Get all productgroup
+        /// </summary>
+        /// <returns>returns a list of productgroup</returns>
         public IEnumerable<ProductGroup> GetAllProductGroups()
         {
             return context.ProductGroups.AsNoTracking().ToList();
         }
-
+        /// <summary>
+        /// Get productgroup by id
+        /// </summary>
+        /// <param name="id">Id of productgroup</param>
+        /// <returns>returns null if not found</returns>
         public ProductGroup GetProductGroup(int id)
         {
             return context.ProductGroups.Find(id); ;
@@ -45,9 +94,65 @@ namespace Digital_Services_BD.Services
 
         public ProductGroup UpdateProductGroup(ProductGroup productGroup)
         {
+            if (productGroup.Image != null)
+            {
+                //Delete existing image
+                if(productGroup.ImageUrl != null)
+                {
+                    var directoryPath = Path.Combine(webHostEnvironment.WebRootPath, "ImageResources", "ProductGroup");
+                    DeleteFile(Path.Combine(directoryPath, productGroup.ImageUrl));
+                }
+                productGroup.ImageUrl = SaveProductImage(productGroup.Image);
+            }
+            productGroup.LastModifiedOn = DateTime.UtcNow;
             context.ProductGroups.Update(productGroup);
-            context.SaveChanges();
-            return productGroup;
+            try
+            {
+                var isUpdated = context.SaveChanges() > 0;
+                return isUpdated ? productGroup : null;
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
+        }
+
+        private bool DeleteFile(string relativePath)
+        {
+            try
+            {
+                var fileDirectory = Path.Combine(webHostEnvironment.WebRootPath, "ImageResources", "ProductGroup");
+                if (Directory.Exists(fileDirectory))
+                {
+                    var filePath = Path.Combine(webHostEnvironment.WebRootPath, relativePath);
+                    File.Delete(filePath);
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+        private string SaveProductImage(IFormFile imageFile)
+        {
+            var uniqueName = "ProductGroup_" + Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            var fileDirectory = Path.Combine(webHostEnvironment.WebRootPath, "ImageResources", "ProductGroup");
+            if (!Directory.Exists(fileDirectory))
+            {
+                Directory.CreateDirectory(fileDirectory);
+            }
+            var filePath = Path.Combine(fileDirectory, uniqueName);
+            try
+            {
+                //Save only path relative to wwwroot
+                imageFile.CopyTo(new FileStream(filePath, FileMode.Create));
+                return Path.Combine("ImageResources", "ProductGroup", uniqueName);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
     }
 }

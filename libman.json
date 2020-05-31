@@ -24,10 +24,7 @@
     },
     {
       "library": "popper.js@2.4.0",
-      "destination": "wwwroot/lib/popper.js/",
-      "files": [
-        "umd/popper.min.js"
-      ]
+      "destination": "wwwroot/lib/popper.js/"
     }
   ]
 }

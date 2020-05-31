@@ -1,6 +1,4 @@
-﻿
-/* Sticky footer styles
--------------------------------------------------- */
+﻿/* Website typography */
 html {
   font-size: 14px;
 }
@@ -14,6 +12,7 @@ html {
         font-size: 12px;
     }
 }
+/* Website typography */
 
 .mt-56px {
    margin-top:56px !important;
@@ -27,6 +26,7 @@ html {
     margin-top: 40px !important;
 }
 
+/* Nav dropdown media query */
 @media screen and (max-width: 576px) {
     .navbar-space {
         margin-top: 70px !important;
@@ -44,12 +44,14 @@ html {
         margin-top: 142px !important;
     }
 }
+/* Nav dropdown media query */
 
 .z-1 {
     z-index: 1 !important;
     background: white;
 }
 
+/* Nav link color customization */
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: white !important;
     background-color: black !important;
@@ -68,3 +70,12 @@ html {
     color: white !important;
     background-color: #696969 !important;
 }
+/* Nav link color customization */
+
+/* Form validation summary ul li customization */
+.validation-summary-errors {
+    color: #e80c4d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+/* Form validation summary ul li customization */

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,15 @@ namespace Digital_Services_BD.Models
 {
     public class AppDbContext : IdentityDbContext
     {
-        public DbSet<Address> Addresses;
-        public DbSet<Customer> Customers;
-        public DbSet<Language> Languages;
-        public DbSet<ProductGroup> ProductGroups;
-        public DbSet<ProductCategory> ProductCategories;
-        public DbSet<ProductItem> ProductItems;
-        public DbSet<ProductItemPrice> ProductItemPrices;
-        public DbSet<PromoOffer> PromoOffers;
-        public DbSet<SearchTagProductItem> SearchTagProductItems;
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<ProductGroup> ProductGroups { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductItem> ProductItems { get; set; }
+        public DbSet<ProductItemPrice> ProductItemPrices { get; set; }
+        public DbSet<PromoOffer> PromoOffers { get; set; }
+        public DbSet<SearchTagProductItem> SearchTagProductItems { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -72,10 +73,12 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
                 entity.Property(e => e.Limitations).HasMaxLength(256);
                 entity.Property(e => e.Manufacturer).HasMaxLength(64);
-                entity.Property(e => e.ImageUrl).HasMaxLength(64);
+                entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Property(e => e.ProductItemPriceId).IsRequired();
                 entity.Property(e => e.IsActive).IsRequired();
                 entity.Property(e => e.IsShippable).IsRequired();
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
+                entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
             });
 
             //ProductItemPrice table property design
@@ -87,6 +90,8 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.Discount).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.Vat).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.ProductItemId).IsRequired();
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
+                entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
             });
             //ProductCategory table property design
             builder.Entity<ProductCategory>(entity => {
@@ -97,7 +102,9 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.HowToConsume).HasMaxLength(256);
                 entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
                 entity.Property(e => e.Limitations).HasMaxLength(256);
-                entity.Property(e => e.ImageUrl).HasMaxLength(64);
+                entity.Property(e => e.ImageUrl).HasMaxLength(256);
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
+                entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
             });
 
             //ProductItemJoinProductCategory table key, foreign key design
@@ -117,11 +124,14 @@ namespace Digital_Services_BD.Models
             builder.Entity<ProductGroup>(entity => {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
-                entity.Property(e => e.ImageUrl).HasMaxLength(64);
+                entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
                 entity.Property(e => e.HowToConsume).HasMaxLength(256);
                 entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
                 entity.Property(e => e.Limitations).HasMaxLength(256);
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
+                entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
+                entity.Ignore(e => e.Image);
             });
 
             //ProductCategoryJoinProductGroup table key, foreign key design
@@ -165,6 +175,7 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.OfferBeginsAt).IsRequired();
                 entity.Property(e => e.OfferEndsAt).IsRequired();
                 entity.Property(e => e.Discount).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
             });
 
             builder.Entity<ProductItemJoinPromoOffer>(entity => {

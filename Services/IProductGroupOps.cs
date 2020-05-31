@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Digital_Services_BD.Services
 {
-    interface IProductGroupOps
+    public interface IProductGroupOps
     {
         IEnumerable<ProductGroup> GetAllProductGroups();
         ProductGroup GetProductGroup(int id);

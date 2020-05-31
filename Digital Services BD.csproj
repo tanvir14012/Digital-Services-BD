@@ -22,6 +22,20 @@
     <Compile Remove="Migrations\20200529123603_product.Designer.cs" />
     <Compile Remove="Migrations\20200529123909_product.cs" />
     <Compile Remove="Migrations\20200529123909_product.Designer.cs" />
+    <Compile Remove="Migrations\20200529131109_product.cs" />
+    <Compile Remove="Migrations\20200529131109_product.Designer.cs" />
+    <Compile Remove="Migrations\20200530175036_product2.cs" />
+    <Compile Remove="Migrations\20200530175036_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200530175421_product2.cs" />
+    <Compile Remove="Migrations\20200530175421_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200530180838_product2.cs" />
+    <Compile Remove="Migrations\20200530180838_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200531135834_product2.cs" />
+    <Compile Remove="Migrations\20200531135834_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200531140635_product2.cs" />
+    <Compile Remove="Migrations\20200531140635_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200531155549_product.cs" />
+    <Compile Remove="Migrations\20200531155549_product.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +51,7 @@
   <ItemGroup>
     <Folder Include="ViewModels\" />
     <Folder Include="Security\" />
+    <Folder Include="wwwroot\ImageResources\ProductGroup\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

@@ -1,0 +1,77 @@
+﻿@model ProductGroup
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <form enctype="multipart/form-data" method="post" asp-controller="Admin"
+              asp-action="EditProductGroup" class="border mt-4 p-4">
+            <h4 class="mb-3">Edit a Product Group</h4>
+            <div class="alert-danger rounded" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">@Html.DisplayNameFor(m => m.Name)</label>
+                <input class="form-control" type="text" asp-for="Name" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label>Image Preview</label><br />
+                <img class="img-thumbnail" src="\@Model.ImageUrl" id="thumbnail" alt="No image" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Image">@Html.DisplayNameFor(m => m.Image)</label>
+                <div class="custom-file">
+                    <input id="imageFile" class="form-control custom-file-input" type="file" asp-for="Image" />
+                    <label id="fileName" class="custom-file-label" for="imageFile">Choose photo..</label>
+                </div>
+                <span class="text-danger" asp-validation-for="Image"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Overview">@Html.DisplayNameFor(m => m.Overview)</label>
+                <textarea class="form-control" asp-for="Overview"></textarea>
+                <span class="text-danger" asp-validation-for="Overview"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WhatCanBeDone">@Html.DisplayNameFor(m => m.WhatCanBeDone)</label>
+                <textarea class="form-control" asp-for="WhatCanBeDone"></textarea>
+                <span class="text-danger" asp-validation-for="WhatCanBeDone"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HowToConsume">@Html.DisplayNameFor(m => m.HowToConsume)</label>
+                <textarea class="form-control" asp-for="HowToConsume"></textarea>
+                <span class="text-danger" asp-validation-for="HowToConsume"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Limitations">@Html.DisplayNameFor(m => m.Limitations)</label>
+                <textarea class="form-control" asp-for="Limitations"></textarea>
+                <span class="text-danger" asp-validation-for="Limitations"></span>
+            </div>
+            <!-- Bind 'Id' in hidden field-->
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <!-- -->
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function readImage(input) {
+            if (input.files && input.files[0]) {
+                $('#fileName').html(input.files[0].name);
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#thumbnail').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $(document).ready(function () {
+            $("#imageFile").change(function () {
+                readImage(this);
+            });
+        });
+    </script>
+}

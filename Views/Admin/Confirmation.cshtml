@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+<div class="row p-2 mt-4">
+    <div class="col-12 alert @ViewBag.HeadingClass">
+        <h4 class="alert-heading">@ViewBag.Heading</h4>
+        <p class="">@ViewBag.Message</p>
+    </div>
+    <form class="col-12" method="post" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller" asp-route-id="@ViewBag.Id">
+        <button type="submit" class="btn btn-primary mr-2">Confirm</button>
+        <a class="btn btn-secondary" asp-action="@ViewBag.CancelAction" asp-controller="@ViewBag.CancelController"
+           asp-route-id="@ViewBag.CancelId">Cancel</a>
+    </form>
+</div>
