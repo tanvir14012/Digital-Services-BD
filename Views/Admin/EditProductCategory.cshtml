@@ -1,19 +1,13 @@
-﻿@model ProductGroup
-@using Digital_Services_BD.Services
-@inject IProductGroupOps productGroupOps
-@inject IProductCategoryOps productCategoryOps
-
+﻿@model ProductCategory
 @{
     Layout = "AdminLayout";
-    var thisGroupCategories = productGroupOps.GetAllProdCategoriesByProdGroupId(Model.Id);
-    var allCategories = productCategoryOps.GetAllProductCategories().ToList();
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-sm-12">
         <form enctype="multipart/form-data" method="post" asp-controller="Admin"
-              asp-action="EditProductGroup" class="border mt-4 p-4">
-            <h4 class="mb-3">Edit a Product Group</h4>
+              asp-action="EditProductCategory" class="border mt-4 p-4">
+            <h4 class="mb-3">Edit a Product Category</h4>
             <div class="alert-danger rounded" asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name">@Html.DisplayNameFor(m => m.Name)</label>
@@ -51,46 +45,6 @@
                 <label asp-for="Limitations">@Html.DisplayNameFor(m => m.Limitations)</label>
                 <textarea class="form-control" asp-for="Limitations"></textarea>
                 <span class="text-danger" asp-validation-for="Limitations"></span>
-            </div>
-
-            <div class="form-group table-responsive">
-                <h4>Categories</h4><hr />
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th style="width: 10%;">Inclusion</th>
-                            <th style="width: 10%;">Logo</th>
-                            <th style="width: 20%;">Name</th>
-                            <th style="width: 40%;">Overview</th>
-                            <th style="width: 20%;">Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var category in allCategories)
-                        {
-                            var isCatgIncluded = thisGroupCategories.Where(c => c.Id == category.Id).Count() > 0;
-                        <tr>
-                            <td style="width: 10%;">
-                                <div class="form-check">
-                                    <!-- name must match the [BindProperty] property in model -->
-                                    <input class="form-check-input" name="AllCategoryIds" type="checkbox" id="@category.Id"
-                                           value="@category.Id" @(isCatgIncluded ? "checked" : "") />
-                                    <label for="@category.Id" class="form-check-label">Included ?</label>
-                                </div>
-                            </td>
-                            <td style="width: 10%;">
-                                <img class="img-mythumbnail" width="32" height="32" src="\@category.ImageUrl" />
-                            </td>
-                            <td style="width: 20%;">@category.Name</td>
-                            <td style="width: 40%;">@category.Overview</td>
-                            <td style="width: 20%;">
-                                <span><i>Created:</i> @category.CreatedOn</span><br />
-                                <span><i>Last modified:</i> @category.LastModifiedOn</span>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
             </div>
             <!-- Bind 'Id', 'ImgeUrl', 'CreatedOn' in hidden field-->
             <input type="hidden" asp-for="Id" />

@@ -13,5 +13,6 @@ namespace Digital_Services_BD.Services
         ProductGroup AddProductGroup(ProductGroup productGroup);
         ProductGroup DeleteProductGroup(int id);
         ProductGroup UpdateProductGroup(ProductGroup productGroup);
+        ICollection<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId);
     }
 }

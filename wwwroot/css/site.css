@@ -14,18 +14,6 @@ html {
 }
 /* Website typography */
 
-.mt-56px {
-   margin-top:56px !important;
-}
-
-.pt-112px {
-    padding-top: 112px !important;
-}
-
-.navbar-space {
-    margin-top: 40px !important;
-}
-
 /* Nav dropdown media query */
 @media screen and (max-width: 576px) {
     .navbar-space {
@@ -46,8 +34,20 @@ html {
 }
 /* Nav dropdown media query */
 
+.mt-56px {
+   margin-top:56px !important;
+}
+
+.pt-112px {
+    padding-top: 112px !important;
+}
+
+.navbar-space {
+    margin-top: 40px !important;
+}
+
 .z-1 {
-    z-index: 1 !important;
+    z-index: 100 !important;
     background: white;
 }
 
@@ -72,10 +72,14 @@ html {
 }
 /* Nav link color customization */
 
-/* Form validation summary ul li customization */
-.validation-summary-errors {
-    color: #e80c4d;
-    font-weight: bold;
-    font-size: 1.1em;
+/* Image size of product group, category, item */
+.img-mythumbnail {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
 }
-/* Form validation summary ul li customization */
+.h-240 {
+    height: 240px !important;
+}
+/* Image size of product group, category, item */

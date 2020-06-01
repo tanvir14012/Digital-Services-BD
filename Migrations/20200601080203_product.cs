@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Digital_Services_BD.Migrations
 {
-    public partial class product2 : Migration
+    public partial class product : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,15 +63,15 @@ namespace Digital_Services_BD.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    GroupId = table.Column<int>(nullable: false),
+                    ProductGroupId = table.Column<int>(nullable: false),
                     FeatureId = table.Column<int>(nullable: false),
                     ImageUrl = table.Column<string>(maxLength: 256, nullable: true),
                     Overview = table.Column<string>(maxLength: 256, nullable: false),
                     WhatCanBeDone = table.Column<string>(maxLength: 256, nullable: true),
                     HowToConsume = table.Column<string>(maxLength: 256, nullable: true),
                     Limitations = table.Column<string>(maxLength: 256, nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(nullable: false)
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()"),
+                    LastModifiedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
                 },
                 constraints: table =>
                 {
@@ -120,8 +120,8 @@ namespace Digital_Services_BD.Migrations
                     IsActive = table.Column<string>(nullable: false),
                     IsShippable = table.Column<string>(nullable: false),
                     StockCount = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(nullable: false)
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()"),
+                    LastModifiedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
                 },
                 constraints: table =>
                 {
@@ -142,7 +142,7 @@ namespace Digital_Services_BD.Migrations
                     ProductItemId = table.Column<int>(nullable: false),
                     OfferBeginsAt = table.Column<DateTime>(nullable: false),
                     OfferEndsAt = table.Column<DateTime>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false)
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
                 },
                 constraints: table =>
                 {
@@ -232,8 +232,8 @@ namespace Digital_Services_BD.Migrations
                     Price = table.Column<decimal>(type: "decimal(19, 4)", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(19, 4)", nullable: false),
                     Vat = table.Column<decimal>(type: "decimal(19, 4)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(nullable: false)
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()"),
+                    LastModifiedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
                 },
                 constraints: table =>
                 {

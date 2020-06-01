@@ -19,6 +19,11 @@ namespace Digital_Services_BD.Models
         public DbSet<ProductItemPrice> ProductItemPrices { get; set; }
         public DbSet<PromoOffer> PromoOffers { get; set; }
         public DbSet<SearchTagProductItem> SearchTagProductItems { get; set; }
+        public DbSet<ProductCategoryJoinProductGroup> productCategoryJoinProductGroup { get; set; }
+        public DbSet<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
+        public DbSet<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
+        public DbSet<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -96,7 +101,7 @@ namespace Digital_Services_BD.Models
             //ProductCategory table property design
             builder.Entity<ProductCategory>(entity => {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
-                entity.Property(e => e.GroupId).IsRequired();
+                entity.Property(e => e.ProductGroupId).IsRequired();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
                 entity.Property(e => e.HowToConsume).HasMaxLength(256);
@@ -105,6 +110,7 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
                 entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
+                entity.Ignore(e => e.Image);
             });
 
             //ProductItemJoinProductCategory table key, foreign key design
@@ -132,6 +138,8 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
                 entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
                 entity.Ignore(e => e.Image);
+                entity.Ignore(e => e.AllCategories);
+                entity.Ignore(e => e.AllCategoryIds);
             });
 
             //ProductCategoryJoinProductGroup table key, foreign key design
@@ -140,11 +148,13 @@ namespace Digital_Services_BD.Models
                 entity.HasOne(e => e.ProductGroup)
                       .WithMany(e => e.ProductCategoryJoinProductGroup)
                       .HasForeignKey(e => e.ProductGroupId)
-                      .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductGroupId");
+                      .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductGroupId")
+                      .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(e => e.ProductCategory)
                       .WithMany(e => e.ProductCategoryJoinProductGroup)
                       .HasForeignKey(e => e.ProductCategoryId)
-                      .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductCategoryId");
+                      .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductCategoryId")
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             //SearchTagProductItem table property design

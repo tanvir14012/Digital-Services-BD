@@ -26,7 +26,7 @@ namespace Digital_Services_BD.Utilities
             } 
             if(file != null && !this.extensions.Contains(extension.ToLower()))
             {
-                return new ValidationResult($"File must end with one of the following extensions [{string.Join(", ", this.extensions)}]");
+                return new ValidationResult($"Image file must end with one of the following extensions [{string.Join(", ", this.extensions)}]");
             }
             return ValidationResult.Success;
         }

@@ -63,8 +63,9 @@ namespace Digital_Services_BD
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
-            //Add product group ops
+            //Add product group, category, item ops
             services.AddScoped<IProductGroupOps, ProductGroupOps>();
+            services.AddScoped<IProductCategoryOps, ProductCategoryOps>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

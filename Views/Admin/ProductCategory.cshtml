@@ -1,47 +1,47 @@
-﻿@model List<ProductGroup>
+﻿@model List<ProductCategory>
 
-@{ 
+@{
     Layout = "AdminLayout";
 }
 <div class="row d-flex justify-content-end mt-4 p-2">
-    <a class="btn btn-light" asp-action="CreateProductGroup" asp-controller="Admin">
+    <a class="btn btn-light" asp-action="CreateProductCategory" asp-controller="Admin">
         <i class="fas fa-plus"></i>
-        <span class="ml-2" >Create</span>
+        <span class="ml-2">Create</span>
     </a>
 </div>
 <div class="row p-2">
     @if (Model.Count == 0)
     {
-        <h4>There is no Product Group in Database</h4>
+        <h4>There is no Product Category in Database</h4>
     }
-    @foreach (var productGroup in Model)
+    @foreach (var productCategory in Model)
     {
         <div class="col-lg-3 col-md-4 col-sm-6 card-group">
             <div class="card m-1">
                 <div class="card-header">
-                    <span>@productGroup.Name</span>
+                    <span>@productCategory.Name</span>
                 </div>
                 <div class="card-body">
                     <div class="d-flex h-240">
-                        <img asp-append-version="true" class="w-100 img-fluid img-mythumbnail" alt="No Image" src="/@productGroup.ImageUrl" />
+                        <img asp-append-version="true" class="w-100 img-fluid img-mythumbnail" alt="No Image" src="/@productCategory.ImageUrl" />
                     </div>
                 </div>
                 <div class="card-footer">
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item p-0 mr-2">
-                            <a asp-action="ViewProductGroup" asp-controller="Admin" asp-route-id="@productGroup.Id"
+                            <a asp-action="ViewProductCategory" asp-controller="Admin" asp-route-id="@productCategory.Id"
                                class="btn btn-primary text-white" data-toggle="tooltip" data-placement="auto" title="Show">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </li>
                         <li class="list-group-item p-0 mr-2">
-                            <a asp-action="EditProductGroup" asp-controller="Admin" asp-route-id="@productGroup.Id"
+                            <a asp-action="EditProductCategory" asp-controller="Admin" asp-route-id="@productCategory.Id"
                                class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </li>
                         <li class="list-group-item p-0 mr-2">
-                            <a asp-action="DeleteProductGroup" asp-controller="Admin" asp-route-id="@productGroup.Id"
+                            <a asp-action="DeleteProductCategory" asp-controller="Admin" asp-route-id="@productCategory.Id"
                                class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
                                 <i class="fas fa-trash"></i>
                             </a>

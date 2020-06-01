@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Digital_Services_BD.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200531163132_product2")]
-    partial class product2
+    [Migration("20200601080203_product")]
+    partial class product
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,12 +122,11 @@ namespace Digital_Services_BD.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<int>("FeatureId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("HowToConsume")
@@ -139,7 +138,9 @@ namespace Digital_Services_BD.Migrations
                         .HasMaxLength(256);
 
                     b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Limitations")
                         .HasColumnType("nvarchar(256)")
@@ -154,6 +155,9 @@ namespace Digital_Services_BD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<int>("ProductGroupId")
+                        .HasColumnType("int");
 
                     b.Property<string>("WhatCanBeDone")
                         .HasColumnType("nvarchar(256)")
@@ -239,7 +243,9 @@ namespace Digital_Services_BD.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("HowToConsume")
                         .HasColumnType("nvarchar(256)")
@@ -258,7 +264,9 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Limitations")
                         .HasColumnType("nvarchar(256)")
@@ -357,7 +365,9 @@ namespace Digital_Services_BD.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("CurrencyCountry")
                         .IsRequired()
@@ -368,7 +378,9 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("decimal(19, 4)");
 
                     b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(19, 4)");
@@ -401,7 +413,9 @@ namespace Digital_Services_BD.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("CurrencyCountry")
                         .IsRequired()

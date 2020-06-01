@@ -32,6 +32,15 @@ namespace Digital_Services_BD.Services
             {
                 productGroup.ImageUrl = SaveProductImage(productGroup.Image);
             }
+            //Add product category under this product group
+            if (productGroup.AllCategoryIds.Count > 0)
+            {
+                var isAdded = AddProdCategoriesToGroup(productGroup.Id, productGroup.AllCategoryIds);
+                if (!isAdded)
+                {
+                    return null;
+                }
+            }
             context.ProductGroups.Add(productGroup);
             try
             {
@@ -86,12 +95,22 @@ namespace Digital_Services_BD.Services
         /// Get productgroup by id
         /// </summary>
         /// <param name="id">Id of productgroup</param>
-        /// <returns>returns null if not found</returns>
+        /// <returns>returns null if not found </returns>
         public ProductGroup GetProductGroup(int id)
         {
-            return context.ProductGroups.Find(id); ;
+            var productGroup = context.ProductGroups.Find(id);
+            //Populate associated categories for details view
+            if(productGroup != null)
+            {
+                productGroup.AllCategories = GetAllProdCategoriesByProdGroupId(id);
+            }
+            return productGroup;
         }
-
+        /// <summary>
+        /// Updates a product group
+        /// </summary>
+        /// <param name="productGroup"></param>
+        /// <returns>updated product group, null if some error occurred</returns>
         public ProductGroup UpdateProductGroup(ProductGroup productGroup)
         {
             if (productGroup.Image != null)
@@ -104,6 +123,15 @@ namespace Digital_Services_BD.Services
                 }
                 productGroup.ImageUrl = SaveProductImage(productGroup.Image);
             }
+            //Update product category under this product group
+            if(productGroup.AllCategoryIds.Count > 0)
+            {
+                var isAdded = AddProdCategoriesToGroup(productGroup.Id, productGroup.AllCategoryIds);
+                if(! isAdded)
+                {
+                    return null;
+                }
+            }
             productGroup.LastModifiedOn = DateTime.UtcNow;
             context.ProductGroups.Update(productGroup);
             try
@@ -115,6 +143,16 @@ namespace Digital_Services_BD.Services
             {
                 return null;
             }
+        }
+
+        public ICollection<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId)
+        {
+            var query = from category in context.ProductCategories
+                        join categorygroupmap in context.productCategoryJoinProductGroup
+                        on category.Id equals categorygroupmap.ProductCategoryId
+                        select category;
+
+            return query.ToList();
         }
 
         private bool DeleteFile(string relativePath)
@@ -153,6 +191,47 @@ namespace Digital_Services_BD.Services
             {
                 return null;
             }
+        }
+
+        private bool AddProdCategoriesToGroup(int productGroupId, IEnumerable<int> ProdCategoryIds)
+        {
+            //Remove all rows with product group id
+            context.productCategoryJoinProductGroup.RemoveRange(
+                    context.productCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId).ToList());
+            //Add rows from the set
+            foreach (var catId in ProdCategoryIds)
+            {
+                context.productCategoryJoinProductGroup.Add(new ProductCategoryJoinProductGroup
+                {
+                    ProductGroupId = productGroupId,
+                    ProductCategoryId = catId
+                });
+            }
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool DeleteProductCategories(int productGroupId)
+        {
+            //Remove all rows with product group id
+            context.productCategoryJoinProductGroup.RemoveRange(
+                    context.productCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId).ToList());
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

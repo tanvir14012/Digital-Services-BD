@@ -20,7 +20,7 @@ namespace Digital_Services_BD.Utilities
             var file = value as IFormFile;
             if(file != null && file.Length > this.maxSize)
             {
-                return new ValidationResult($"File size can not be greater than {this.maxSize / (1024.00 * 1024)} MB");
+                return new ValidationResult($"Image file size can not be greater than {this.maxSize / (1024.00 * 1024)} MB");
             }
             return ValidationResult.Success;
         }
