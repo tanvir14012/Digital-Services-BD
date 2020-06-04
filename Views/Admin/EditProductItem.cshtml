@@ -1,19 +1,19 @@
-﻿@model ProductCategory
+﻿@model ProductItem
 @using Digital_Services_BD.Services
-@inject IProductCategoryOps productCategoryOps
 @inject IProductItemOps productItemOps
+@inject IProductCategoryOps productCategoryOps
 
 @{
     Layout = "AdminLayout";
-    var itemsThisCategory = productItemOps.GetAllProdItemByProdCatgId(Model.Id).ToList();
-    var allItems = productItemOps.GetAllProductItems();
+    var thisItemCategories = productCategoryOps.GetAllProdCategoryByProdItemId(Model.Id);
+    var allCategories = productCategoryOps.GetAllProductCategories().ToList();
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-sm-12">
         <form enctype="multipart/form-data" method="post" asp-controller="Admin"
-              asp-action="EditProductCategory" class="border mt-4 p-4">
-            <h4 class="mb-3">Edit a Product Category</h4>
+              asp-action="EditProductItem" class="border mt-4 p-4">
+            <h4 class="mb-3">Edit a Product Item</h4>
             <div class="alert-danger rounded" asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name">@Html.DisplayNameFor(m => m.Name)</label>
@@ -31,6 +31,16 @@
                     <label id="fileName" class="custom-file-label" for="imageFile">Choose photo..</label>
                 </div>
                 <span class="text-danger" asp-validation-for="Image"></span>
+            </div>
+            <div class="form-row m-4">
+                <div class="form-check col-sm-6">
+                    <input type="checkbox" class="form-check-input" asp-for="IsActive"  />
+                    <label class="form-check-label" asp-for="IsActive">Is active ?</label>
+                </div>
+                <div class="form-check col-sm-6">
+                    <input type="checkbox" class="form-check-input" asp-for="IsShippable"  />
+                    <label class="form-check-label" asp-for="IsShippable">Is shipable ?</label>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Overview">@Html.DisplayNameFor(m => m.Overview)</label>
@@ -52,11 +62,39 @@
                 <textarea class="form-control" asp-for="Limitations"></textarea>
                 <span class="text-danger" asp-validation-for="Limitations"></span>
             </div>
+            <div class="form-group">
+                <h4>Product Price</h4><hr />
+                @for (var i = 0; i < SupportedCurrencies.Currencies.Count; i++)
+                {
+                    <ul class="list-group list-group-horizontal-md list-unstyled mt-1">
+                        <li class="list-group-item d-flex flex-column bordr-0 m-1">
+                            <label>Currency</label>
+                            <input class="form-contro-sm input-disabled" type="text" value="@SupportedCurrencies.Currencies[i]"
+                                   asp-for="ProductItemPrice[i].PriceCurrency" />
+                        </li>
+                        <li class="list-group-item d-flex flex-column bordr-0 m-1">
+                            <label>Price</label>
+                            <input class="form-contro-sm" asp-for="ProductItemPrice[i].Price" type="number" required />
+                        </li>
+                        <li class="list-group-item d-flex flex-column bordr-0 m-1">
+                            <label>Discount</label>
+                            <input class="form-contro-sm" asp-for="ProductItemPrice[i].Discount" type="number" required />
+                        </li>
+                        <li class="list-group-item d-flex flex-column bordr-0 m-1">
+                            <label>Vat</label>
+                            <input asp-for="ProductItemPrice[i].Vat" class="form-contro-sm" type="number" required />
+                        </li>
+                    </ul>
+                    <!-- Store Id,CreatedOn in hidden field-->
+                    <input type="hidden" asp-for="ProductItemPrice[i].Id" />
+                    <input type="hidden" asp-for="ProductItemPrice[i].CreatedOn" />
+                }
+            </div>
             <div class="form-group table-responsive">
-                <h4>Product Items</h4><hr />
+                <h4>Categories</h4><hr />
                 <table class="table table-bordered">
                     <thead>
-                        @if (allItems.Count() > 0)
+                        @if (allCategories.Count() > 0)
                         {
                             <tr>
                                 <th style="width: 10%;">Inclusion</th>
@@ -69,33 +107,33 @@
                         {
                             <tr>
                                 <th colspan="5">
-                                    <h4>There is no product item in database</h4>
+                                    <h4>There is no category in database</h4>
                                 </th>
                             </tr>
                         }
 
                     </thead>
                     <tbody>
-                        @foreach (var item in allItems)
+                        @foreach (var category in allCategories)
                         {
-                            var isItemIncluded = itemsThisCategory.Where(i => i.Id == item.Id).Count() > 0;
+                            var isCatgIncluded = thisItemCategories.Where(c => c.Id == category.Id).Count() > 0;
                             <tr>
                                 <td style="width: 10%;">
                                     <div class="form-check">
                                         <!-- name must match the [BindProperty] property in model -->
-                                        <input class="form-check-input" name="AllItemIds" type="checkbox" id="@item.Id"
-                                               value="@item.Id" @(isItemIncluded ? "checked" : "") />
-                                        <label for="@item.Id" class="form-check-label">Included ?</label>
+                                        <input class="form-check-input" name="CategoryIds" type="checkbox" id="@category.Id"
+                                               value="@category.Id" @(isCatgIncluded ? "checked" : "") />
+                                        <label for="@category.Id" class="form-check-label">Included ?</label>
                                     </div>
                                 </td>
                                 <td style="width: 10%;">
-                                    <img class="img-mythumbnail" width="32" height="32" src="\@item.ImageUrl" />
+                                    <img class="img-mythumbnail" width="32" height="32" src="\@category.ImageUrl" />
                                 </td>
-                                <td style="width: 20%;">@item.Name</td>
-                                <td style="width: 40%;">@item.Overview</td>
+                                <td style="width: 20%;">@category.Name</td>
+                                <td style="width: 40%;">@category.Overview</td>
                                 <td style="width: 20%;">
-                                    <span><i>Created:</i> @item.CreatedOn</span><br />
-                                    <span><i>Last modified:</i> @item.LastModifiedOn</span>
+                                    <span><i>Created:</i> @category.CreatedOn</span><br />
+                                    <span><i>Last modified:</i> @category.LastModifiedOn</span>
                                 </td>
                             </tr>
                         }

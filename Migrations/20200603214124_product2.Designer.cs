@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Digital_Services_BD.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200601080203_product")]
-    partial class product
+    [Migration("20200603214124_product2")]
+    partial class product2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,9 +126,6 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getutcdate()");
 
-                    b.Property<int>("FeatureId")
-                        .HasColumnType("int");
-
                     b.Property<string>("HowToConsume")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -156,9 +153,6 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int>("ProductGroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("WhatCanBeDone")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -180,7 +174,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasIndex("ProductGroupId");
 
-                    b.ToTable("ProductCategoryJoinProductGroup");
+                    b.ToTable("productCategoryJoinProductGroup");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductGroup", b =>
@@ -255,13 +249,11 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("IsActive")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("IsShippable")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsShippable")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -272,10 +264,6 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(128)")
@@ -285,21 +273,6 @@ namespace Digital_Services_BD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
-
-                    b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductFeatureId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductItemPriceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StockCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("WhatCanBeDone")
                         .HasColumnType("nvarchar(256)")
@@ -368,11 +341,6 @@ namespace Digital_Services_BD.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<string>("CurrencyCountry")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(19, 4)");

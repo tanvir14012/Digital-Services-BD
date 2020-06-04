@@ -1,5 +1,6 @@
 ﻿using Digital_Services_BD.Utilities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,8 +13,10 @@ namespace Digital_Services_BD.Models
     {
         public ProductCategory()
         {
-            ProductItemJoinProductCategory = new HashSet<ProductItemJoinProductCategory>();
-            ProductCategoryJoinProductGroup = new HashSet<ProductCategoryJoinProductGroup>();
+            ProductItemJoinProductCategory = new List<ProductItemJoinProductCategory>();
+            ProductCategoryJoinProductGroup = new List<ProductCategoryJoinProductGroup>();
+            AllItemIds = new HashSet<int>();
+            AllItems = new List<ProductItem>();
         }
         public int Id { get; set; }
         [Required]
@@ -21,8 +24,6 @@ namespace Digital_Services_BD.Models
         [Display(Name = "Product Category Name")]
         public string Name { get; set; }
         //Product category id, similar products are categoryed together
-        public int ProductGroupId { get; set; }
-        public int FeatureId { get; set; }
         [Display(Name = "Image Upload")]
         [MaxFileSize(1)]
         [AllowedExtensions(new string[] { "jpg", "png", "gif", "tiff" })]
@@ -43,6 +44,10 @@ namespace Digital_Services_BD.Models
         public string Limitations { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
+        //Not mapped to database
+        [BindProperty]
+        public ICollection<int> AllItemIds { get; set; }
+        public ICollection<ProductItem> AllItems { get; set; }
         //Navigation property
         public ICollection<ProductCategoryJoinProductGroup> ProductCategoryJoinProductGroup { get; set; }
         public ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }

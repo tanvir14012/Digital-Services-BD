@@ -1,10 +1,11 @@
-﻿@model ProductGroup
+﻿@model ProductItem
 @using Digital_Services_BD.Services
-@inject IProductGroupOps productGroupOps
+@inject IProductItemOps productItemOps
+@inject IProductCategoryOps productCategoryOps
 
 @{
     Layout = "AdminLayout";
-    var categories = productGroupOps.GetAllProdCategoriesByProdGroupId(Model.Id);
+    var categories = productCategoryOps.GetAllProdCategoryByProdItemId(Model.Id);
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
@@ -16,6 +17,39 @@
             </div>
             <div class="card-body">
                 <img class="card-img-top img-thumbnail" alt="No Image" src="\@Model.ImageUrl" />
+                <div class="form-row m-4">
+                    <div class="form-check col-sm-6">
+                        <input type="checkbox" class="form-check-input" asp-for="IsActive" id="isActive" disabled />
+                        <label class="form-check-label" asp-for="IsActive">Is active ?</label>
+                    </div>
+                    <div class="form-check col-sm-6">
+                        <input type="checkbox" class="form-check-input" asp-for="IsShippable" disabled />
+                        <label class="form-check-label" asp-for="IsShippable">Is shipable ?</label>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="width:20%;">Price</th>
+                                <th style="width:20%;">Discount</th>
+                                <th style="width:20%;">Vat</th>
+                                <th style="width:20%;">Currency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var price in Model.ProductItemPrice)
+                            {
+                                <tr>
+                                    <td style="width: 20%;">@price.Price</td>
+                                    <td style="width: 20%;">@price.Discount</td>
+                                    <td style="width: 20%;">@price.Vat</td>
+                                    <td style="width: 20%;">@price.PriceCurrency</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="card-body row">
                 <span class="col-md-6">Created on: @Model.CreatedOn</span>
@@ -48,28 +82,28 @@
                                 </tr>
                             } else
                             {
-                                <tr>
+                                <tr >
                                     <th colspan="4">
-                                        <h4>The product group has no category</h4>
+                                        <h4>The product has no category</h4>
                                     </th>
                                 </tr>
                             }
 
                         </thead>
                         <tbody>
-                            @foreach(var category in categories)
+                            @foreach (var category in categories)
                             {
-                            <tr>
-                                <td style="width: 10%;">
-                                    <img class="img-mythumbnail" width="32" height="32" src="\@category.ImageUrl" />
-                                </td>
-                                <td style="width: 30%;">@category.Name</td>
-                                <td style="width: 40%;" >@category.Overview</td>
-                                <td style="width: 20%;">
+                                <tr>
+                                    <td style="width: 10%;">
+                                        <img class="img-mythumbnail" width="32" height="32" src="\@category.ImageUrl" />
+                                    </td>
+                                    <td style="width: 30%;">@category.Name</td>
+                                    <td style="width: 40%;">@category.Overview</td>
+                                    <td style="width: 20%;">
                                         <span><i>Created:</i> @category.CreatedOn</span><br />
                                         <span><i>Last modified:</i> @category.LastModifiedOn</span>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -78,20 +112,20 @@
             <div class="card-footer">
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item p-0 mr-2">
-                        <a asp-action="EditProductGroup" asp-controller="Admin" asp-route-id="@Model.Id"
+                        <a asp-action="EditProductItem" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                     </li>
                     <li class="list-group-item p-0 mr-2">
-                        <a asp-action="DeleteProductGroup" asp-controller="Admin" asp-route-id="@Model.Id"
+                        <a asp-action="DeleteProductItem" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
                     </li>
                     <li class="list-group-item p-0 mr-2">
-                        <a asp-action="ProductGroup" asp-controller="Admin"
-                           class="btn btn-secondary text-white" data-toggle="tooltip" data-placement="auto" title="Back to product group">
+                        <a asp-action="ProductItem" asp-controller="Admin"
+                           class="btn btn-secondary text-white" data-toggle="tooltip" data-placement="auto" title="Back to product item">
                             <i class="fas fa-backward"></i>
                         </a>
                     </li>

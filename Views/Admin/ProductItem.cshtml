@@ -1,0 +1,63 @@
+﻿@model List<ProductItem>
+
+@{
+    Layout = "AdminLayout";
+}
+<div class="row d-flex justify-content-end mt-4 p-2">
+    <a class="btn btn-light" asp-action="CreateProductItem" asp-controller="Admin">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">Create</span>
+    </a>
+</div>
+<div class="row p-2">
+    @if (Model.Count == 0)
+    {
+        <h4>There is no Product Item in Database</h4>
+    }
+    @foreach (var productItem in Model)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 card-group">
+            <div class="card m-1">
+                <div class="card-header">
+                    <span>@productItem.Name</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex h-240">
+                        <img asp-append-version="true" class="w-100 img-fluid img-mythumbnail" alt="No Image" src="/@productItem.ImageUrl" />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item p-0 mr-2">
+                            <a asp-action="ViewProductItem" asp-controller="Admin" asp-route-id="@productItem.Id"
+                               class="btn btn-primary text-white" data-toggle="tooltip" data-placement="auto" title="Show">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item p-0 mr-2">
+                            <a asp-action="EditProductItem" asp-controller="Admin" asp-route-id="@productItem.Id"
+                               class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item p-0 mr-2">
+                            <a asp-action="DeleteProductItem" asp-controller="Admin" asp-route-id="@productItem.Id"
+                               class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

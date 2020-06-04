@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Digital_Services_BD.Migrations
 {
-    public partial class product : Migration
+    public partial class product2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,8 +63,6 @@ namespace Digital_Services_BD.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    ProductGroupId = table.Column<int>(nullable: false),
-                    FeatureId = table.Column<int>(nullable: false),
                     ImageUrl = table.Column<string>(maxLength: 256, nullable: true),
                     Overview = table.Column<string>(maxLength: 256, nullable: false),
                     WhatCanBeDone = table.Column<string>(maxLength: 256, nullable: true),
@@ -106,20 +104,14 @@ namespace Digital_Services_BD.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductCategoryId = table.Column<int>(nullable: false),
-                    ProductGroupId = table.Column<int>(nullable: false),
-                    ProductFeatureId = table.Column<int>(nullable: false),
-                    ProductItemPriceId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Manufacturer = table.Column<string>(maxLength: 64, nullable: true),
                     ImageUrl = table.Column<string>(maxLength: 256, nullable: true),
                     Overview = table.Column<string>(maxLength: 256, nullable: false),
                     WhatCanBeDone = table.Column<string>(maxLength: 256, nullable: true),
                     HowToConsume = table.Column<string>(maxLength: 256, nullable: true),
                     Limitations = table.Column<string>(maxLength: 256, nullable: true),
-                    IsActive = table.Column<string>(nullable: false),
-                    IsShippable = table.Column<string>(nullable: false),
-                    StockCount = table.Column<int>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    IsShippable = table.Column<bool>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()"),
                     LastModifiedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
                 },
@@ -166,7 +158,7 @@ namespace Digital_Services_BD.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductCategoryJoinProductGroup",
+                name: "productCategoryJoinProductGroup",
                 schema: "StoreDb",
                 columns: table => new
                 {
@@ -175,7 +167,7 @@ namespace Digital_Services_BD.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductCategoryJoinProductGroup", x => new { x.ProductCategoryId, x.ProductGroupId });
+                    table.PrimaryKey("PK_productCategoryJoinProductGroup", x => new { x.ProductCategoryId, x.ProductGroupId });
                     table.ForeignKey(
                         name: "FK_ProductCategoryJoinProductGroup_ProductCategoryId",
                         column: x => x.ProductCategoryId,
@@ -228,7 +220,6 @@ namespace Digital_Services_BD.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductItemId = table.Column<int>(nullable: false),
                     PriceCurrency = table.Column<string>(maxLength: 16, nullable: false),
-                    CurrencyCountry = table.Column<string>(maxLength: 32, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(19, 4)", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(19, 4)", nullable: false),
                     Vat = table.Column<decimal>(type: "decimal(19, 4)", nullable: false),
@@ -302,9 +293,9 @@ namespace Digital_Services_BD.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductCategoryJoinProductGroup_ProductGroupId",
+                name: "IX_productCategoryJoinProductGroup_ProductGroupId",
                 schema: "StoreDb",
-                table: "ProductCategoryJoinProductGroup",
+                table: "productCategoryJoinProductGroup",
                 column: "ProductGroupId");
 
             migrationBuilder.CreateIndex(
@@ -367,7 +358,7 @@ namespace Digital_Services_BD.Migrations
                 schema: "StoreDb");
 
             migrationBuilder.DropTable(
-                name: "ProductCategoryJoinProductGroup",
+                name: "productCategoryJoinProductGroup",
                 schema: "StoreDb");
 
             migrationBuilder.DropTable(

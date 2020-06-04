@@ -13,5 +13,6 @@ namespace Digital_Services_BD.Services
         ProductCategory AddProductCategory(ProductCategory ProductCategory);
         ProductCategory DeleteProductCategory(int id);
         ProductCategory UpdateProductCategory(ProductCategory ProductCategory);
+        IEnumerable<ProductCategory> GetAllProdCategoryByProdItemId(int productItemId);
     }
 }

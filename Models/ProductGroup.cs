@@ -14,7 +14,7 @@ namespace Digital_Services_BD.Models
     {
         public ProductGroup()
         {
-            ProductCategoryJoinProductGroup = new HashSet<ProductCategoryJoinProductGroup>();
+            ProductCategoryJoinProductGroup = new List<ProductCategoryJoinProductGroup>();
             AllCategoryIds = new HashSet<int>();
             AllCategories = new List<ProductCategory>();
         }

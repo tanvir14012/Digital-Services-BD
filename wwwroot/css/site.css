@@ -83,3 +83,7 @@ html {
     height: 240px !important;
 }
 /* Image size of product group, category, item */
+.input-disabled {
+    pointer-events: none;
+    background-color: rgb(220,220,220);
+}

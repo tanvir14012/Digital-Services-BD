@@ -23,7 +23,7 @@ namespace Digital_Services_BD.Models
         public DbSet<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
         public DbSet<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
         public DbSet<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
-
+        public DbSet<ProductItemFeature> ProductItemFeatures { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -70,20 +70,19 @@ namespace Digital_Services_BD.Models
             //ProductItem table property design
             builder.Entity<ProductItem>(entity => {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
-                entity.Property(e => e.ProductCategoryId).IsRequired();
-                entity.Property(e => e.StockCount).IsRequired();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
                 entity.Property(e => e.HowToConsume).HasMaxLength(256);
                 entity.Property(e => e.WhatCanBeDone).HasMaxLength(256);
                 entity.Property(e => e.Limitations).HasMaxLength(256);
-                entity.Property(e => e.Manufacturer).HasMaxLength(64);
                 entity.Property(e => e.ImageUrl).HasMaxLength(256);
-                entity.Property(e => e.ProductItemPriceId).IsRequired();
                 entity.Property(e => e.IsActive).IsRequired();
                 entity.Property(e => e.IsShippable).IsRequired();
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
                 entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
+                entity.Ignore(e => e.Image);
+                entity.Ignore(e => e.CategoryIds);
+                entity.Ignore(e => e.Categories);
             });
 
             //ProductItemPrice table property design
@@ -91,7 +90,6 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.PriceCurrency).IsRequired().HasMaxLength(16);
-                entity.Property(e => e.CurrencyCountry).IsRequired().HasMaxLength(32);
                 entity.Property(e => e.Discount).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.Vat).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.ProductItemId).IsRequired();
@@ -101,7 +99,6 @@ namespace Digital_Services_BD.Models
             //ProductCategory table property design
             builder.Entity<ProductCategory>(entity => {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
-                entity.Property(e => e.ProductGroupId).IsRequired();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
                 entity.Property(e => e.HowToConsume).HasMaxLength(256);
@@ -111,6 +108,8 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
                 entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
                 entity.Ignore(e => e.Image);
+                entity.Ignore(e => e.AllItemIds);
+                entity.Ignore(e => e.AllItems);
             });
 
             //ProductItemJoinProductCategory table key, foreign key design
@@ -119,11 +118,13 @@ namespace Digital_Services_BD.Models
                 entity.HasOne(e => e.ProductItem)
                       .WithMany(e => e.ProductItemJoinProductCategory)
                       .HasForeignKey(e => e.ProductItemId)
-                      .HasConstraintName("FK_ProductItemJoinProductCategory_ProductItemId");
+                      .HasConstraintName("FK_ProductItemJoinProductCategory_ProductItemId")
+                      .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(e => e.ProductCategory)
                       .WithMany(e => e.ProductItemJoinProductCategory)
                       .HasForeignKey(e => e.ProductCategoryId)
-                      .HasConstraintName("FK_ProductItemJoinProductCategory_ProductCategoryId");
+                      .HasConstraintName("FK_ProductItemJoinProductCategory_ProductCategoryId")
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             //ProductGroup table property design
@@ -198,6 +199,26 @@ namespace Digital_Services_BD.Models
                       .WithMany(e => e.ProductItemJoinPromoOffer)
                       .HasForeignKey(e => e.PromoOfferId)
                       .HasConstraintName("FK_ProductItemJoinPromoOffer_PromoOfferId");
+            });
+
+            builder.Entity<ProductItemFeature>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.Company).HasMaxLength(64);
+                entity.Property(e => e.Developer).HasMaxLength(64);
+                entity.Property(e => e.Publisher).HasMaxLength(64);
+                entity.Property(e => e.Description).HasMaxLength(2048);
+                entity.Property(e => e.RegionCodes).HasMaxLength(1024);
+                entity.Property(e => e.RegionCountries).HasMaxLength(1024);
+                entity.Property(e => e.DeliveryInfo).HasMaxLength(64);
+                entity.Property(e => e.ValidityPeriod).HasMaxLength(64);
+                entity.Property(e => e.Genre).HasMaxLength(128);
+                entity.Property(e => e.Os).HasMaxLength(256);
+                entity.Property(e => e.Platform).HasMaxLength(256);
+                entity.Property(e => e.RequirementCpu).HasMaxLength(256);
+                entity.Property(e => e.RequirementRam).HasMaxLength(128);
+                entity.Property(e => e.RequirementGpu).HasMaxLength(128);
+                entity.Property(e => e.RequirementDisk).HasMaxLength(128);
+                entity.Property(e => e.DownloadSize).HasMaxLength(64);
             });
         }
     }

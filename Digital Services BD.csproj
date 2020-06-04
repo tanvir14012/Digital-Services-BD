@@ -38,6 +38,12 @@
     <Compile Remove="Migrations\20200531155549_product.Designer.cs" />
     <Compile Remove="Migrations\20200531163132_product2.cs" />
     <Compile Remove="Migrations\20200531163132_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200601080203_product.cs" />
+    <Compile Remove="Migrations\20200601080203_product.Designer.cs" />
+    <Compile Remove="Migrations\20200603190557_product2.cs" />
+    <Compile Remove="Migrations\20200603190557_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200603204242_product2.cs" />
+    <Compile Remove="Migrations\20200603204242_product2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

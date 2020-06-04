@@ -32,19 +32,19 @@ namespace Digital_Services_BD.Services
             {
                 productGroup.ImageUrl = SaveProductImage(productGroup.Image);
             }
-            //Add product category under this product group
-            if (productGroup.AllCategoryIds.Count > 0)
-            {
-                var isAdded = AddProdCategoriesToGroup(productGroup.Id, productGroup.AllCategoryIds);
-                if (!isAdded)
-                {
-                    return null;
-                }
-            }
             context.ProductGroups.Add(productGroup);
             try
             {
                 var isSaved = context.SaveChanges() > 0;
+                //Add product category under this product group
+                if (productGroup.AllCategoryIds.Count > 0)
+                {
+                    var isAdded = AddProdCategoriesToGroup(productGroup.Id, productGroup.AllCategoryIds);
+                    if (!isAdded)
+                    {
+                        return null;
+                    }
+                }
                 return isSaved ? productGroup : null;
             }
             catch(Exception e)
@@ -102,7 +102,7 @@ namespace Digital_Services_BD.Services
             //Populate associated categories for details view
             if(productGroup != null)
             {
-                productGroup.AllCategories = GetAllProdCategoriesByProdGroupId(id);
+                productGroup.AllCategories = GetAllProdCategoriesByProdGroupId(id).ToList();
             }
             return productGroup;
         }
@@ -123,8 +123,10 @@ namespace Digital_Services_BD.Services
                 }
                 productGroup.ImageUrl = SaveProductImage(productGroup.Image);
             }
-            //Update product category under this product group
-            if(productGroup.AllCategoryIds.Count > 0)
+            //Remove all category entries
+            DeleteProductCategories(productGroup.Id);
+            //Add product category list under this product group sent from ui
+            if (productGroup.AllCategoryIds.Count > 0)
             {
                 var isAdded = AddProdCategoriesToGroup(productGroup.Id, productGroup.AllCategoryIds);
                 if(! isAdded)
@@ -145,7 +147,7 @@ namespace Digital_Services_BD.Services
             }
         }
 
-        public ICollection<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId)
+        public IEnumerable<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId)
         {
             var query = from category in context.ProductCategories
                         join categorygroupmap in context.productCategoryJoinProductGroup
@@ -195,9 +197,6 @@ namespace Digital_Services_BD.Services
 
         private bool AddProdCategoriesToGroup(int productGroupId, IEnumerable<int> ProdCategoryIds)
         {
-            //Remove all rows with product group id
-            context.productCategoryJoinProductGroup.RemoveRange(
-                    context.productCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId).ToList());
             //Add rows from the set
             foreach (var catId in ProdCategoryIds)
             {
@@ -217,12 +216,16 @@ namespace Digital_Services_BD.Services
             }
             return true;
         }
-
+        /// <summary>
+        /// Remove all rows from productCategoryJoinProductGroup having specified productGroupId
+        /// </summary>
+        /// <param name="productCategoryId"></param>
+        /// <returns></returns>
         private bool DeleteProductCategories(int productGroupId)
         {
             //Remove all rows with product group id
             context.productCategoryJoinProductGroup.RemoveRange(
-                    context.productCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId).ToList());
+                    context.productCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId));
             try
             {
                 context.SaveChanges();
@@ -233,5 +236,6 @@ namespace Digital_Services_BD.Services
             }
             return true;
         }
+
     }
 }

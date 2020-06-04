@@ -96,3 +96,7 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Ra
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductCategory.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductCategory.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductCategory.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductItem.cshtml.g.cs

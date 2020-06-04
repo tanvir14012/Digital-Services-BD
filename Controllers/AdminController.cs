@@ -14,11 +14,14 @@ namespace Digital_Services_BD.Controllers
     {
         private readonly IProductGroupOps productGroupOps;
         private readonly IProductCategoryOps productCategoryOps;
+        private readonly IProductItemOps productItemOps;
 
-        public AdminController(IProductGroupOps productGroupOps, IProductCategoryOps productCategoryOps)
+        public AdminController(IProductGroupOps productGroupOps, IProductCategoryOps productCategoryOps,
+            IProductItemOps productItemOps)
         {
             this.productGroupOps = productGroupOps;
             this.productCategoryOps = productCategoryOps;
+            this.productItemOps = productItemOps;
         }
         public IActionResult Index()
         {
@@ -296,6 +299,144 @@ namespace Digital_Services_BD.Controllers
             ViewBag.Action = "ProductCategory";
             ViewBag.Controller = "Admin";
             ViewBag.BackText = "Go to product category";
+            return View("NotFound");
+        }
+        #endregion
+
+        #region ProductItem
+        public IActionResult ProductItem()
+        {
+            return View(productItemOps.GetAllProductItems());
+        }
+        public IActionResult CreateProductItem()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateProductItem(ProductItem model)
+        {
+            if (ModelState.IsValid)
+            {
+                var productItem = productItemOps.AddProductItem(model);
+                if (productItem != null)
+                {
+                    return RedirectToAction("ProductItem");
+                }
+                ModelState.AddModelError(string.Empty, "Some error occurred while adding the item to database");
+            }
+            return View(model);
+        }
+        public IActionResult ViewProductItem(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var productItem = productItemOps.GetProductItem(id);
+                if (productItem != null)
+                {
+                    return View(productItem);
+                }
+            }
+            ViewBag.Heading = "Product Item Not Found";
+            ViewBag.Message = "The product item is not found on the system";
+            ViewBag.Action = "ProductItem";
+            ViewBag.Controller = "Admin";
+            ViewBag.BackText = "Go to product item";
+            return View("NotFound");
+        }
+
+        [HttpGet]
+        public IActionResult EditProductItem(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var productItem = productItemOps.GetProductItem(id);
+                if (productItem != null)
+                {
+                    return View(productItem);
+                }
+            }
+            ViewBag.Heading = "Product Item Not Found";
+            ViewBag.Message = "The product item is not found on the system";
+            ViewBag.Action = "ProductItem";
+            ViewBag.Controller = "Admin";
+            ViewBag.BackText = "Go to product item";
+            return View("NotFound");
+        }
+        [HttpPost]
+        public IActionResult EditProductItem(ProductItem model)
+        {
+            if (ModelState.IsValid)
+            {
+                var productItem = productItemOps.UpdateProductItem(model);
+                if (productItem != null)
+                {
+                    return RedirectToAction("ProductItem");
+                }
+                ModelState.AddModelError(string.Empty, "Some error occurred while updating the item to database");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProductItem(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var productItem = productItemOps.GetProductItem(id);
+                if (productItem != null)
+                {
+                    ViewBag.Title = "Confirm Delete";
+                    ViewBag.Id = productItem.Id;
+                    ViewBag.Action = "DeleteProductItemConfirm";
+                    ViewBag.Controller = "Admin";
+                    ViewBag.CancelAction = "ProductItem";
+                    ViewBag.CancelController = "Admin";
+                    ViewBag.Heading = "Confirm Product Item Deletion";
+                    ViewBag.HeadingClass = "alert-danger";
+                    ViewBag.Message = "The following action will delete the product item permanently from the system, which can not be undone.";
+                    return View("Confirmation");
+                }
+            }
+            ViewBag.Heading = "Product Item Not Found";
+            ViewBag.Message = "The product item is not found on the system";
+            ViewBag.Action = "ProductItem";
+            ViewBag.Controller = "Admin";
+            ViewBag.BackText = "Go to product item";
+            return View("NotFound");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProductItemConfirm(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var productItem = productItemOps.DeleteProductItem(id);
+                if (productItem != null)
+                {
+                    ViewBag.Title = "Delete Successful";
+                    ViewBag.Heading = "Success";
+                    ViewBag.HeadingClass = "alert-info";
+                    ViewBag.Message = "The product item has been deleted successfully.";
+                    ViewBag.Action = "ProductItem";
+                    ViewBag.Controller = "Admin";
+                    ViewBag.BackText = "Go to product item";
+                }
+                else
+                {
+                    ViewBag.Title = "Delete Failed";
+                    ViewBag.Heading = "Fail";
+                    ViewBag.HeadingClass = "alert-danger";
+                    ViewBag.Message = "Some error occurred while deleting the product item. Please try again later.";
+                    ViewBag.Action = "ProductItem";
+                    ViewBag.Controller = "Admin";
+                    ViewBag.BackText = "Go to product item";
+                }
+                return View("SuccessFailure");
+            }
+
+            ViewBag.Action = "ProductItem";
+            ViewBag.Controller = "Admin";
+            ViewBag.BackText = "Go to product item";
             return View("NotFound");
         }
         #endregion

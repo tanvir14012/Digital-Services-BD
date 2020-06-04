@@ -11,7 +11,6 @@ namespace Digital_Services_BD.Models
         //Foreign key
         public int ProductItemId { get; set; }
         public string PriceCurrency { get; set; }
-        public string CurrencyCountry { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public decimal Vat { get; set; }
