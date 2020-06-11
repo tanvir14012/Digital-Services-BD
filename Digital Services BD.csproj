@@ -44,6 +44,12 @@
     <Compile Remove="Migrations\20200603190557_product2.Designer.cs" />
     <Compile Remove="Migrations\20200603204242_product2.cs" />
     <Compile Remove="Migrations\20200603204242_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200603214124_product2.cs" />
+    <Compile Remove="Migrations\20200603214124_product2.Designer.cs" />
+    <Compile Remove="Migrations\20200607135700_product.cs" />
+    <Compile Remove="Migrations\20200607135700_product.Designer.cs" />
+    <Compile Remove="Migrations\20200608041115_product.cs" />
+    <Compile Remove="Migrations\20200608041115_product.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,10 +63,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
     <Folder Include="Security\" />
+    <Folder Include="wwwroot\ImageResources\Carousel\" />
     <Folder Include="wwwroot\ImageResources\ProductGroup\" />
-    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>

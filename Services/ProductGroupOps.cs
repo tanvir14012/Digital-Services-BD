@@ -32,6 +32,8 @@ namespace Digital_Services_BD.Services
             {
                 productGroup.ImageUrl = SaveProductImage(productGroup.Image);
             }
+            productGroup.CreatedOn = DateTime.UtcNow;
+            productGroup.LastModifiedOn = DateTime.UtcNow;
             context.ProductGroups.Add(productGroup);
             try
             {
@@ -152,6 +154,7 @@ namespace Digital_Services_BD.Services
             var query = from category in context.ProductCategories
                         join categorygroupmap in context.productCategoryJoinProductGroup
                         on category.Id equals categorygroupmap.ProductCategoryId
+                        where categorygroupmap.ProductGroupId == productGroupId
                         select category;
 
             return query.ToList();

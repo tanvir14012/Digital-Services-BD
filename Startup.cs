@@ -67,6 +67,8 @@ namespace Digital_Services_BD
             services.AddScoped<IProductGroupOps, ProductGroupOps>();
             services.AddScoped<IProductCategoryOps, ProductCategoryOps>();
             services.AddScoped<IProductItemOps, ProductItemOps>();
+            services.AddScoped<IProductSectionOps, ProductSectionOps>();
+            services.AddScoped<ICarouselOps, CarouselOps>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

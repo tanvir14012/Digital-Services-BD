@@ -1,11 +1,125 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+﻿@*@using Microsoft.AspNetCore.Mvc.Localization
+    @inject IViewLocalizer Localizer*@
+@inject IProductSectionOps productSectionOps
+@inject IProductItemOps productItemOps
+@inject ICarouselOps carouselOps
 
 @{
-    ViewData["Title"] = Localizer["Home Page"];
+    ViewData["Title"] = "Home Page";
+    var allProductSections = productSectionOps.GetAllProductSections().ToList();
+    var carousel = carouselOps.GetAllCarousel().OrderBy(c => c.Rank).ToList().FirstOrDefault();
 }
 
-<div class="text-center">
-    <h1 class="display-4">@Localizer["Welcome"] fg</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Carousel -->
+@if (carousel != null)
+{
+    carousel = carouselOps.GetCarousel(carousel.Id); //Load images
+    <div class="row p-2">
+        <div id="carousel" class="carousel carousel-fade slide w-100" data-ride="carousel" data-interval="90000">
+            <ul class="carousel-indicators">
+                @for (var i = 0; i < carousel.CarouselJoinCarouselImage.Count; i++)
+                {
+                    <li class='@(i == 0 ? "active": "")' data-target="#carousel" data-slide-to="@i"></li>
+                }
+
+            </ul>
+            <div class="carousel-inner">
+                @for (var i = 0; i < carousel.CarouselJoinCarouselImage.Count; i++)
+                {
+                    var imageSrc = carousel.CarouselJoinCarouselImage[i].ImageUrl;
+
+                    <div class='carousel-item d-flex justify-content-center align-items-center h-240 @(i == 0 ? "active": "")'>
+                        <img class="img-fluid h-100" src="\@imageSrc" alt="" />
+                    </div>
+                }
+            </div>
+            <!-- Prev, Next Buttons -->
+            <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded"></span>
+            </a>
+            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded"></span>
+            </a>
+            <!-- Prev, Next Buttons -->
+        </div>
+    </div>
+    <!-- Carousel-->
+}
+
+@for (var i = 0; i < allProductSections.Count(); i++)
+{
+    var productSection = allProductSections[i];
+    var productItems = @productSectionOps.GetAllProdItemsByProdSectionId(productSection.Id).Where(p => p.IsActive).ToList();
+
+    <div class="row p-3 d-flex justify-content-between">
+        <h4>@productSection.Title</h4>
+        <a asp-action="Discover" asp-controller="Home" asp-route-id="@productSection.Id"
+           class="nav-link justify-content-end">discover all</a>
+    </div>
+    <div class="row p-2">
+        <div class="card-deck col-12 p-2" id="section_@productSection.Id">
+
+            @for (var j = 0; j < productItems.Count(); j++)
+            {
+                var product = productItemOps.GetProductItem(productItems[j].Id);
+                var priceObj = product.ProductItemPrice.FirstOrDefault(p => p.PriceCurrency == "BDT");
+                @if (priceObj == null)
+                {
+                    continue;
+                }
+
+                <div class="col-lg-2 col-md-4 col-sm-6 p-0 m-0">
+                    <div class="card p-0 m-0 mr-1 mt-2" data-serial="@j" @(j > 5 ? "hidden" : "")>
+                        <a class="text-decoration-none text-black" asp-action="Details" asp-controller="Product" asp-route-id="@product.Id">
+                            <img class="card-img-top h-240" src="\@product.ImageUrl" />
+                            <div class="card-body p-1">
+                                <strong>@product.Name</strong>
+                            </div>
+                            <div class="card-footer p-1">
+                                <div class="price-font">
+                                    <strong>@string.Format("{0:0.00}", priceObj.Price - priceObj.Discount)</strong>
+                                    <sup>BDT</sup>
+                                </div>
+                                @if (priceObj.Discount > 0)
+                                {
+                                    <div class="text-black">
+                                        <s class="text-muted">@priceObj.Price</s>
+                                        <sup class="text-muted">BDT</sup>
+                                        <span class="ml-1 bg-primary p-1">
+                                            <span class="text-white">@string.Format("{0:0.00}", -(priceObj.Discount * 100) / priceObj.Price)%</span>
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center col-12" @(productItems.Count < 6 ? "hidden" : "")>
+            <a name="showMore" class="nav-link" href="javascript:void(0)" data-container="section_@productSection.Id">show more</a>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script>
+        var section = [];
+        $("a[name='showMore']").click(function (e) {
+            var holder = parseInt($(e.currentTarget).data("container"));
+            section[holder] = (section[holder] ? section[holder] : 5) + 6;
+
+            $("#section_" + holder).children().each(function () {
+                var s = parseInt($(this).data("serial"));
+                if (s <= section[holder]) {
+                    $(this).attr('hidden', false);
+                }
+            });
+            var total = $("#section_" + holder).children().length;
+            if (section[holder] >= total) {
+                $(e.currentTarget).attr("hidden", true);
+            }
+        });
+    </script>
+}

@@ -8,6 +8,8 @@
     <environment include="Development">
         <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
         <!-- Bootstrap CSS  -->
@@ -76,10 +78,11 @@
         </div>
     </footer>
     <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/popper.js/umd/popper.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

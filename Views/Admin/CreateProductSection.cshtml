@@ -1,0 +1,85 @@
+﻿@model ProductSection
+@using Digital_Services_BD.Services
+@inject IProductItemOps productItemOps
+@inject IProductSectionOps productSectionOps
+
+@{
+    Layout = "AdminLayout";
+    var allItems = productItemOps.GetAllProductItems().ToList();
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <form method="post" asp-controller="Admin"
+              asp-action="CreateProductSection" class="border mt-4 p-4">
+            <h4 class="mb-3">Create a Product Section</h4>
+            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Title">Title</label>
+                <input class="form-control" type="text" asp-for="Title" />
+                <span class="text-danger" asp-validation-for="Title"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Overview">Overview</label>
+                <textarea class="form-control" asp-for="Overview"></textarea>
+                <span class="text-danger" asp-validation-for="Overview"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rank">Rank</label>
+                <select class="from-control" asp-for="Rank"
+                        asp-items="@productSectionOps.GetAvailableRanks().Select(r => new SelectListItem(r.ToString(), r.ToString()))">
+                </select>
+                <span class="text-danger" asp-validation-for="Rank"></span>
+            </div>
+            <div class="form-group table-responsive">
+                <h4>Product Items</h4><hr />
+                <table class="table table-bordered">
+                    <thead>
+                        @if (allItems.Count > 0)
+                        {
+                            <tr>
+                                <th style="width: 10%;">Inclusion</th>
+                                <th style="width: 10%;">Logo</th>
+                                <th style="width: 20%;">Name</th>
+                                <th style="width: 40%;">Overview</th>
+                                <th style="width: 20%;">Timestamp</th>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <th colspan="5"><h4>There is no product item in database</h4></th>
+                            </tr>
+                        }
+
+                    </thead>
+                    <tbody>
+                        @foreach (var item in allItems)
+                        {
+                            <tr>
+                                <td style="width: 10%;">
+                                    <div class="form-check">
+                                        <!-- name must match the [BindProperty] property in model -->
+                                        <input class="form-check-input" name="ProductItemIds" type="checkbox" id="@item.Id"
+                                               value="@item.Id" />
+                                        <label for="@item.Id" class="form-check-label">Add</label>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;">
+                                    <img class="img-mythumbnail" width="32" height="32" src="\@item.ImageUrl" />
+                                </td>
+                                <td style="width: 20%;">@item.Name</td>
+                                <td style="width: 40%;">@item.Overview</td>
+                                <td style="width: 20%;">
+                                    <span><i>Created:</i> @item.CreatedOn</span><br />
+                                    <span><i>Last modified:</i> @item.LastModifiedOn</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>

@@ -67,12 +67,25 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\en
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.input.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.output.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorCoreGenerate.cache
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Confirmation.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductCategory.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductGroup.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductCategory.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductGroup.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductCategory.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductGroup.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\SuccessFailure.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductCategory.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductGroup.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductItem.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\AdminLayout.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NotFound.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
@@ -87,16 +100,11 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Di
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.pdb
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.genruntimeconfig.cache
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csprojAssemblyReference.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductGroup.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Confirmation.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\SuccessFailure.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NotFound.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductGroup.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductItem.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductSection.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductSection.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductSection.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductSection.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Carousel.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateCarousel.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditCarousel.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewCarousel.cshtml.g.cs

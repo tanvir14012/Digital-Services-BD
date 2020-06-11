@@ -1,0 +1,119 @@
+﻿@model Carousel
+@inject ICarouselOps carouselOps
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-sm-12">
+        <form enctype="multipart/form-data" method="post" asp-controller="Admin"
+              asp-action="EditCarousel" asp-route-id="@Model.Id" class="border mt-4 p-4">
+            <h4 class="mb-3">Edit a Carousel</h4>
+            <h6 class="text-muted">If you select an image file, corresponding image will be updated. Otherwise it will remain unmodified.</h6>
+            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input class="form-control" type="text" asp-for="Name" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rank">Rank</label>
+                <input class="form-control" type="number" min="0" max="10" asp-for="Rank" />
+                <span class="text-danger" asp-validation-for="Rank"></span>
+            </div>
+            <div id="container">
+                @for (var i = 0; i < Model?.CarouselJoinCarouselImage.Count; i++)
+                {
+                    var imageItem = Model.CarouselJoinCarouselImage[i];
+                <div>
+                    <strong>@(i+1).</strong>
+                    <div class="form-group">
+                        <label>Image Preview</label><br />
+                        <img class="img-thumbnail" id=@("thumbnail" + i) src="\@imageItem.ImageUrl" alt="No image" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CarouselJoinCarouselImage[i].Image">Image</label>
+                        <div class="custom-file">
+                            <input id="imageFile0" data-count="@i" class="form-control custom-file-input" type="file"
+                                   asp-for="CarouselJoinCarouselImage[i].Image" />
+                            <label id=@("fileName"+i) class="custom-file-label" for=@("imageFile" + i)>Choose a photo if you want to update..</label>
+                        </div>
+                        <span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[i].Image"></span>
+                    </div>
+                    <!--Add Id, CreatedOn, ImageUrl etc. in hidden field-->
+                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].Id" />
+                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].CarouselId" />
+                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].CreatedOn" />
+                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].ImageUrl" />
+                </div>
+                }
+
+            </div>
+            <div class="form-group">
+                <button id="removeImage" type="button" class="btn btn-light float-right"><i class="fas fa-trash mr-2 text-danger"></i>Remove last image</button>
+                <button id="addImage" type="button" class="btn btn-light float-right"><i class="fas fa-plus mr-2"></i>Add image</button>
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <!--Add Id, CreatedOn etc. in hidden field-->
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedOn" />
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        function readImage(input, count) {
+            if (input.files && input.files[0]) {
+                $('#fileName' + count).html(input.files[0].name);
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#thumbnail' + count).attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $(document).ready(function () {
+            $("input[type='file']").change(function (e) {
+                var count = $(e.currentTarget).data("count");
+                console.log(count);
+                readImage(this, count);
+            });
+
+
+            $("#addImage").click(function () {
+                var nextIndex = $("#container").children("div").length;
+                //name attribute is important
+                var template =
+                    '<div>' +
+                    '<strong>' + (nextIndex + 1) + '.</strong>' +
+                    '<div class="form-group">' +
+                    '<label>Image Preview</label><br />' +
+                    '<img class="img-thumbnail" id="thumbnail' + nextIndex + '" alt="No image" />' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="CarouselJoinCarouselImage[' + nextIndex + '].Image">Image</label>' +
+                    '<div class="custom-file">' +
+                    '<input id="imageFile' + nextIndex + '" data-count="' + nextIndex + '" class="form-control custom-file-input" type="file" name="CarouselJoinCarouselImage[' + nextIndex + '].Image" asp-for="CarouselJoinCarouselImage[' + nextIndex + '].Image" />' +
+                    '<label id="fileName' + nextIndex + '" class="custom-file-label" for="imageFile' + nextIndex + '">Choose photo..</label>' +
+                    '</div>' +
+                    '<span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[' + nextIndex + '].Image"></span>' +
+                    '</div>' +
+                    '</div>';
+                $("#container").append(template);
+                $("input[type='file']").unbind();
+                $("input[type='file']").change(function (e) {
+                    var count = $(e.currentTarget).data("count");
+                    readImage(this, count);
+                });
+            });
+
+            $("#removeImage").click(function () {
+                $("#container").children("div").last().remove();
+            });
+        });
+    </script>
+}

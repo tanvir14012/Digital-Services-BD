@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Digital_Services_BD.Migrations
 {
-    public partial class product2 : Migration
+    public partial class product : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -112,12 +112,30 @@ namespace Digital_Services_BD.Migrations
                     Limitations = table.Column<string>(maxLength: 256, nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     IsShippable = table.Column<bool>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()"),
-                    LastModifiedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
+                    CreatedOn = table.Column<DateTime>(nullable: true, defaultValueSql: "getutcdate()"),
+                    LastModifiedOn = table.Column<DateTime>(nullable: true, defaultValueSql: "getutcdate()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSections",
+                schema: "StoreDb",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(maxLength: 128, nullable: true),
+                    Overview = table.Column<string>(maxLength: 512, nullable: true),
+                    Rank = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSections", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,6 +203,46 @@ namespace Digital_Services_BD.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductItemFeatures",
+                schema: "StoreDb",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductItemId = table.Column<int>(nullable: false),
+                    Company = table.Column<string>(maxLength: 64, nullable: true),
+                    Developer = table.Column<string>(maxLength: 64, nullable: true),
+                    Publisher = table.Column<string>(maxLength: 64, nullable: true),
+                    Description = table.Column<string>(maxLength: 2048, nullable: true),
+                    RegionCodes = table.Column<string>(maxLength: 1024, nullable: true),
+                    RegionCountries = table.Column<string>(maxLength: 1024, nullable: true),
+                    DeliveryInfo = table.Column<string>(maxLength: 64, nullable: true),
+                    ValidityPeriod = table.Column<string>(maxLength: 64, nullable: true),
+                    Genre = table.Column<string>(maxLength: 512, nullable: true),
+                    Os = table.Column<string>(maxLength: 512, nullable: true),
+                    Platform = table.Column<string>(maxLength: 512, nullable: true),
+                    ReleaseDate = table.Column<DateTime>(nullable: true),
+                    RequirementCpu = table.Column<string>(maxLength: 256, nullable: true),
+                    RequirementRam = table.Column<string>(maxLength: 128, nullable: true),
+                    RequirementGpu = table.Column<string>(maxLength: 128, nullable: true),
+                    RequirementDisk = table.Column<string>(maxLength: 128, nullable: true),
+                    DownloadSize = table.Column<string>(maxLength: 64, nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductItemFeatures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductItemFeatures_ProductItems_ProductItemId",
+                        column: x => x.ProductItemId,
+                        principalSchema: "StoreDb",
+                        principalTable: "ProductItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductItemJoinProductCategory",
                 schema: "StoreDb",
                 columns: table => new
@@ -234,6 +292,33 @@ namespace Digital_Services_BD.Migrations
                         column: x => x.ProductItemId,
                         principalSchema: "StoreDb",
                         principalTable: "ProductItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSectionJoinProductItem",
+                schema: "StoreDb",
+                columns: table => new
+                {
+                    ProductSectionId = table.Column<int>(nullable: false),
+                    ProductItemId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSectionJoinProductItem", x => new { x.ProductSectionId, x.ProductItemId });
+                    table.ForeignKey(
+                        name: "FK_ProductSectionJoinProductItem_ProductItemId",
+                        column: x => x.ProductItemId,
+                        principalSchema: "StoreDb",
+                        principalTable: "ProductItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSectionJoinProductItem_ProductSectionId",
+                        column: x => x.ProductSectionId,
+                        principalSchema: "StoreDb",
+                        principalTable: "ProductSections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -299,6 +384,13 @@ namespace Digital_Services_BD.Migrations
                 column: "ProductGroupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductItemFeatures_ProductItemId",
+                schema: "StoreDb",
+                table: "ProductItemFeatures",
+                column: "ProductItemId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductItemJoinProductCategory_ProductCategoryId",
                 schema: "StoreDb",
                 table: "ProductItemJoinProductCategory",
@@ -320,6 +412,12 @@ namespace Digital_Services_BD.Migrations
                 name: "IX_ProductItemPrices_ProductItemId",
                 schema: "StoreDb",
                 table: "ProductItemPrices",
+                column: "ProductItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSectionJoinProductItem_ProductItemId",
+                schema: "StoreDb",
+                table: "ProductSectionJoinProductItem",
                 column: "ProductItemId");
 
             migrationBuilder.AddForeignKey(
@@ -362,6 +460,10 @@ namespace Digital_Services_BD.Migrations
                 schema: "StoreDb");
 
             migrationBuilder.DropTable(
+                name: "ProductItemFeatures",
+                schema: "StoreDb");
+
+            migrationBuilder.DropTable(
                 name: "ProductItemJoinProductCategory",
                 schema: "StoreDb");
 
@@ -375,6 +477,10 @@ namespace Digital_Services_BD.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductItemPrices",
+                schema: "StoreDb");
+
+            migrationBuilder.DropTable(
+                name: "ProductSectionJoinProductItem",
                 schema: "StoreDb");
 
             migrationBuilder.DropTable(
@@ -395,6 +501,10 @@ namespace Digital_Services_BD.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductItems",
+                schema: "StoreDb");
+
+            migrationBuilder.DropTable(
+                name: "ProductSections",
                 schema: "StoreDb");
 
             migrationBuilder.DropPrimaryKey(

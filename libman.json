@@ -23,6 +23,14 @@
       "destination": "wwwroot/lib/font-awesome/"
     },
     {
+      "library": "bootstrap-select@1.13.17",
+      "destination": "wwwroot/lib/bootstrap-select/"
+    },
+    {
+      "library": "jquery-datetimepicker@2.5.20",
+      "destination": "wwwroot/lib/jquery-datetimepicker/"
+    },
+    {
       "library": "popper.js@2.4.0",
       "destination": "wwwroot/lib/popper.js/"
     }

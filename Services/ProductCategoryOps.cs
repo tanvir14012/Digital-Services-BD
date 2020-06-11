@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Digital_Services_BD.Services
 {
@@ -31,7 +32,8 @@ namespace Digital_Services_BD.Services
             {
                 productCategory.ImageUrl = SaveProductImage(productCategory.Image);
             }
-           
+            productCategory.CreatedOn = DateTime.UtcNow;
+            productCategory.LastModifiedOn = DateTime.UtcNow;
             context.ProductCategories.Add(productCategory);
             try
             {

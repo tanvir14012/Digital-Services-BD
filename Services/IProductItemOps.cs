@@ -14,5 +14,7 @@ namespace Digital_Services_BD.Services
         ProductItem DeleteProductItem(int id);
         ProductItem UpdateProductItem(ProductItem ProductItem);
         IEnumerable<ProductItem> GetAllProdItemByProdCatgId(int productItemId);
+        ProductItemViewModel ConvertModelToViewModel(ProductItem model);
+        ProductItem ConvertViewModelToModel(ProductItemViewModel model);
     }
 }

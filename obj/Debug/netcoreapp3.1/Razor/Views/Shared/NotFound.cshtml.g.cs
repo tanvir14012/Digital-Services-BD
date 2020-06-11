@@ -26,8 +26,15 @@ using Digital_Services_BD.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\_ViewImports.cshtml"
+using Digital_Services_BD.Services;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d401d22d7febbfeb8792588e8ae948720e7b10e3", @"/Views/Shared/NotFound.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f2b36e79c8825e8b2d898bed9e2ac0f4e8bf1fde", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c11e7091e85c4fc8076d1553ae47474c9477a747", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared_NotFound : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("nav-link"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -74,7 +81,7 @@ using Digital_Services_BD.Models;
 #line hidden
 #nullable disable
             WriteLiteral("</p>\r\n            <ul class=\"list-group list-group-horizontal-md list-unstyled\">\r\n                <li class=\"list-group-item p-0\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d401d22d7febbfeb8792588e8ae948720e7b10e34923", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d401d22d7febbfeb8792588e8ae948720e7b10e35120", async() => {
                 WriteLiteral("Home");
             }
             );
@@ -93,7 +100,7 @@ using Digital_Services_BD.Models;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"list-group-item p-0\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d401d22d7febbfeb8792588e8ae948720e7b10e36464", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d401d22d7febbfeb8792588e8ae948720e7b10e36661", async() => {
 #nullable restore
 #line 16 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\Shared\NotFound.cshtml"
                                                                                                      Write(ViewBag.BackText);

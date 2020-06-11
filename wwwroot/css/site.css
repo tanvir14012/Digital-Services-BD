@@ -87,3 +87,11 @@ html {
     pointer-events: none;
     background-color: rgb(220,220,220);
 }
+
+.text-black{
+    color: black;
+}
+
+.price-font{
+    font-size: 1.25rem;
+}

@@ -24,6 +24,11 @@ namespace Digital_Services_BD.Models
         public DbSet<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
         public DbSet<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
         public DbSet<ProductItemFeature> ProductItemFeatures { get; set; }
+        public DbSet<ProductSection> ProductSections { get; set; }
+        public DbSet<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
+        public DbSet<Carousel> Carousels { get; set; }
+        public DbSet<CarouselJoinCarouselImage> carouselJoinCarouselImages { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -203,6 +208,7 @@ namespace Digital_Services_BD.Models
 
             builder.Entity<ProductItemFeature>(entity => {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.Company).HasMaxLength(64);
                 entity.Property(e => e.Developer).HasMaxLength(64);
                 entity.Property(e => e.Publisher).HasMaxLength(64);
@@ -211,14 +217,53 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.RegionCountries).HasMaxLength(1024);
                 entity.Property(e => e.DeliveryInfo).HasMaxLength(64);
                 entity.Property(e => e.ValidityPeriod).HasMaxLength(64);
-                entity.Property(e => e.Genre).HasMaxLength(128);
-                entity.Property(e => e.Os).HasMaxLength(256);
-                entity.Property(e => e.Platform).HasMaxLength(256);
+                entity.Property(e => e.Genre).HasMaxLength(512);
+                entity.Property(e => e.Os).HasMaxLength(512);
+                entity.Property(e => e.Platform).HasMaxLength(512);
                 entity.Property(e => e.RequirementCpu).HasMaxLength(256);
                 entity.Property(e => e.RequirementRam).HasMaxLength(128);
                 entity.Property(e => e.RequirementGpu).HasMaxLength(128);
                 entity.Property(e => e.RequirementDisk).HasMaxLength(128);
                 entity.Property(e => e.DownloadSize).HasMaxLength(64);
+            });
+
+            //Product section for landing page like featured, you may like, hot deals etc.
+            builder.Entity<ProductSection>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.Title).HasMaxLength(128);
+                entity.Property(e => e.Overview).HasMaxLength(512);
+                entity.Ignore(e => e.ProductItemIds);
+                entity.Ignore(e => e.ProductItems);
+            });
+            //Foreign key design
+            builder.Entity<ProductSectionJoinProductItem>(entity => {
+                entity.HasKey(e => new { e.ProductSectionId, e.ProductItemId});
+                entity.HasOne(e => e.ProductSection)
+                      .WithMany(e => e.ProductSectionJoinProductItem)
+                      .HasForeignKey(e => e.ProductSectionId)
+                      .HasConstraintName("FK_ProductSectionJoinProductItem_ProductSectionId")
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.ProductItem)
+                     .WithMany(e => e.ProductSectionJoinProductItem)
+                     .HasForeignKey(e => e.ProductItemId)
+                     .HasConstraintName("FK_ProductSectionJoinProductItem_ProductItemId")
+                     .OnDelete(DeleteBehavior.Cascade);
+            });
+            //Carousel
+            builder.Entity<Carousel>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.Name).HasMaxLength(128);
+            });
+            builder.Entity<CarouselJoinCarouselImage>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.ImageUrl).HasMaxLength(256);
+                entity.Ignore(e => e.Image);
+                entity.HasOne(e => e.Carousel)
+                      .WithMany(e => e.CarouselJoinCarouselImage)
+                      .HasForeignKey(e => e.CarouselId)
+                      .HasConstraintName("FK_CarouselJoinCarouselImage_CarouselId")
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

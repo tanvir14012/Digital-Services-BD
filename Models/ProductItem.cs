@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Digital_Services_BD.Utilities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,16 @@ namespace Digital_Services_BD.Models
             ProductItemJoinPromoOffer = new List<ProductItemJoinPromoOffer>();
             CategoryIds = new HashSet<int>();
             Categories = new List<ProductCategory>();
+            ProductItemFeature = new ProductItemFeature();
+            ProductSectionJoinProductItem = new List<ProductSectionJoinProductItem>();
         }
         public int Id { get; set; }
         [Required]
         [StringLength(128, ErrorMessage = "Product name field should contain no more than 128 characters")]
         [Display(Name = "Product Name")]
         public string Name { get; set; }
+        [MaxFileSize(1)]
+        [AllowedExtensions(new string[] { "jpg", "png", "gif", "tiff" })]
         public IFormFile Image { get; set; }
         public string ImageUrl { get; set; }
         [Required]
@@ -41,8 +46,8 @@ namespace Digital_Services_BD.Models
         public string Limitations { get; set; }
         public bool IsActive { get; set; }
         public bool IsShippable { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime LastModifiedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
         public ProductItemFeature ProductItemFeature { get; set; }
         //Not mappded to database
         [BindProperty]
@@ -54,5 +59,6 @@ namespace Digital_Services_BD.Models
         public ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
         public ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
         public ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
+        public ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
     }
 }

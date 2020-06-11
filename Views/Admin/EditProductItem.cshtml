@@ -1,4 +1,4 @@
-﻿@model ProductItem
+﻿@model ProductItemViewModel
 @using Digital_Services_BD.Services
 @inject IProductItemOps productItemOps
 @inject IProductCategoryOps productCategoryOps
@@ -34,11 +34,11 @@
             </div>
             <div class="form-row m-4">
                 <div class="form-check col-sm-6">
-                    <input type="checkbox" class="form-check-input" asp-for="IsActive"  />
+                    <input type="checkbox" class="form-check-input" asp-for="IsActive" />
                     <label class="form-check-label" asp-for="IsActive">Is active ?</label>
                 </div>
                 <div class="form-check col-sm-6">
-                    <input type="checkbox" class="form-check-input" asp-for="IsShippable"  />
+                    <input type="checkbox" class="form-check-input" asp-for="IsShippable" />
                     <label class="form-check-label" asp-for="IsShippable">Is shipable ?</label>
                 </div>
             </div>
@@ -103,7 +103,8 @@
                                 <th style="width: 40%;">Overview</th>
                                 <th style="width: 20%;">Timestamp</th>
                             </tr>
-                        } else
+                        }
+                        else
                         {
                             <tr>
                                 <th colspan="5">
@@ -140,6 +141,104 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <h4>Product Features</h4><hr />
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.Company">Company</label>
+                    <input class="form-control " type="text" asp-for="ProductItemFeature.Company" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.Company"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.Developer">Developer</label>
+                    <input class="form-control " type="text" asp-for="ProductItemFeature.Developer" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.Developer"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.Publisher">Publisher</label>
+                    <input class="form-control " type="text" asp-for="ProductItemFeature.Publisher" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.Publisher"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.ReleaseDate">ReleaseDate</label>
+                    <input id="releaseDate" class="form-control " type="datetime" asp-for="ProductItemFeature.ReleaseDate" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.ReleaseDate"></span>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label asp-for="ProductItemFeature.Description">Description</label>
+                    <textarea class="form-control" type="datetime" asp-for="ProductItemFeature.Description"></textarea>
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.Description"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.DeliveryInfo">Delivery Info</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.DeliveryInfo" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.DeliveryInfo"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.ValidityPeriod">Validity Period</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.ValidityPeriod" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.ValidityPeriod"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.DownloadSize">Download Size</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.DownloadSize" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.DownloadSize"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.Genre">Genres</label>
+                    <select class="selectpicker form-control" asp-for="ProductItemFeature.Genre"
+                            asp-items="new List<SelectListItem>(DropdownLists.Genres.Select(r => new SelectListItem(r, r)))" data-live-search="true" multiple="multiple">
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.Genre"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.RegionCodes">Region Codes</label>
+                    <select class="selectpicker form-control" asp-for="ProductItemFeature.RegionCodes"
+                            asp-items="new List<SelectListItem>(DropdownLists.RegionCodes.Select(r => new SelectListItem(r, r)))" data-live-search="true" multiple>
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.RegionCodes"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.RegionCountries">Region Countries</label>
+                    <select class="selectpicker form-control" asp-for="ProductItemFeature.RegionCountries"
+                            asp-items="new List<SelectListItem>(DropdownLists.RegionCountries.Select(r => new SelectListItem(r, r)))" data-live-search="true" multiple>
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.RegionCountries"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.Os"></label>
+                    <select class="selectpicker form-control" asp-for="ProductItemFeature.Os"
+                            asp-items="new List<SelectListItem>(DropdownLists.Os.Select(r => new SelectListItem(r, r)))" data-live-search="true" multiple>
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.Os"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.RequirementCpu">Minimum CPU Requirement</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.RequirementCpu" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.RequirementCpu"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.RequirementGpu">Minimum GPU Requirement</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.RequirementGpu" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.RequirementGpu"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.RequirementRam">Minimum RAM Requirement</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.RequirementRam" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.RequirementRam"></span>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                    <label asp-for="ProductItemFeature.RequirementDisk">Minimum Disk-space Requirement</label>
+                    <input class="form-control " type="datetime" asp-for="ProductItemFeature.RequirementDisk" />
+                    <span class="text-danger" asp-validation-for="ProductItemFeature.RequirementDisk"></span>
+                </div>
+                <!-- Bind 'Id', 'CreatedOn' in hidden field-->
+                <input type="hidden" asp-for="ProductItemFeature.Id" />
+                <input type="hidden" asp-for="ProductItemFeature.CreatedOn" />
+            </div>
+
             <!-- Bind 'Id', 'ImgeUrl', 'CreatedOn' in hidden field-->
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="ImageUrl" />
@@ -167,6 +266,13 @@
         $(document).ready(function () {
             $("#imageFile").change(function () {
                 readImage(this);
+            });
+            //Multiple select
+            $(".selectpicker").selectpicker();
+            //Datetime picker
+            $("#releaseDate").datetimepicker({
+                format: 'Y/m/d',
+                formatDate: 'Y/m/d'
             });
         });
     </script>

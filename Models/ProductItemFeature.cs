@@ -37,7 +37,7 @@ namespace Digital_Services_BD.Models
         public string Os { get; set; }
         [StringLength(256, ErrorMessage = "Platform field should not contain more than 256 characters")]
         public string Platform { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
         [StringLength(256, ErrorMessage = "RequirementCpu field should not contain more than 256 characters")]
         public string RequirementCpu { get; set; }
         [StringLength(128, ErrorMessage = "RequirementRam field should not contain more than 128 characters")]
@@ -48,7 +48,7 @@ namespace Digital_Services_BD.Models
         public string RequirementDisk { get; set; }
         [StringLength(64, ErrorMessage = "DownloadSize field should not contain more than 64 characters")]
         public string DownloadSize { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime LastModifiedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
     }
 }

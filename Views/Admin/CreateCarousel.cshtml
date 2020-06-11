@@ -1,0 +1,106 @@
+﻿@model Carousel
+@inject ICarouselOps carouselOps
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-sm-12">
+        <form enctype="multipart/form-data" method="post" asp-controller="Admin"
+              asp-action="CreateCarousel" class="border mt-4 p-4">
+            <h4 class="mb-3">Create a Carousel</h4>
+            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input class="form-control" type="text" asp-for="Name" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rank">Rank</label>
+                <input class="form-control" type="number" min="0" max="10" asp-for="Rank" />
+                <span class="text-danger" asp-validation-for="Rank"></span>
+            </div>
+            <div id="container">
+                @*<div>
+                    <strong>1.</strong>
+                    <div class="form-group">
+                        <label>Image Preview</label><br />
+                        <img class="img-thumbnail" id="thumbnail0" alt="No image" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CarouselJoinCarouselImage[0].Image">Image</label>
+                        <div class="custom-file">
+                            <input id="imageFile0" data-count="0" class="form-control custom-file-input" type="file" asp-for="CarouselJoinCarouselImage[0].Image" />
+                            <label id="fileName0" class="custom-file-label" for="imageFile0">Choose photo..</label>
+                        </div>
+                        <span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[0].Image"></span>
+                    </div>
+                </div>*@
+            </div>
+            <div class="form-group">
+                <button id="removeImage" type="button" class="btn btn-light float-right"><i class="fas fa-trash mr-2 text-danger"></i>Remove last image</button>
+                <button id="addImage" type="button" class="btn btn-light float-right"><i class="fas fa-plus mr-2"></i>Add image</button>
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        function readImage(input, count) {
+            if (input.files && input.files[0]) {
+                $('#fileName' + count).html(input.files[0].name);
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#thumbnail' + count).attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $(document).ready(function () {
+            $("input[type='file']").change(function (e) {
+                var count = $(e.currentTarget).data("count");
+                console.log(count);
+                readImage(this, count);
+            });
+
+
+            $("#addImage").click(function () {
+                var nextIndex = $("#container").children("div").length;
+                //name attribute is important
+                var template =
+                    '<div>' +
+                    '<strong>' + (nextIndex + 1) + '.</strong>' +
+                    '<div class="form-group">' +
+                    '<label>Image Preview</label><br />' +
+                    '<img class="img-thumbnail" id="thumbnail' + nextIndex + '" alt="No image" />' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="CarouselJoinCarouselImage[' + nextIndex + '].Image">Image</label>' +
+                    '<div class="custom-file">' +
+                    '<input id="imageFile' + nextIndex + '" data-count="' + nextIndex + '" class="form-control custom-file-input" type="file" name="CarouselJoinCarouselImage[' + nextIndex + '].Image" asp-for="CarouselJoinCarouselImage[' + nextIndex + '].Image" />' +
+                    '<label id="fileName' + nextIndex + '" class="custom-file-label" for="imageFile' + nextIndex + '">Choose photo..</label>' +
+                    '</div>' +
+                    '<span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[' + nextIndex + '].Image"></span>' +
+                    '</div>' +
+                    '</div>';
+  
+                $("#container").append(template);
+                $("input[type='file']").unbind();
+                $("input[type='file']").change(function (e) {
+                    var count = $(e.currentTarget).data("count");
+                   // console.log(count);
+                    readImage(this, count);
+                });
+            });
+
+            $("#removeImage").click(function () {
+                $("#container").children("div").last().remove();
+            });
+        });
+    </script>
+}

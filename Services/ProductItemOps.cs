@@ -32,6 +32,13 @@ namespace Digital_Services_BD.Services
             {
                 productItem.ImageUrl = SaveProductImage(productItem.Image);
             }
+            productItem.CreatedOn = DateTime.UtcNow;
+            productItem.LastModifiedOn = DateTime.UtcNow;
+            if(productItem.ProductItemFeature != null)
+            {
+                productItem.ProductItemFeature.CreatedOn = DateTime.UtcNow;
+                productItem.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
+            }
             //Add product item
             context.ProductItems.Add(productItem);
             try
@@ -107,11 +114,12 @@ namespace Digital_Services_BD.Services
         public ProductItem GetProductItem(int id)
         {
             var productItem = context.ProductItems.Find(id);
-            //Populate associated categories, prices for details view
+            //Populate associated categories, prices, features for details view
             if (productItem != null)
             {
                 productItem.Categories = GetProductItemCategories(id).ToList();
                 productItem.ProductItemPrice = GetProductItemPrices(id).ToList();
+                productItem.ProductItemFeature = GetProductItemFeature(id);
             }
             return productItem;
         }
@@ -138,6 +146,10 @@ namespace Digital_Services_BD.Services
             if (productItem.CategoryIds != null && productItem.CategoryIds.Count > 0)
             {
                 AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
+            }
+            if(productItem.ProductItemFeature != null)
+            {
+                productItem.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
             }
             productItem.LastModifiedOn = DateTime.UtcNow;
             context.ProductItems.Update(productItem);
@@ -232,6 +244,10 @@ namespace Digital_Services_BD.Services
                         select category;
             return query.ToList();
         }
+        private ProductItemFeature GetProductItemFeature(int productItemId)
+        {
+            return context.ProductItemFeatures.Where(f => f.ProductItemId == productItemId).FirstOrDefault();
+        }
         private bool AddProductPrice(int productItemId, IEnumerable<ProductItemPrice> prices)
         {
             foreach(var priceObj in prices)
@@ -293,6 +309,109 @@ namespace Digital_Services_BD.Services
             {
 
             }
+        }
+
+        public ProductItemViewModel ConvertModelToViewModel(ProductItem model)
+        {
+            var productFeature = new ProductItemFeatureViewModel
+            {
+                Company = model.ProductItemFeature?.Company,
+                CreatedOn = model.ProductItemFeature.CreatedOn,
+                DeliveryInfo = model.ProductItemFeature?.DeliveryInfo,
+                Description = model.ProductItemFeature?.Description,
+                Developer = model.ProductItemFeature?.Developer,
+                DownloadSize = model.ProductItemFeature?.DownloadSize,
+                Genre = model.ProductItemFeature?.Genre.Split(",").ToList(),
+                Id = model.ProductItemFeature.Id,
+                LastModifiedOn = model.ProductItemFeature.LastModifiedOn,
+                Os = model.ProductItemFeature?.Os.Split(",").ToList(),
+                Platform = model.ProductItemFeature?.Platform.Split(",").ToList(),
+                ProductItemId = model.ProductItemFeature.ProductItemId,
+                Publisher = model.ProductItemFeature?.Publisher,
+                RegionCodes = model.ProductItemFeature?.RegionCodes.Split(",").ToList(),
+                RegionCountries = model.ProductItemFeature?.RegionCountries.Split(",").ToList(),
+                ReleaseDate = model.ProductItemFeature.ReleaseDate,
+                RequirementCpu = model.ProductItemFeature?.RequirementCpu,
+                RequirementDisk = model.ProductItemFeature?.RequirementDisk,
+                RequirementGpu = model.ProductItemFeature?.RequirementGpu,
+                RequirementRam = model.ProductItemFeature?.RequirementRam,
+                ValidityPeriod = model.ProductItemFeature?.ValidityPeriod
+            };
+
+            var productItemViewModel = new ProductItemViewModel
+            {
+                ProductItemFeature = productFeature,
+                Categories = model.Categories,
+                CategoryIds = model.CategoryIds,
+                CreatedOn = model.CreatedOn,
+                HowToConsume = model.HowToConsume,
+                Id = model.Id,
+                Image = model.Image,
+                ImageUrl = model.ImageUrl,
+                IsActive = model.IsActive,
+                IsShippable = model.IsShippable,
+                LastModifiedOn = model.LastModifiedOn,
+                Limitations = model.Limitations,
+                Name = model.Name,
+                Overview = model.Overview,
+                ProductItemJoinProductCategory = model.ProductItemJoinProductCategory,
+                ProductItemJoinPromoOffer = model.ProductItemJoinPromoOffer,
+                ProductItemJoinSearchTagProductItem = model.ProductItemJoinSearchTagProductItem,
+                ProductItemPrice = model.ProductItemPrice,
+                WhatCanBeDone = model.WhatCanBeDone
+            };
+            return productItemViewModel;
+        }
+
+        public ProductItem ConvertViewModelToModel(ProductItemViewModel model)
+        {
+            var productFeature = new ProductItemFeature
+            {
+                Company = model.ProductItemFeature?.Company,
+                CreatedOn = model.ProductItemFeature.CreatedOn,
+                DeliveryInfo = model.ProductItemFeature?.DeliveryInfo,
+                Description = model.ProductItemFeature?.Description,
+                Developer = model.ProductItemFeature?.Developer,
+                DownloadSize = model.ProductItemFeature?.DownloadSize,
+                Genre = string.Join(",", model.ProductItemFeature?.Genre.Select(g => g.ToString())),
+                Id = model.ProductItemFeature.Id,
+                LastModifiedOn = model.ProductItemFeature.LastModifiedOn,
+                Os = string.Join(",", model.ProductItemFeature?.Os.Select(g => g.ToString())),
+                Platform = string.Join(",", model.ProductItemFeature?.Platform.Select(g => g.ToString())),
+                ProductItemId = model.ProductItemFeature.ProductItemId,
+                Publisher = model.ProductItemFeature?.Publisher,
+                RegionCodes = string.Join(",", model.ProductItemFeature?.RegionCodes.Select(g => g.ToString())),
+                RegionCountries = string.Join(",", model.ProductItemFeature?.RegionCountries.Select(g => g.ToString())),
+                ReleaseDate = model.ProductItemFeature.ReleaseDate,
+                RequirementCpu = model.ProductItemFeature?.RequirementCpu,
+                RequirementDisk = model.ProductItemFeature?.RequirementDisk,
+                RequirementGpu = model.ProductItemFeature?.RequirementGpu,
+                RequirementRam = model.ProductItemFeature?.RequirementRam,
+                ValidityPeriod = model.ProductItemFeature?.ValidityPeriod
+            };
+            var productItem = new ProductItem
+            {
+                ProductItemFeature = productFeature,
+                Categories = model.Categories,
+                CategoryIds = model.CategoryIds,
+                CreatedOn = model.CreatedOn,
+                HowToConsume = model.HowToConsume,
+                Id = model.Id,
+                Image = model.Image,
+                ImageUrl = model.ImageUrl,
+                IsActive = model.IsActive,
+                IsShippable = model.IsShippable,
+                LastModifiedOn = model.LastModifiedOn,
+                Limitations = model.Limitations,
+                Name = model.Name,
+                Overview = model.Overview,
+                ProductItemJoinProductCategory = model.ProductItemJoinProductCategory,
+                ProductItemJoinPromoOffer = model.ProductItemJoinPromoOffer,
+                ProductItemJoinSearchTagProductItem = model.ProductItemJoinSearchTagProductItem,
+                ProductItemPrice = model.ProductItemPrice,
+                WhatCanBeDone = model.WhatCanBeDone
+            };
+            return productItem;
         }
     }
 }
