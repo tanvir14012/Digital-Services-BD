@@ -33,6 +33,18 @@
     {
       "library": "popper.js@2.4.0",
       "destination": "wwwroot/lib/popper.js/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "jquery-ui@1.12.1",
+      "destination": "wwwroot/lib/jquery-ui/"
+    },
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/",
+      "files": [
+        "jquery-ui.min.js"
+      ]
     }
   ]
 }

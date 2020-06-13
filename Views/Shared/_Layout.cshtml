@@ -8,6 +8,7 @@
     <environment include="Development">
         <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+        <link href="~/lib/jquery-ui/themes/base/all.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
         <!-- Bootstrap CSS  -->
@@ -130,11 +131,11 @@
             &copy; 2020 - Digital_Services_BD - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/popper.js/umd/popper.min.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
