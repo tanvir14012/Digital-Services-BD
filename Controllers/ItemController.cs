@@ -11,47 +11,47 @@ using Microsoft.AspNetCore.Mvc;
 namespace Digital_Services_BD.Controllers
 {
     [Route("[controller]/{id}")]
-    public class CategoryController : Controller
+    public class ItemController : Controller
     {
-        private readonly IProductGroupOps productGroupOps;
         private readonly IProductCategoryOps productCategoryOps;
+        private readonly IProductItemOps productItemOps;
 
-        public CategoryController(IProductGroupOps productGroupOps, IProductCategoryOps productCategoryOps)
+        public ItemController(IProductCategoryOps productCategoryOps, IProductItemOps productItemOps)
         {
-            this.productGroupOps = productGroupOps;
             this.productCategoryOps = productCategoryOps;
+            this.productItemOps = productItemOps;
         }
         public IActionResult Index([FromRoute] int id, [FromQuery] int pageNo = 1,
             [FromQuery] string sortBy = null, [FromQuery] string priceRange = null)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var productGroup = productGroupOps.GetProductGroup(id);
-                if (productGroup != null)
+                var productCategory = productCategoryOps.GetProductCategory(id);
+                if (productCategory != null)
                 {
-                    var filteredCategories = productGroupOps.FilterCategories(productGroup.Id, pageNo - 1, sortBy, priceRange);
-                    ViewBag.Id = productGroup.Id;
-                    ViewBag.ProductGroupName = productGroup.Name;
-                    ViewBag.TotalCategory = filteredCategories.TotalCategories;
+                    var filteredItems = productCategoryOps.FilterItems(productCategory.Id, pageNo - 1, sortBy, priceRange);
+                    ViewBag.Id = productCategory.Id;
+                    ViewBag.ProductCategoryName = productCategory.Name;
+                    ViewBag.TotalItem = filteredItems.TotalItems;
                     ViewBag.PageNo = pageNo;
                     ViewBag.SortBy = sortBy ?? "m_p";
-                    if(priceRange != null && Regex.IsMatch(priceRange, @"\d+to\d+"))
+                    if (priceRange != null && Regex.IsMatch(priceRange, @"\d+to\d+"))
                     {
-                        ViewBag.PriceMin =  Convert.ToInt32(priceRange.Split("to")[0]);
-                        ViewBag.PriceMax =  Convert.ToInt32(priceRange.Split("to")[1]);
+                        ViewBag.PriceMin = Convert.ToInt32(priceRange.Split("to")[0]);
+                        ViewBag.PriceMax = Convert.ToInt32(priceRange.Split("to")[1]);
                     }
                     else
                     {
                         ViewBag.PriceMin = ProductConfig.MinPrice;
                         ViewBag.PriceMax = ProductConfig.MaxPrice;
                     }
-                    return View(filteredCategories.CategoriesUnderFilter);
+                    return View(filteredItems.ItemsUnderFilter);
                 }
             }
             ViewBag.Heading = "Page Not Found";
             ViewBag.Message = "This is not the page you are looking for. Please check spelling and try again.";
             ViewBag.Action = "Index";
-            ViewBag.Controller = "Category";
+            ViewBag.Controller = "Item";
             ViewBag.BackText = "Go Back";
             return View("NotFound");
         }

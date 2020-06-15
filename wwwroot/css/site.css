@@ -130,3 +130,12 @@ html {
         border: solid 1px #5A4181;
     }
 /*Pagination link*/
+
+/*price range slider handle*/
+.ui-slider-handle {
+    background: white !important;
+}
+
+.text-muted-link < a {
+    color: #6c757d !important;
+}

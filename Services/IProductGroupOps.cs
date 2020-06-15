@@ -1,4 +1,5 @@
 ﻿using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Digital_Services_BD.Services
         ProductGroup DeleteProductGroup(int id);
         ProductGroup UpdateProductGroup(ProductGroup productGroup);
         IEnumerable<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId);
+        FilteredCategories FilterCategories(int productGroupId, int pageNo, string sortBy, string priceRange);
     }
 }

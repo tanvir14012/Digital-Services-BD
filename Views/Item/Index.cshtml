@@ -1,11 +1,11 @@
 ﻿@using Digital_Services_BD.ViewModels
-@model List<ProductCategory>
-@inject IProductItemOps productItemOps
+@model List<ProductItem>
 @inject IProductGroupOps productGroupOps
+@inject IProductItemOps productItemOps
 @inject IProductCategoryOps productCategoryOps
 
 @{
-    var locationOrigin = Url.Action("Index", "Category", new { id = ViewBag.Id });
+    var locationOrigin = Url.Action("Index", "Item", new { id = ViewBag.Id });
 }
 <script type="text/javascript">
     var locationOrigin = "@locationOrigin";
@@ -23,8 +23,8 @@
             </a>
         </li>
         <li class="breadcrumb-item active">
-            <a href="@Url.Action("Index", "Category", new { id = 1})">
-                @ViewBag.ProductGroupName
+            <a href="@Url.Action("Index", "Item", new { id = ViewBag.Id})">
+                @ViewBag.ProductCategoryName
             </a>
         </li>
     </ul>
@@ -57,18 +57,18 @@
                     <div class="card">
                         <div class="card-header p-0">
                             <button class="btn btn-light w-100 text-left pl-2" data-target="#filter2" data-toggle="collapse">
-                                Category
+                                Subcategory
                                 <i class="float-right fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
                         <div class="collapse show" @*data-parent="#accordion"*@ id="filter2">
                             <div class="card-body p-0 pl-2 pr-2">
                                 <ul class="list-group list-group-flush link-normal">
-                                    @foreach (var productGroup in productGroupOps.GetAllProductGroups())
+                                    @foreach (var productCategory in productCategoryOps.GetAllProductCategories())
                                     {
                                         <li class="list-group-item p-0 pt-2">
-                                            <a asp-controller="Category" asp-action="Index" asp-route-id="@productGroup.Id">
-                                                <span class=" @(productGroup.Id == ViewBag.Id ? "text-muted font-weight-bold": "")"> @productGroup.Name</span>
+                                            <a asp-controller="Item" asp-action="Index" asp-route-id="@productCategory.Id">
+                                                <span class=" @(productCategory.Id == ViewBag.Id ? "text-muted font-weight-bold": "")"> @productCategory.Name</span>
                                             </a>
                                         </li>
                                     }
@@ -82,7 +82,7 @@
         </div>
     </div>
     <div class="col-lg-9 col-md-8 col-sm-12">
-        <h4>@ViewBag.ProductGroupName<sub class="text-muted ml-2">(@ViewBag.TotalCategory item/s)</sub></h4>
+        <h4>@ViewBag.ProductCategoryName<sub class="text-muted ml-2">(@ViewBag.TotalItem item/s)</sub></h4>
         <div class="form-row d-flex justify-content-end">
             <label class="mr-2 pt-1">Sort By</label>
             <select id="sortBy" class="selectpicker">
@@ -96,50 +96,32 @@
         <div class="card-deck row">
             @for (var i = 0; i < Model.Count; i++)
             {
+                var priceObj = Model[i].ProductItemPrice.FirstOrDefault();
                 <div class="col-lg-4 col-md-6 col-sm-12 p-0 pt-2">
                     <div class="card m-2 link-normal">
-                        <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Item" asp-route-id="@Model[i].Id">
+                        <a class="text-decoration-none text-black" asp-action="Details" asp-controller="Product">
                             <div class="d-flex justify-content-center align-items-center">
                                 <img class="img-fluid h-240" src="\@Model[i].ImageUrl" />
                             </div>
                             <div class="card-body p-1">
                                 <h5>@Model[i].Name</h5>
-                                <ul class="list-group list-group-horizontal form-row">
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].Overview">
-                                            <i class="fas fa-book"></i>
-                                            Overview
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].WhatCanBeDone">
-                                            <i class="fas fa-info-circle"></i>
-                                            Benefits
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].HowToConsume">
-                                            <i class="fas fa-comment"></i>
-                                            Guide
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].Limitations">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                            Pitfall
-                                        </span>
-                                    </li>
-                                </ul>
+
                             </div>
                             <div class="card-footer p-1">
                                 <div class="price-font">
-                                    From
-                                    <strong>@string.Format("{0:0.00}", productCategoryOps.GetMinProductPriceByCatgId(Model[i].Id))</strong>
-                                    <sup>BDT</sup><br />
-                                    To
-                                    <strong>@string.Format("{0:0.00}", productCategoryOps.GetMaxProductPriceByCatgId(Model[i].Id))</strong>
+                                    <strong>@string.Format("{0:0.00}", priceObj.Price - priceObj.Discount)</strong>
                                     <sup>BDT</sup>
                                 </div>
+                                @if (priceObj.Discount > 0)
+                                {
+                                    <div class="text-black">
+                                        <s class="text-muted">@priceObj.Price</s>
+                                        <sup class="text-muted">BDT</sup>
+                                        <span class="ml-1 bg-primary p-1">
+                                            <span class="text-white">@string.Format("{0:0.00}", -(priceObj.Discount * 100) / priceObj.Price)%</span>
+                                        </span>
+                                    </div>
+                                }
                             </div>
                         </a>
                     </div>
@@ -154,7 +136,7 @@
                     @if (ViewBag.PageNo >= 2)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
+                            <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"
                                asp-route-pageNo="@(ViewBag.PageNo-1)">&laquo;</a>
                         </li>
                     }
@@ -163,7 +145,7 @@
                         @for (var i = 1; i <= ViewBag.PageNo; i++)
                         {
                             <li class="page-item @(i == ViewBag.PageNo ? "active": "")">
-                                <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
+                                <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"
                                    asp-route-pageNo="@i">@i</a>
                             </li>
                         }
@@ -171,7 +153,7 @@
                     else
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
+                            <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"
                                asp-route-pageNo="1">1</a>
                         </li>
                         <li class="page-item">
@@ -183,18 +165,18 @@
                         @for (var i = ViewBag.PageNo - 2; i <= ViewBag.PageNo; i++)
                         {
                             <li class="page-item @(i == ViewBag.PageNo ? "active": "")">
-                                <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
+                                <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"
                                    asp-route-pageNo="@i">@i</a>
                             </li>
                         }
                     }
                     @*--------  Second Half  -------- *@
-                    @if ((ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage) - ViewBag.PageNo < 5)
+                    @if ((ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage) - ViewBag.PageNo < 5)
                     {
-                        @for (var i = ViewBag.PageNo + 1; i <= (ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage); i++)
+                        @for (var i = ViewBag.PageNo + 1; i <= (ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage); i++)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id" asp-route-pageNo="@i">@i</a>
+                                <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id" asp-route-pageNo="@i">@i</a>
                             </li>
                         }
                     }
@@ -203,21 +185,21 @@
                         @for (var i = ViewBag.PageNo + 1; i <= ViewBag.PageNo + 2; i++)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id" asp-route-pageNo="@i">@i</a>
+                                <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id" asp-route-pageNo="@i">@i</a>
                             </li>
                         }
                         <li class="page-item">
                             ...
                         </li>
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
-                               asp-route-pageNo="@(ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage)">@(ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage)</a>
+                            <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"
+                               asp-route-pageNo="@(ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage)">@(ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage)</a>
                         </li>
                     }
-                    @if ((ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage) - ViewBag.PageNo >= 1)
+                    @if ((ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage) - ViewBag.PageNo >= 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
+                            <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"
                                asp-route-pageNo="@(ViewBag.PageNo+1)">&raquo;</a>
                         </li>
                     }
@@ -250,7 +232,7 @@
             //Price submit
             $("#goPrice").click(function () {
                 window.location.href = locationOrigin + "?sortBy=" + $("#sortBy").val() + "&priceRange=" +
-                    $("#priceRange").slider("option", "values")[0] + "to" + $("#priceRange").slider("option", "values")[1] + 
+                    $("#priceRange").slider("option", "values")[0] + "to" + $("#priceRange").slider("option", "values")[1] +
                     + "&pageNo=" + pageNo;
             });
             $("#priceLabel").html(priceMin + "<sup>BDT</sup>&nbsp;&mdash;&nbsp;" + priceMax + "<sup>BDT</sup>");

@@ -1,4 +1,6 @@
-﻿using Digital_Services_BD.Models;
+﻿using Digital_Services_BD.Migrations;
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Digital_Services_BD.Services
@@ -28,7 +31,7 @@ namespace Digital_Services_BD.Services
         /// <returns>returns added item if successful, otherwise returns null</returns>
         public ProductGroup AddProductGroup(ProductGroup productGroup)
         {
-            if(productGroup.Image != null)
+            if (productGroup.Image != null)
             {
                 productGroup.ImageUrl = SaveProductImage(productGroup.Image);
             }
@@ -49,7 +52,7 @@ namespace Digital_Services_BD.Services
                 }
                 return isSaved ? productGroup : null;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }
@@ -66,7 +69,7 @@ namespace Digital_Services_BD.Services
         public ProductGroup DeleteProductGroup(int id)
         {
             var productGroup = context.ProductGroups.Find(id);
-            if(productGroup != null)
+            if (productGroup != null)
             {
                 context.ProductGroups.Remove(productGroup);
             }
@@ -79,11 +82,11 @@ namespace Digital_Services_BD.Services
                 };
                 return null;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }
-            
+
         }
         /// <summary>
         /// Get all productgroup
@@ -102,7 +105,7 @@ namespace Digital_Services_BD.Services
         {
             var productGroup = context.ProductGroups.Find(id);
             //Populate associated categories for details view
-            if(productGroup != null)
+            if (productGroup != null)
             {
                 productGroup.AllCategories = GetAllProdCategoriesByProdGroupId(id).ToList();
             }
@@ -118,7 +121,7 @@ namespace Digital_Services_BD.Services
             if (productGroup.Image != null)
             {
                 //Delete existing image
-                if(productGroup.ImageUrl != null)
+                if (productGroup.ImageUrl != null)
                 {
                     var directoryPath = Path.Combine(webHostEnvironment.WebRootPath, "ImageResources", "ProductGroup");
                     DeleteFile(Path.Combine(directoryPath, productGroup.ImageUrl));
@@ -131,7 +134,7 @@ namespace Digital_Services_BD.Services
             if (productGroup.AllCategoryIds.Count > 0)
             {
                 var isAdded = AddProdCategoriesToGroup(productGroup.Id, productGroup.AllCategoryIds);
-                if(! isAdded)
+                if (!isAdded)
                 {
                     return null;
                 }
@@ -143,7 +146,7 @@ namespace Digital_Services_BD.Services
                 var isUpdated = context.SaveChanges() > 0;
                 return isUpdated ? productGroup : null;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }
@@ -238,6 +241,81 @@ namespace Digital_Services_BD.Services
                 return false;
             }
             return true;
+        }
+        /// <summary>
+        /// Filters categories of a product group 
+        /// </summary>
+        /// <param name="productGroupId"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="priceRange"></param>
+        /// <returns></returns>
+        public FilteredCategories FilterCategories(int productGroupId, int pageNo, string sortBy, string priceRange)
+        {
+            var query = from category in context.ProductCategories
+                        join categorygroupmap in context.productCategoryJoinProductGroup
+                        on category.Id equals categorygroupmap.ProductCategoryId
+                        where categorygroupmap.ProductGroupId == productGroupId
+                        join categoryitemmap in context.ProductItemJoinProductCategory
+                        on category.Id equals categoryitemmap.ProductCategoryId
+                        join item in context.ProductItems
+                        on categoryitemmap.ProductItemId equals item.Id
+                        join prices in context.ProductItemPrices
+                        on item.Id equals prices.ProductItemId
+                        where prices.PriceCurrency == "BDT"
+                        select new { category, item, prices };
+            var joinTable = query.Distinct().ToList();
+            if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+"))
+            {
+                decimal minPrice = Convert.ToDecimal(priceRange.Split("to")[0]);
+                decimal maxPrice = Convert.ToDecimal(priceRange.Split("to")[1]);
+                joinTable = joinTable.Where(jt => (jt.prices.Price - jt.prices.Discount) >= minPrice
+                && (jt.prices.Price - jt.prices.Discount) <= maxPrice).ToList();
+            }
+            if (sortBy != null)
+            {
+                switch (sortBy)
+                {
+                    case "name": joinTable = joinTable.OrderBy(jt => jt.category.Name).ToList();
+                        break;
+                    case "p_l_h": joinTable = joinTable.OrderBy(jt => (jt.prices.Price - jt.prices.Discount)).ToList();
+                        break;
+                    case "p_h_l": joinTable = joinTable.OrderByDescending(jt => (jt.prices.Price - jt.prices.Discount)).ToList(); 
+                        break;
+                    default:
+                        break;
+                }
+            }
+            var categories = joinTable.Select(jt => jt.category).Distinct().ToList();
+            var totalCategories = categories.Count();
+
+            if(pageNo >= 0 && pageNo < categories.Count)
+            {
+                var start = pageNo * ProductConfig.NoOfProductCategoryPerPage;
+                try
+                {
+                    categories = categories.GetRange(start, ProductConfig.NoOfProductCategoryPerPage);
+                }
+                catch(ArgumentException e)
+                {
+                    if(start > categories.Count)
+                    {
+                        categories = categories.TakeLast(ProductConfig.NoOfProductCategoryPerPage).ToList();
+                    }
+                    else if(start + ProductConfig.NoOfProductCategoryPerPage >= categories.Count )
+                    {
+                        categories = categories.GetRange(start, categories.Count() - start);
+                    }
+                }
+                
+            }
+            var filteredCategories = new FilteredCategories
+            {
+                TotalCategories = totalCategories,
+                CategoriesUnderFilter = categories
+            };
+
+            return filteredCategories;
         }
 
     }

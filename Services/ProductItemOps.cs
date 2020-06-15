@@ -169,6 +169,7 @@ namespace Digital_Services_BD.Services
             var query = from item in context.ProductItems
                         join categoryitemmap in context.ProductItemJoinProductCategory
                         on item.Id equals categoryitemmap.ProductItemId
+                        where categoryitemmap.ProductCategoryId == productCategoryId
                         select item;
 
             return query.ToList();
