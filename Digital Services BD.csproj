@@ -50,6 +50,8 @@
     <Compile Remove="Migrations\20200607135700_product.Designer.cs" />
     <Compile Remove="Migrations\20200608041115_product.cs" />
     <Compile Remove="Migrations\20200608041115_product.Designer.cs" />
+    <Compile Remove="Migrations\20200618132835_cart.cs" />
+    <Compile Remove="Migrations\20200618132835_cart.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

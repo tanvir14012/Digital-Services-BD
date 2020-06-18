@@ -357,5 +357,13 @@ namespace Digital_Services_BD.Services
 
             return filteredItems;
         }
+
+        public IEnumerable<int> GetAllProductGroupIdsByCategoryId(int categoryId)
+        {
+            return context.productCategoryJoinProductGroup.AsNoTracking()
+                .Where(jt => jt.ProductCategoryId == categoryId)
+                .Select(jt => jt.ProductGroupId).ToList();
+        }
+
     }
 }

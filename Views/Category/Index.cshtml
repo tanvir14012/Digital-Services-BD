@@ -30,6 +30,7 @@
     </ul>
 </div>
 <div class="row p-2">
+    <!-- Left sidebar -->
     <div class="col-lg-3 col-md-4 col-sm-12 pl-0">
         <div class="navbar-expand-md">
             <button class="btn btn-light navbar-toggler m-2" data-toggle="collapse" data-target="#filterContent">
@@ -81,6 +82,8 @@
             </div>
         </div>
     </div>
+    <!-- Left sidebar -->
+    <!-- Main content area-->
     <div class="col-lg-9 col-md-8 col-sm-12">
         <h4>@ViewBag.ProductGroupName<sub class="text-muted ml-2">(@ViewBag.TotalCategory item/s)</sub></h4>
         <div class="form-row d-flex justify-content-end">
@@ -146,7 +149,7 @@
                 </div>
             }
         </div>
-
+        <!-- Pagination -->
         @if (Model.Count > 0)
         {
             <div class="row d-flex justify-content-center">
@@ -224,7 +227,9 @@
                 </ul>
             </div>
         }
+        <!-- Pagination -->
     </div>
+    <!-- Main content area-->
 </div>
 
 @section Scripts {

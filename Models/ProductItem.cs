@@ -21,7 +21,8 @@ namespace Digital_Services_BD.Models
             Categories = new List<ProductCategory>();
             ProductItemFeature = new ProductItemFeature();
             ProductSectionJoinProductItem = new List<ProductSectionJoinProductItem>();
-        }
+            ProductItemBundleJoinProductItem = new List<ProductItemBundleJoinProductItem>();
+    }
         public int Id { get; set; }
         [Required]
         [StringLength(128, ErrorMessage = "Product name field should contain no more than 128 characters")]
@@ -60,5 +61,6 @@ namespace Digital_Services_BD.Models
         public ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
         public ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
         public ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
+        public ICollection<ProductItemBundleJoinProductItem> ProductItemBundleJoinProductItem { get; set; }
     }
 }

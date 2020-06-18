@@ -7,7 +7,6 @@ namespace AspNetCore
     #line hidden
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,6 +26,13 @@ using Digital_Services_BD.Models;
 #line hidden
 #nullable disable
 #nullable restore
+#line 4 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\_ViewImports.cshtml"
+using System.Linq;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\Admin\ViewProductItem.cshtml"
 using Digital_Services_BD.Services;
 
@@ -34,7 +40,7 @@ using Digital_Services_BD.Services;
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2cc758bc8fef6ac635c18ec7171f18f1edc0f3b2", @"/Views/Admin/ViewProductItem.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c11e7091e85c4fc8076d1553ae47474c9477a747", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"ee0dd57ce81847b019f0ad6fef18f63dfdba4aa3", @"/Views/_ViewImports.cshtml")]
     public class Views_Admin_ViewProductItem : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<ProductItem>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("type", "checkbox", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -117,7 +123,7 @@ WriteAttributeValue("", 663, Model.ImageUrl, 663, 15, false);
 #nullable disable
             EndWriteAttribute();
             WriteLiteral(" />\r\n                <div class=\"form-row m-4\">\r\n                    <div class=\"form-check col-sm-6\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b210825", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b210981", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -145,7 +151,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("label", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b212975", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("label", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b213131", async() => {
                 WriteLiteral("Is active ?");
             }
             );
@@ -168,7 +174,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_LabelTagHelper.For = ModelExpressionProvid
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </div>\r\n                    <div class=\"form-check col-sm-6\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b214664", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b214820", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -195,7 +201,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("label", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b216734", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("label", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b216890", async() => {
                 WriteLiteral("Is shipable ?");
             }
             );
@@ -475,7 +481,7 @@ WriteAttributeValue("", 4544, category.ImageUrl, 4544, 18, false);
                 <ul class=""list-group list-group-horizontal"">
                     <li class=""list-group-item p-0 mr-2"">
                         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b229992", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b230148", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-edit\"></i>\r\n                        ");
             }
             );
@@ -512,7 +518,7 @@ WriteAttributeValue("", 4544, category.ImageUrl, 4544, 18, false);
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </li>\r\n                    <li class=\"list-group-item p-0 mr-2\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b232932", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b233088", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-trash\"></i>\r\n                        ");
             }
             );
@@ -549,7 +555,7 @@ WriteAttributeValue("", 4544, category.ImageUrl, 4544, 18, false);
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </li>\r\n                    <li class=\"list-group-item p-0 mr-2\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b235879", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2cc758bc8fef6ac635c18ec7171f18f1edc0f3b236035", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-backward\"></i>\r\n                        ");
             }
             );

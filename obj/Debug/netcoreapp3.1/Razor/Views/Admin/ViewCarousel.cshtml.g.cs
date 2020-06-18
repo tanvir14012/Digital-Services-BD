@@ -7,7 +7,6 @@ namespace AspNetCore
     #line hidden
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,8 +32,15 @@ using Digital_Services_BD.Services;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 4 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\_ViewImports.cshtml"
+using System.Linq;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e", @"/Views/Admin/ViewCarousel.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c11e7091e85c4fc8076d1553ae47474c9477a747", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"ee0dd57ce81847b019f0ad6fef18f63dfdba4aa3", @"/Views/_ViewImports.cshtml")]
     public class Views_Admin_ViewCarousel : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<Carousel>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("img-fluid img-mythumbnail m-1"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -99,7 +105,7 @@ using Digital_Services_BD.Services;
 #line hidden
 #nullable disable
             WriteLiteral("                    <div class=\"col-6\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e8205", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e8361", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.ImageTagHelper>();
@@ -142,7 +148,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper.AppendVersion = true;
 #line hidden
 #nullable disable
             WriteLiteral("            </div>\r\n            <div class=\"card-footer\">\r\n                <ul class=\"list-group list-group-horizontal\">\r\n                    <li class=\"list-group-item p-0 mr-2\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e10990", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e11146", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-edit\"></i>\r\n                        ");
             }
             );
@@ -179,7 +185,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper.AppendVersion = true;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </li>\r\n                    <li class=\"list-group-item p-0 mr-2\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e13923", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c0fa82a6cc0c4b09d3588ae0640b969e2b74c78e14079", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-trash\"></i>\r\n                        ");
             }
             );

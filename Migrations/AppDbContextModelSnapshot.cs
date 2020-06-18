@@ -130,6 +130,84 @@ namespace Digital_Services_BD.Migrations
                     b.ToTable("carouselJoinCarouselImages");
                 });
 
+            modelBuilder.Entity("Digital_Services_BD.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCheckedOut")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinCartItem", b =>
+                {
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId", "CartItemId");
+
+                    b.HasIndex("CartItemId");
+
+                    b.ToTable("CartJoinCartItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinProductItemBundle", b =>
+                {
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductItemBundleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId", "ProductItemBundleId");
+
+                    b.HasIndex("ProductItemBundleId");
+
+                    b.ToTable("CartJoinProductItemBundles");
+                });
+
             modelBuilder.Entity("Digital_Services_BD.Models.Language", b =>
                 {
                     b.Property<int>("Id")
@@ -335,6 +413,54 @@ namespace Digital_Services_BD.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItemBundle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("BundleDiscount")
+                        .HasColumnType("decimal(19, 4)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActiveNow")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductItemBundles");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItemBundleJoinProductItem", b =>
+                {
+                    b.Property<int>("ProductItemBundleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductItemQuantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("ProductItemBundleId", "ProductItemId");
+
+                    b.HasIndex("ProductItemId");
+
+                    b.ToTable("productItemBundleJoinProductItems");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemFeature", b =>
@@ -918,6 +1044,40 @@ namespace Digital_Services_BD.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinCartItem", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Cart", "Cart")
+                        .WithMany("CartJoinCartItem")
+                        .HasForeignKey("CartId")
+                        .HasConstraintName("FK_CartJoinCartItem_CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.CartItem", "CartItem")
+                        .WithMany("CartJoinCartItem")
+                        .HasForeignKey("CartItemId")
+                        .HasConstraintName("FK_CartJoinCartItem_CartItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinProductItemBundle", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Cart", "Cart")
+                        .WithMany("CartJoinProductItemBundle")
+                        .HasForeignKey("CartId")
+                        .HasConstraintName("FK_CartJoinProductItemBundle_CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductItemBundle", "ProductItemBundle")
+                        .WithMany("CartJoinProductItemBundle")
+                        .HasForeignKey("ProductItemBundleId")
+                        .HasConstraintName("FK_CartJoinProductItemBundle_ProductItemBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Digital_Services_BD.Models.ProductCategoryJoinProductGroup", b =>
                 {
                     b.HasOne("Digital_Services_BD.Models.ProductCategory", "ProductCategory")
@@ -932,6 +1092,23 @@ namespace Digital_Services_BD.Migrations
                         .HasForeignKey("ProductGroupId")
                         .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItemBundleJoinProductItem", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.ProductItemBundle", "ProductItemBundle")
+                        .WithMany("ProductItemBundleJoinProductItem")
+                        .HasForeignKey("ProductItemBundleId")
+                        .HasConstraintName("FK_ProductItemBundleJoinProductItem_ProductItemBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
+                        .WithMany("ProductItemBundleJoinProductItem")
+                        .HasForeignKey("ProductItemId")
+                        .HasConstraintName("FK_ProductItemBundleJoinProductItem_ProductItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

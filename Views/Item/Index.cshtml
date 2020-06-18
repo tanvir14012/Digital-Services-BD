@@ -6,6 +6,8 @@
 
 @{
     var locationOrigin = Url.Action("Index", "Item", new { id = ViewBag.Id });
+    var allProductGroups = productGroupOps.GetAllProductGroups().ToList();
+    var allProductGroupIdsUnderThisCategory = productCategoryOps.GetAllProductGroupIdsByCategoryId(ViewBag.Id);
 }
 <script type="text/javascript">
     var locationOrigin = "@locationOrigin";
@@ -20,6 +22,11 @@
         <li class="breadcrumb-item">
             <a asp-controller="Home" asp-action="Index">
                 <i class="fas fa-home mr-1"></i>Home
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Category", new { id = allProductGroupIdsUnderThisCategory[0]})">
+                @(allProductGroups.Where(g => g.Id == allProductGroupIdsUnderThisCategory[0]).Select(g => g.Name).FirstOrDefault())
             </a>
         </li>
         <li class="breadcrumb-item active">
@@ -69,6 +76,30 @@
                                         <li class="list-group-item p-0 pt-2">
                                             <a asp-controller="Item" asp-action="Index" asp-route-id="@productCategory.Id">
                                                 <span class=" @(productCategory.Id == ViewBag.Id ? "text-muted font-weight-bold": "")"> @productCategory.Name</span>
+                                            </a>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header p-0">
+                            <button class="btn btn-light w-100 text-left pl-2" data-target="#filter3" data-toggle="collapse">
+                                Category
+                                <i class="float-right fas fa-angle-down text-muted"></i>
+                            </button>
+                        </div>
+                        <div class="collapse show" @*data-parent="#accordion"*@ id="filter3">
+                            <div class="card-body p-0 pl-2 pr-2">
+                                <ul class="list-group list-group-flush link-normal">
+                                    @foreach (var productGroup in allProductGroups)
+                                    {
+                                        <li class="list-group-item p-0 pt-2">
+                                            <a asp-controller="Category" asp-action="Index" asp-route-id="@productGroup.Id">
+                                                <span class=" @(allProductGroupIdsUnderThisCategory.Contains(productGroup.Id) ? "text-muted font-weight-bold": "")"> @productGroup.Name</span>
                                             </a>
                                         </li>
                                     }

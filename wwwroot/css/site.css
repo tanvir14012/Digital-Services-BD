@@ -136,6 +136,6 @@ html {
     background: white !important;
 }
 
-.text-muted-link < a {
+.text-muted-link > a {
     color: #6c757d !important;
 }

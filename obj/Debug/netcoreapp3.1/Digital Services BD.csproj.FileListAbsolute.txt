@@ -110,3 +110,4 @@ D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Ra
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewCarousel.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Category\Index.cshtml.g.cs
 D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Item\Index.cshtml.g.cs
+D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Detail\Index.cshtml.g.cs

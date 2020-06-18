@@ -28,7 +28,12 @@ namespace Digital_Services_BD.Models
         public DbSet<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
         public DbSet<Carousel> Carousels { get; set; }
         public DbSet<CarouselJoinCarouselImage> carouselJoinCarouselImages { get; set; }
-
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<CartJoinCartItem> CartJoinCartItems { get; set; }
+        public DbSet<ProductItemBundle> ProductItemBundles { get; set; }
+        public DbSet<ProductItemBundleJoinProductItem> productItemBundleJoinProductItems { get; set; }
+        public DbSet<CartJoinProductItemBundle> CartJoinProductItemBundles { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -37,7 +42,8 @@ namespace Digital_Services_BD.Models
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("StoreDb");
             //Address table property design
-            builder.Entity<Address>(entity => {
+            builder.Entity<Address>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.AddressLineOne).IsUnicode().HasMaxLength(128);
                 entity.Property(e => e.AddressLineTwo).IsUnicode().HasMaxLength(128);
@@ -49,7 +55,8 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.Country).IsUnicode().HasMaxLength(16);
             });
             //Customer table property design
-            builder.Entity<Customer>(entity => {
+            builder.Entity<Customer>(entity =>
+            {
                 entity.Property(e => e.FirstName).IsUnicode().IsRequired().HasMaxLength(16);
                 entity.Property(e => e.LastName).IsUnicode().IsRequired().HasMaxLength(16);
                 entity.Property(e => e.Gender).IsUnicode().HasMaxLength(8);
@@ -73,7 +80,8 @@ namespace Digital_Services_BD.Models
                       .OnDelete(DeleteBehavior.NoAction);
             });
             //ProductItem table property design
-            builder.Entity<ProductItem>(entity => {
+            builder.Entity<ProductItem>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
@@ -91,7 +99,8 @@ namespace Digital_Services_BD.Models
             });
 
             //ProductItemPrice table property design
-            builder.Entity<ProductItemPrice>(entity => {
+            builder.Entity<ProductItemPrice>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.PriceCurrency).IsRequired().HasMaxLength(16);
@@ -102,7 +111,8 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.LastModifiedOn).HasDefaultValueSql("getutcdate()");
             });
             //ProductCategory table property design
-            builder.Entity<ProductCategory>(entity => {
+            builder.Entity<ProductCategory>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
@@ -118,7 +128,8 @@ namespace Digital_Services_BD.Models
             });
 
             //ProductItemJoinProductCategory table key, foreign key design
-            builder.Entity<ProductItemJoinProductCategory>(entity => {
+            builder.Entity<ProductItemJoinProductCategory>(entity =>
+            {
                 entity.HasKey(e => new { e.ProductItemId, e.ProductCategoryId });
                 entity.HasOne(e => e.ProductItem)
                       .WithMany(e => e.ProductItemJoinProductCategory)
@@ -133,7 +144,8 @@ namespace Digital_Services_BD.Models
             });
 
             //ProductGroup table property design
-            builder.Entity<ProductGroup>(entity => {
+            builder.Entity<ProductGroup>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.ImageUrl).HasMaxLength(256);
@@ -149,7 +161,8 @@ namespace Digital_Services_BD.Models
             });
 
             //ProductCategoryJoinProductGroup table key, foreign key design
-            builder.Entity<ProductCategoryJoinProductGroup>(entity => {
+            builder.Entity<ProductCategoryJoinProductGroup>(entity =>
+            {
                 entity.HasKey(e => new { e.ProductCategoryId, e.ProductGroupId });
                 entity.HasOne(e => e.ProductGroup)
                       .WithMany(e => e.ProductCategoryJoinProductGroup)
@@ -164,13 +177,15 @@ namespace Digital_Services_BD.Models
             });
 
             //SearchTagProductItem table property design
-            builder.Entity<SearchTagProductItem>(entity => {
+            builder.Entity<SearchTagProductItem>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.TagName).IsRequired().HasMaxLength(128);
             });
 
             //ProductItemJoinSearchTagProductItem table key, foreign key design
-            builder.Entity<ProductItemJoinSearchTagProductItem>(entity => {
+            builder.Entity<ProductItemJoinSearchTagProductItem>(entity =>
+            {
                 entity.HasKey(e => new { e.ProductItemId, e.SearchTagProductItemId });
                 entity.HasOne(e => e.ProductItem)
                       .WithMany(e => e.ProductItemJoinSearchTagProductItem)
@@ -182,7 +197,8 @@ namespace Digital_Services_BD.Models
                       .HasConstraintName("FK_ProductItemJoinSearchTagProductItem_SearchTagProductItemId");
             });
             //PromoOffer table property design
-            builder.Entity<PromoOffer>(entity => {
+            builder.Entity<PromoOffer>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.PromoCode).IsRequired().HasMaxLength(16);
@@ -194,7 +210,8 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
             });
 
-            builder.Entity<ProductItemJoinPromoOffer>(entity => {
+            builder.Entity<ProductItemJoinPromoOffer>(entity =>
+            {
                 entity.HasKey(e => new { e.ProductItemId, e.PromoOfferId });
                 entity.HasOne(e => e.ProductItem)
                       .WithMany(e => e.ProductItemJoinPromoOffer)
@@ -206,7 +223,8 @@ namespace Digital_Services_BD.Models
                       .HasConstraintName("FK_ProductItemJoinPromoOffer_PromoOfferId");
             });
 
-            builder.Entity<ProductItemFeature>(entity => {
+            builder.Entity<ProductItemFeature>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.Company).HasMaxLength(64);
@@ -228,7 +246,8 @@ namespace Digital_Services_BD.Models
             });
 
             //Product section for landing page like featured, you may like, hot deals etc.
-            builder.Entity<ProductSection>(entity => {
+            builder.Entity<ProductSection>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Title).HasMaxLength(128);
                 entity.Property(e => e.Overview).HasMaxLength(512);
@@ -236,8 +255,9 @@ namespace Digital_Services_BD.Models
                 entity.Ignore(e => e.ProductItems);
             });
             //Foreign key design
-            builder.Entity<ProductSectionJoinProductItem>(entity => {
-                entity.HasKey(e => new { e.ProductSectionId, e.ProductItemId});
+            builder.Entity<ProductSectionJoinProductItem>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductSectionId, e.ProductItemId });
                 entity.HasOne(e => e.ProductSection)
                       .WithMany(e => e.ProductSectionJoinProductItem)
                       .HasForeignKey(e => e.ProductSectionId)
@@ -251,11 +271,13 @@ namespace Digital_Services_BD.Models
                      .OnDelete(DeleteBehavior.Cascade);
             });
             //Carousel
-            builder.Entity<Carousel>(entity => {
+            builder.Entity<Carousel>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.Name).HasMaxLength(128);
             });
-            builder.Entity<CarouselJoinCarouselImage>(entity => {
+            builder.Entity<CarouselJoinCarouselImage>(entity =>
+            {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
                 entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Ignore(e => e.Image);
@@ -263,6 +285,77 @@ namespace Digital_Services_BD.Models
                       .WithMany(e => e.CarouselJoinCarouselImage)
                       .HasForeignKey(e => e.CarouselId)
                       .HasConstraintName("FK_CarouselJoinCarouselImage_CarouselId")
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+            //Cart
+            builder.Entity<Cart>(entity =>
+            {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.IsCheckedOut).IsRequired().HasDefaultValue(false);
+            });
+
+            builder.Entity<CartItem>(entity =>
+            {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.CartId).IsRequired();
+                entity.Property(e => e.ProductItemId).IsRequired();
+                entity.Property(e => e.Quantity).IsRequired();
+                entity.Ignore(e => e.Name);
+                entity.Ignore(e => e.PriceCurrency);
+                entity.Ignore(e => e.Price);
+                entity.Ignore(e => e.Discount);
+                entity.Ignore(e => e.Vat);
+            });
+
+            builder.Entity<CartJoinCartItem>(entity => {
+                entity.HasKey(e => new { e.CartId, e.CartItemId });
+                entity.HasOne(e => e.Cart)
+                      .WithMany(e => e.CartJoinCartItem)
+                      .HasForeignKey(e => e.CartId)
+                      .HasConstraintName("FK_CartJoinCartItem_CartId")
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.CartItem)
+                      .WithMany(e => e.CartJoinCartItem)
+                      .HasForeignKey(e => e.CartItemId)
+                      .HasConstraintName("FK_CartJoinCartItem_CartItemId")
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            //Product Bundle
+            builder.Entity<ProductItemBundle>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
+                entity.Property(e => e.BundleDiscount).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.IsActiveNow).IsRequired();
+            });
+
+            builder.Entity<ProductItemBundleJoinProductItem>(entity => {
+                entity.HasKey(e => new { e.ProductItemBundleId, e.ProductItemId });
+                entity.Property(e => e.ProductItemQuantity).IsRequired().HasDefaultValue(1);
+                entity.HasOne(e => e.ProductItemBundle)
+                      .WithMany(e => e.ProductItemBundleJoinProductItem)
+                      .HasForeignKey(e => e.ProductItemBundleId)
+                      .HasConstraintName("FK_ProductItemBundleJoinProductItem_ProductItemBundleId")
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.ProductItem)
+                      .WithMany(e => e.ProductItemBundleJoinProductItem)
+                      .HasForeignKey(e => e.ProductItemId)
+                      .HasConstraintName("FK_ProductItemBundleJoinProductItem_ProductItemId")
+                      .OnDelete(DeleteBehavior.Restrict); // Do not let product item deleted 
+
+            });
+            //CartJoinProductItemBundle
+            builder.Entity<CartJoinProductItemBundle>(entity => {
+                entity.HasKey(e => new { e.CartId, e.ProductItemBundleId });
+                entity.HasOne(e => e.Cart)
+                      .WithMany(e => e.CartJoinProductItemBundle)
+                      .HasForeignKey(e => e.CartId)
+                      .HasConstraintName("FK_CartJoinProductItemBundle_CartId")
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.ProductItemBundle)
+                      .WithMany(e => e.CartJoinProductItemBundle)
+                      .HasForeignKey(e => e.ProductItemBundleId)
+                      .HasConstraintName("FK_CartJoinProductItemBundle_ProductItemBundleId")
                       .OnDelete(DeleteBehavior.Cascade);
             });
         }

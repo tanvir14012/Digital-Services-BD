@@ -18,6 +18,7 @@ namespace Digital_Services_BD.Services
         decimal GetMinProductPriceByCatgId(int catgId);
         decimal GetMaxProductPriceByCatgId(int catgId);
         FilteredItems FilterItems(int productCategoryId, int pageNo, string sortBy, string priceRange);
+        IEnumerable<int> GetAllProductGroupIdsByCategoryId(int categoryId);
 
     }
 }

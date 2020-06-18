@@ -7,7 +7,6 @@ namespace AspNetCore
     #line hidden
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,8 +32,15 @@ using Digital_Services_BD.Services;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 4 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\_ViewImports.cshtml"
+using System.Linq;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"3c8f59d793cc0778c74f27be5bf1d475e0cff584", @"/Views/Admin/ProductGroup.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c11e7091e85c4fc8076d1553ae47474c9477a747", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"ee0dd57ce81847b019f0ad6fef18f63dfdba4aa3", @"/Views/_ViewImports.cshtml")]
     public class Views_Admin_ProductGroup : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<List<ProductGroup>>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("btn btn-light"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -88,7 +94,7 @@ using Digital_Services_BD.Services;
 #line hidden
 #nullable disable
             WriteLiteral("<div class=\"row d-flex justify-content-end mt-4 p-2\">\r\n    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff5849213", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff5849369", async() => {
                 WriteLiteral("\r\n        <i class=\"fas fa-plus\"></i>\r\n        <span class=\"ml-2\" >Create</span>\r\n    ");
             }
             );
@@ -140,7 +146,7 @@ using Digital_Services_BD.Services;
 #line hidden
 #nullable disable
             WriteLiteral("</span>\r\n                </div>\r\n                <div class=\"card-body\">\r\n                    <div class=\"d-flex h-240\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "3c8f59d793cc0778c74f27be5bf1d475e0cff58412078", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "3c8f59d793cc0778c74f27be5bf1d475e0cff58412234", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.ImageTagHelper>();
@@ -175,7 +181,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper.AppendVersion = true;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </div>\r\n                </div>\r\n                <div class=\"card-footer\">\r\n                    <ul class=\"list-group list-group-horizontal\">\r\n                        <li class=\"list-group-item p-0 mr-2\">\r\n                            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff58414675", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff58414831", async() => {
                 WriteLiteral("\r\n                                <i class=\"fas fa-eye\"></i>\r\n                            ");
             }
             );
@@ -212,7 +218,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper.AppendVersion = true;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                        </li>\r\n                        <li class=\"list-group-item p-0 mr-2\">\r\n                            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff58417642", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff58417798", async() => {
                 WriteLiteral("\r\n                                <i class=\"fas fa-edit\"></i>\r\n                            ");
             }
             );
@@ -249,7 +255,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_ImageTagHelper.AppendVersion = true;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                        </li>\r\n                        <li class=\"list-group-item p-0 mr-2\">\r\n                            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff58420614", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c8f59d793cc0778c74f27be5bf1d475e0cff58420770", async() => {
                 WriteLiteral("\r\n                                <i class=\"fas fa-trash\"></i>\r\n                            ");
             }
             );

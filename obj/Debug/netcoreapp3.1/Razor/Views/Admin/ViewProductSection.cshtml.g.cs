@@ -7,7 +7,6 @@ namespace AspNetCore
     #line hidden
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,6 +26,13 @@ using Digital_Services_BD.Models;
 #line hidden
 #nullable disable
 #nullable restore
+#line 4 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\_ViewImports.cshtml"
+using System.Linq;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "D:\C# ASP Net\Digital Services BD\Digital Services BD\Views\Admin\ViewProductSection.cshtml"
 using Digital_Services_BD.Services;
 
@@ -34,7 +40,7 @@ using Digital_Services_BD.Services;
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"627a476fd8059645164529b819bab9a4de0eb828", @"/Views/Admin/ViewProductSection.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c11e7091e85c4fc8076d1553ae47474c9477a747", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"ee0dd57ce81847b019f0ad6fef18f63dfdba4aa3", @"/Views/_ViewImports.cshtml")]
     public class Views_Admin_ViewProductSection : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<ProductSection>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("asp-action", "EditProductSection", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -228,7 +234,7 @@ WriteAttributeValue("", 2185, item.ImageUrl, 2185, 14, false);
                 <ul class=""list-group list-group-horizontal"">
                     <li class=""list-group-item p-0 mr-2"">
                         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "627a476fd8059645164529b819bab9a4de0eb82814455", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "627a476fd8059645164529b819bab9a4de0eb82814611", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-edit\"></i>\r\n                        ");
             }
             );
@@ -265,7 +271,7 @@ WriteAttributeValue("", 2185, item.ImageUrl, 2185, 14, false);
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </li>\r\n                    <li class=\"list-group-item p-0 mr-2\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "627a476fd8059645164529b819bab9a4de0eb82817400", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "627a476fd8059645164529b819bab9a4de0eb82817556", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-trash\"></i>\r\n                        ");
             }
             );
@@ -302,7 +308,7 @@ WriteAttributeValue("", 2185, item.ImageUrl, 2185, 14, false);
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                    </li>\r\n                    <li class=\"list-group-item p-0 mr-2\">\r\n                        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "627a476fd8059645164529b819bab9a4de0eb82820348", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "627a476fd8059645164529b819bab9a4de0eb82820504", async() => {
                 WriteLiteral("\r\n                            <i class=\"fas fa-backward\"></i>\r\n                        ");
             }
             );
