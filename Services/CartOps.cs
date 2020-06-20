@@ -36,9 +36,23 @@ namespace Digital_Services_BD.Services
                 return null;
             }
         }
-        public CartItem AddCartItemtoCart(int cartId, int productItemId, int quantity)
+        public CartItem AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity)
         {
-            var cart = context.Carts.Find(cartId);
+            Cart cart = null;
+            
+            if (userId != null)
+            {
+                cart = context.Carts.Where(c => c.UserId == userId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
+            }
+            else if (cartId != null)
+            {
+                cart = context.Carts.Find(cartId);
+            }
+            //No cart found
+            if (cart == null)
+            {
+                cart = CreateCart(userId);
+            }
             var productItem = context.ProductItems.Find(productItemId);
             if(cart != null && productItem != null && quantity > 0)
             {
@@ -152,16 +166,16 @@ namespace Digital_Services_BD.Services
         {
             CartViewModel cartViewModel = null;
             Cart cart = null;
-            if(cartId != null)
-            {
-                cart = context.Carts.Find(cartId);
-            }
-            else if(userId != null)
+            if (userId != null)
             {
                 cart = context.Carts.Where(c => c.UserId == userId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
             }
+            else if (cartId != null)
+            {
+                cart = context.Carts.Find(cartId);
+            }
             //If cart found in database
-            if(cart != null)
+            if (cart != null)
             {
                 var populateCartItems = from cartItem in context.CartItems
                             join productItem in context.ProductItems
@@ -172,7 +186,7 @@ namespace Digital_Services_BD.Services
                             where price.PriceCurrency == "BDT"
                             select new CartItem {
                                 Id= cartItem.Id,
-                                Name = cartItem.Name,
+                                Name = productItem.Name,
                                 ProductItemId = productItem.Id,
                                 CartId = cartItem.CartId,
                                 Quantity = cartItem.Quantity,
@@ -240,7 +254,8 @@ namespace Digital_Services_BD.Services
                     cartViewModel = new CartViewModel
                     {
                         CartId = newCart.Id,
-                        UserId = userId
+                        UserId = userId,
+                        IsCreatedNow = true
                     };
                 }
             }

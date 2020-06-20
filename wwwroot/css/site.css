@@ -85,6 +85,9 @@ html {
 .h-240 {
     height: 240px !important;
 }
+.max-h-240 {
+    max-height: 240px !important;
+}
 /* Image size of product group, category, item */
 .input-disabled {
     pointer-events: none;
@@ -138,4 +141,8 @@ html {
 
 .text-muted-link > a {
     color: #6c757d !important;
+}
+
+.obj-fit-contain {
+    object-fit: contain !important;
 }

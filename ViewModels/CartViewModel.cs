@@ -22,5 +22,6 @@ namespace Digital_Services_BD.ViewModels
         public decimal PromoCodeDiscount { get; set; }
         public decimal TaxesAndFees { get; set; }
         public decimal Total { get; set; }
+        public bool IsCreatedNow { get; set; } = false;
     }
 }

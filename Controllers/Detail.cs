@@ -16,6 +16,8 @@ namespace Digital_Services_BD.Controllers
         {
             this.productItemOps = productItemOps;
         }
+
+        [HttpGet]
         public IActionResult Index([FromRoute] int id)
         {
             if(ModelState.IsValid)
@@ -23,6 +25,8 @@ namespace Digital_Services_BD.Controllers
                 var productItem = productItemOps.GetProductItem(id);
                 if(productItem != null)
                 {
+                    ViewBag.Message = TempData["Message"];
+                    ViewBag.AlertClass = TempData["AlertClass"];
                     return View(productItem);
                 }
 
