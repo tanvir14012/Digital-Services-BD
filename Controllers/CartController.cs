@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Digital_Services_BD.Migrations;
 using Digital_Services_BD.Services;
+using Digital_Services_BD.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,14 +23,14 @@ namespace Digital_Services_BD.Controllers
         [HttpGet]
         public IActionResult Index([FromQuery] int? userId)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 string cartIdCookie = Request.Cookies["CartId"];
                 int? cartId = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"\d{0,2147483647}")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
                 var cartView = cartOps.GetCart(cartId, userId);
-                if(cartView != null)
+                if (cartView != null)
                 {
-                    if(cartView.IsCreatedNow)
+                    if (cartView.IsCreatedNow)
                     {
                         var option = new CookieOptions();
                         option.Expires = DateTime.Now.AddMonths(6);
@@ -41,17 +42,65 @@ namespace Digital_Services_BD.Controllers
             return View(null);
         }
         [HttpPost]
-        public IActionResult AddToCart( int? userId, int itemId, int addQuantity, string returnUrl)
+        public IActionResult Index(int cartId, List<CartItemIdQty> cartItemIdNquantity, int? cartItemIdToBeDeleted)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
+            {
+                if (cartOps.DoesCartExist(cartId))
+                {
+                    //Delete 
+                    if (cartItemIdToBeDeleted != null)
+                    {
+                        var cartItem = cartOps.DeleteCartItemFromCart(cartId, (int)cartItemIdToBeDeleted);
+                        if (cartItem == null) //Delete unsuccessful
+                        {
+                            ViewBag.DeleteMsg = "Sorry! Some error occurred while deleting the item from your cart. Please try again.";
+                        }
+                    }
+                    else // Update quantity
+                    {
+                        foreach (var itemIdQty in cartItemIdNquantity)
+                        {
+                            cartOps.UpdateQuantity(itemIdQty.CartItemId, itemIdQty.Quantity);
+                        }
+                    }
+
+                    var cartView = cartOps.GetCart(cartId, null);
+                    if (cartView != null)
+                    {
+                        return View(cartView);
+                    }
+                }
+            }
+            return View(null);
+        }
+
+        [HttpPost]
+        public IActionResult AddToCart(int? userId, int itemId, int addToCartQuantity, string returnUrl)
+        {
+            if (ModelState.IsValid)
             {
                 string cartIdCookie = Request.Cookies["CartId"];
                 int? cartIdFromCookie = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"\d{0,2147483647}")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
-                var cartItem = cartOps.AddCartItemtoCart(cartIdFromCookie, userId, itemId, addQuantity);
-                if(cartItem != null)
+                var cartItemView = cartOps.AddCartItemtoCart(cartIdFromCookie, userId, itemId, addToCartQuantity);
+                if (cartItemView != null)
                 {
-                    TempData["Message"] = "Success! The item has been added to your cart.";
-                    TempData["AlertClass"] = "alert alert-info alert-dismissible fade show";
+                    if(cartItemView.IsCartCreatedWhenAdded)
+                    {
+                        var cookieOps = new CookieOptions();
+                        cookieOps.Expires = DateTime.UtcNow.AddMonths(6);
+                        Response.Cookies.Append("CartId", cartItemView.CreatedCartId.ToString(), cookieOps);
+                    }
+                    if(cartItemView.Message != null)
+                    {
+                        TempData["Message"] = cartItemView.Message;
+                        TempData["AlertClass"] = cartItemView.MessageClass;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Success! The item has been added to your cart.";
+                        TempData["AlertClass"] = "alert alert-success alert-dismissible fade show";
+                    }
                 }
                 else
                 {
@@ -64,14 +113,14 @@ namespace Digital_Services_BD.Controllers
         }
 
         [HttpPost]
-        public IActionResult BuyNow(int? userId2, int itemId2, int buyQuantity, string returnUrl2)
+        public IActionResult BuyNow(int? userId2, int itemId2, int buyNowQuantity, string returnUrl2)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 string cartIdCookie = Request.Cookies["CartId"];
                 int? cartIdFromCookie = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"\d{0,2147483647}")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
-                var cartItem = cartOps.AddCartItemtoCart(cartIdFromCookie, userId2, itemId2, buyQuantity);
-                if(cartItem != null)
+                var cartItem = cartOps.AddCartItemtoCart(cartIdFromCookie, userId2, itemId2, buyNowQuantity);
+                if (cartItem != null)
                 {
                     return RedirectToAction("Index", new { userId = userId2 });
                 }

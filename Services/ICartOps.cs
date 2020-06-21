@@ -11,10 +11,11 @@ namespace Digital_Services_BD.Services
     {
         Cart CreateCart(int? userId);
         CartViewModel GetCart(int? cartId, int? userId);
-        CartItem AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity);
+        CartItemViewModel AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity);
         CartItem DeleteCartItemFromCart(int cartId, int cartItemId);
         CartItem UpdateQuantity(int cartItemId, int quantity);
         Cart MergeCarts(int anonymousCartId, int userId);
         bool EmptyCart(int cartId);
+        bool DoesCartExist(int cartId);
     }
 }

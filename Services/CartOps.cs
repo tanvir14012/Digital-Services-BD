@@ -36,8 +36,9 @@ namespace Digital_Services_BD.Services
                 return null;
             }
         }
-        public CartItem AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity)
+        public CartItemViewModel AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity)
         {
+            CartItemViewModel cartItemViewModel = new CartItemViewModel();
             Cart cart = null;
             
             if (userId != null)
@@ -52,27 +53,60 @@ namespace Digital_Services_BD.Services
             if (cart == null)
             {
                 cart = CreateCart(userId);
+                cartItemViewModel.IsCartCreatedWhenAdded = true;
+                cartItemViewModel.CreatedCartId = cart.Id;
             }
             var productItem = context.ProductItems.Find(productItemId);
             if(cart != null && productItem != null && quantity > 0)
             {
-                var price = context.ProductItemPrices.Where(p => p.ProductItemId == productItem.Id && p.PriceCurrency == "BDT").FirstOrDefault();
-                var cartItem = new CartItem
+                //var price = context.ProductItemPrices.Where(p => p.ProductItemId == productItem.Id && p.PriceCurrency == "BDT").FirstOrDefault();
+                if(! DoesProductItemExistInCart(cart.Id, productItem.Id))
                 {
-                    CartId = cart.Id,
-                    ProductItemId = productItem.Id,
-                    Quantity = quantity
-                };
-                context.CartItems.Add(cartItem);
-                try
-                {
-                    context.SaveChanges();
-                    return cartItem;
+                    var cartItem = new CartItem
+                    {
+                        CartId = cart.Id,
+                        ProductItemId = productItem.Id,
+                        Quantity = quantity
+                    };
+                    context.CartItems.Add(cartItem);
+                    try
+                    {
+                        context.SaveChanges();
+                        cartItemViewModel.CartItem = cartItem;
+                        return cartItemViewModel;
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
                 }
-                catch(Exception e)
+                else //In cart there exists the product item already
                 {
-                    return null;
+                    var cartItem = context.CartItems.Where(ci => ci.CartId == cart.Id && ci.ProductItemId == productItem.Id).FirstOrDefault();
+                    if(cartItem != null)
+                    {
+                        cartItem.Quantity += quantity;
+                        if(cartItem.Quantity > ProductConfig.MaxItemAllowedInCart)
+                        {
+                            cartItem.Quantity = ProductConfig.MaxItemAllowedInCart;
+                            cartItemViewModel.Message = $"We are glad that you like to buy a lot of stuffs but the possible maximum quantity of a product in cart is {ProductConfig.MaxItemAllowedInCart}, that is added to your cart.";
+                            cartItemViewModel.MessageClass = "alert alert-info alert-dismissible fade show";
+                        }
+                        context.CartItems.Update(cartItem);
+                        try
+                        {
+                            context.SaveChanges();
+                            cartItemViewModel.CartItem = cartItem;
+                            return cartItemViewModel;
+                        }
+                        catch (Exception e)
+                        {
+                            return null;
+                        }
+                    }
                 }
+               
+               
             }
             return null;
         }
@@ -145,9 +179,7 @@ namespace Digital_Services_BD.Services
             var cartItem = context.CartItems.Find(cartItemId);
             if(cartItem != null && quantity > 0)
             {
-                var price = context.ProductItemPrices
-                    .Where(p => p.ProductItemId == cartItem.ProductItemId && p.PriceCurrency == "BDT")
-                    .FirstOrDefault();
+                quantity = quantity > ProductConfig.MaxItemAllowedInCart ? ProductConfig.MaxItemAllowedInCart : quantity;
                 cartItem.Quantity = quantity;
                 context.CartItems.Update(cartItem);
             }
@@ -260,6 +292,16 @@ namespace Digital_Services_BD.Services
                 }
             }
             return cartViewModel;
+        }
+
+        public bool DoesCartExist(int cartId)
+        {
+            return context.Carts.AsNoTracking().Where(c => c.Id == cartId).Count() > 0;
+        }
+
+        private bool DoesProductItemExistInCart(int cartId, int productItemId)
+        {
+            return context.CartItems.Where(ci => ci.CartId == cartId && ci.ProductItemId == productItemId).Count() > 0;
         }
     }
 }

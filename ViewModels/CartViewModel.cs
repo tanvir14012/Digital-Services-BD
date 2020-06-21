@@ -1,4 +1,5 @@
 ﻿using Digital_Services_BD.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Digital_Services_BD.ViewModels
         {
             CartItems = new List<CartItem>();
             CartItemBundlesViewModel = new List<CartItemBundleViewModel>();
+            cartItemIdNquantity = new List<CartItemIdQty>();
         }
         public int CartId { get; set; }
         public int? UserId { get; set; }
@@ -23,5 +25,8 @@ namespace Digital_Services_BD.ViewModels
         public decimal TaxesAndFees { get; set; }
         public decimal Total { get; set; }
         public bool IsCreatedNow { get; set; } = false;
+        //Ui, (productItemId, quantity) pair
+        [BindProperty]
+        public ICollection<CartItemIdQty> cartItemIdNquantity { get; set; }
     }
 }
