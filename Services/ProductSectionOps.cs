@@ -131,7 +131,6 @@ namespace Digital_Services_BD.Services
                         on item.Id equals itemsectionmap.ProductItemId
                         where itemsectionmap.ProductSectionId == productSectionId
                         select item;
-
             return query.ToList();
         }
 

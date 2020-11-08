@@ -14,11 +14,13 @@ namespace Digital_Services_BD.ViewModels
             CartItems = new List<CartItem>();
             CartItemBundlesViewModel = new List<CartItemBundleViewModel>();
             cartItemIdNquantity = new List<CartItemIdQty>();
+            cartItemBundleIdNquantity = new List<CartItemBundleIdQty>();
         }
         public int CartId { get; set; }
         public int? UserId { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<CartItemBundleViewModel> CartItemBundlesViewModel { get; set; }
+        public string PriceCurrency { get; set; }
         public decimal Subtotal { get; set; }
         public string PromoCode { get; set; }
         public decimal PromoCodeDiscount { get; set; }
@@ -28,5 +30,7 @@ namespace Digital_Services_BD.ViewModels
         //Ui, (productItemId, quantity) pair
         [BindProperty]
         public ICollection<CartItemIdQty> cartItemIdNquantity { get; set; }
+        [BindProperty]
+        public ICollection<CartItemBundleIdQty> cartItemBundleIdNquantity { get; set; }
     }
 }

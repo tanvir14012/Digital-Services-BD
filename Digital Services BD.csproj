@@ -2,59 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Digital_Services_BD</RootNamespace>
+	  <RootNamespace>Digital_Services_BD</RootNamespace>
+    <UserSecretsId>031258c6-6624-4fca-81e6-352758e13c09</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200526034100_CustomerAdd.cs" />
-    <Compile Remove="Migrations\20200526034100_CustomerAdd.Designer.cs" />
-    <Compile Remove="Migrations\20200526035459_Initial.cs" />
-    <Compile Remove="Migrations\20200526035459_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200526043827_Initial.cs" />
-    <Compile Remove="Migrations\20200526043827_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200526044957_Initial.cs" />
-    <Compile Remove="Migrations\20200526044957_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200526050101_initial2.cs" />
-    <Compile Remove="Migrations\20200526050101_initial2.Designer.cs" />
-    <Compile Remove="Migrations\20200529110756_product.cs" />
-    <Compile Remove="Migrations\20200529110756_product.Designer.cs" />
-    <Compile Remove="Migrations\20200529123603_product.cs" />
-    <Compile Remove="Migrations\20200529123603_product.Designer.cs" />
-    <Compile Remove="Migrations\20200529123909_product.cs" />
-    <Compile Remove="Migrations\20200529123909_product.Designer.cs" />
-    <Compile Remove="Migrations\20200529131109_product.cs" />
-    <Compile Remove="Migrations\20200529131109_product.Designer.cs" />
-    <Compile Remove="Migrations\20200530175036_product2.cs" />
-    <Compile Remove="Migrations\20200530175036_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200530175421_product2.cs" />
-    <Compile Remove="Migrations\20200530175421_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200530180838_product2.cs" />
-    <Compile Remove="Migrations\20200530180838_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200531135834_product2.cs" />
-    <Compile Remove="Migrations\20200531135834_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200531140635_product2.cs" />
-    <Compile Remove="Migrations\20200531140635_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200531155549_product.cs" />
-    <Compile Remove="Migrations\20200531155549_product.Designer.cs" />
-    <Compile Remove="Migrations\20200531163132_product2.cs" />
-    <Compile Remove="Migrations\20200531163132_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200601080203_product.cs" />
-    <Compile Remove="Migrations\20200601080203_product.Designer.cs" />
-    <Compile Remove="Migrations\20200603190557_product2.cs" />
-    <Compile Remove="Migrations\20200603190557_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200603204242_product2.cs" />
-    <Compile Remove="Migrations\20200603204242_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200603214124_product2.cs" />
-    <Compile Remove="Migrations\20200603214124_product2.Designer.cs" />
-    <Compile Remove="Migrations\20200607135700_product.cs" />
-    <Compile Remove="Migrations\20200607135700_product.Designer.cs" />
-    <Compile Remove="Migrations\20200608041115_product.cs" />
-    <Compile Remove="Migrations\20200608041115_product.Designer.cs" />
-    <Compile Remove="Migrations\20200618132835_cart.cs" />
-    <Compile Remove="Migrations\20200618132835_cart.Designer.cs" />
+    <Compile Remove="Migrations\20200629053229_order.cs" />
+    <Compile Remove="Migrations\20200629053229_order.Designer.cs" />
+    <Compile Remove="Migrations\20200629080902_order2.cs" />
+    <Compile Remove="Migrations\20200629080902_order2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
@@ -62,6 +22,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MimeKit" Version="2.9.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
   </ItemGroup>
 
   <ItemGroup>

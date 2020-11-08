@@ -1,114 +1,134 @@
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\appsettings.Development.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\appsettings.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\libman.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.exe
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.deps.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.runtimeconfig.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.runtimeconfig.dev.json
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.pdb
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\bn\Digital Services BD.resources.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\en\Digital Services BD.resources.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.Views.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.Views.pdb
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Controllers.Home.bn.resources
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.bn.resources
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.en.resources
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Views.Home.Index.bn.resources
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Views.Home.Index.en.resources
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.GenerateResource.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.AssemblyInfoInputs.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.AssemblyInfo.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.CoreCompileInputs.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.MvcApplicationPartsAssemblyInfo.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorAssemblyInfo.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorAssemblyInfo.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\bn\Digital Services BD.resources.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\en\Digital Services BD.resources.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.input.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.output.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorCoreGenerate.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Confirmation.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductGroup.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductGroup.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductGroup.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\SuccessFailure.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductCategory.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductGroup.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductItem.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\AdminLayout.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NotFound.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorTargetAssemblyInfo.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorTargetAssemblyInfo.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.Views.pdb
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.CopyComplete
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\staticwebassets\Digital Services BD.StaticWebAssets.Manifest.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\staticwebassets\Digital Services BD.StaticWebAssets.xml
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.dll
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.pdb
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.genruntimeconfig.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csprojAssemblyReference.cache
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductSection.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductSection.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductSection.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductSection.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Carousel.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateCarousel.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditCarousel.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewCarousel.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Category\Index.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Item\Index.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Detail\Index.cshtml.g.cs
-D:\C# ASP Net\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\nlog.config
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\libman.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.exe
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.deps.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.runtimeconfig.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.runtimeconfig.dev.json
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.pdb
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\bn\Digital Services BD.resources.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\en\Digital Services BD.resources.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.Views.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.Views.pdb
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\NLog.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\NLog.Extensions.Logging.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Controllers.Home.bn.resources
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.bn.resources
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.SharedResource.en.resources
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Views.Home.Index.bn.resources
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital_Services_BD.Resources.Views.Home.Index.en.resources
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.GenerateResource.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.AssemblyInfoInputs.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.AssemblyInfo.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.CoreCompileInputs.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorAssemblyInfo.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorAssemblyInfo.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\bn\Digital Services BD.resources.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\en\Digital Services BD.resources.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.input.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.TagHelpers.output.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorCoreGenerate.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\EmailNotSentMsg.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\ForgotPassword.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\ResendEmailVerification.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\ResetPassword.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\ResetPasswordEmailTemplate.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\SignIn.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\SignUp.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Account\SignUpEmailConfirmTemplate.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Carousel.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Confirmation.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateCarousel.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductCategory.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductGroup.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductItem.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateProductSection.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditCarousel.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductCategory.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductGroup.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductItem.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditProductSection.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductCategory.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductGroup.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductItem.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ProductSection.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\SuccessFailure.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewCarousel.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductCategory.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductGroup.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductItem.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ViewProductSection.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Payment.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Summary.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Category\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Detail\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Item\Index.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\AdminLayout.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\AlertMessage.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NotFound.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorTargetAssemblyInfo.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.RazorTargetAssemblyInfo.cs
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.Views.pdb
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csproj.CopyComplete
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\staticwebassets\Digital Services BD.StaticWebAssets.Manifest.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\staticwebassets\Digital Services BD.StaticWebAssets.xml
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.dll
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.pdb
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.genruntimeconfig.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csprojAssemblyReference.cache

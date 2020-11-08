@@ -3,7 +3,8 @@
 @{
     Layout = "AdminLayout";
 }
-<div class="row d-flex justify-content-end mt-4 p-2">
+<div class="row d-flex justify-content-between mt-4 pl-4 pr-4">
+    <h4 class="text-secondary">Administrator Area for Product Items</h4>
     <a class="btn btn-light" asp-action="CreateProductItem" asp-controller="Admin">
         <i class="fas fa-plus"></i>
         <span class="ml-2">Create</span>
@@ -12,7 +13,7 @@
 <div class="row p-2">
     @if (Model.Count == 0)
     {
-        <h4>There is no Product Item in Database</h4>
+        <h5 class="pl-3">There is no Product Item in Database</h5>
     }
     @foreach (var productItem in Model)
     {

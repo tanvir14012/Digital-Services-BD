@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 
 namespace Digital_Services_BD.Controllers
 {
     [Route("[controller]/[action]")]
+    [Authorize(Policy = "AdminFullAccess")]
     public class AdminController : Controller
     {
         private readonly IProductGroupOps productGroupOps;
@@ -27,6 +30,8 @@ namespace Digital_Services_BD.Controllers
             this.productSectionOps = productSectionOps;
             this.carouselOps = carouselOps;
         }
+        [Route("/[controller]")]
+        [Route("/[controller]/[action]")]
         public IActionResult Index()
         {
             return View();

@@ -12,5 +12,8 @@ namespace Digital_Services_BD.ViewModels
         public static readonly int MinPrice = 0;
         public static readonly int MaxPrice = 9300;
         public static readonly int MaxItemAllowedInCart = 10;
+
+        //Landing Page Section at /Home
+        public static readonly int MaxColumnAllowedInLandingPageSectionRow = 4;
     }
 }

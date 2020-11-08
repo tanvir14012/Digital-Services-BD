@@ -1,17 +1,14 @@
-﻿
-
-
-    <div class="row mt-4 p-2">
+﻿    <div class="row mt-4 p-2">
 
         <div class="col-md-6 col-sm-12">
             <h4>@ViewBag.Heading</h4>
             <p>@ViewBag.Message</p>
             <ul class="list-group list-group-horizontal-md link-normal">
-                <li class="list-group-item p-0">
+                <li class="list-group-item p-0 border-0 btn btn-sm btn-light">
                     <a class="nav-link" asp-action="Index" asp-controller="Home"><i class="fas fa-home mr-2"></i>Home</a>
                 </li>
-                <li class="list-group-item p-0">
-                    <a class="nav-link" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller">@ViewBag.BackText</a>
+                <li class="list-group-item p-0 border-0 btn btn-sm btn-light">
+                    <a class="nav-link" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller"><i class="fas fa-backward mr-2"></i>@ViewBag.BackText</a>
                 </li>
             </ul>
         </div>

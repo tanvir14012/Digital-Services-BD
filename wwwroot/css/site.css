@@ -14,6 +14,10 @@ html {
         font-size: 12px;
     }
 }
+
+body {
+    font-family: Verdana, Arial, Tahoma, sans-serif !important;
+}
 /* Website typography */
 
 /* Nav dropdown media query */
@@ -36,6 +40,12 @@ html {
 }
 /* Nav dropdown media query */
 
+/* Nav dropdown hover expand*/
+/*#navLinks li:hover .dropdown-menu {
+    display: block;
+}*/
+/* Nav dropdown hover expand*/
+
 .mt-56px {
     margin-top: 56px !important;
 }
@@ -48,12 +58,32 @@ html {
     margin-top: 40px !important;
 }
 
-.z-1 {
-    z-index: 100 !important;
+.z-10 {
+    z-index: 10 !important;
     background: white;
+}
+.z-9 {
+    z-index: 9 !important;
+}
+.z-8 {
+    z-index: 8 !important;
 }
 
 /* Nav link color customization */
+
+.border-wb3-tomato {
+    border-bottom: 3px solid tomato !important;
+}
+
+.border-md-bottom {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+@media screen and (max-width: 768px) {
+    .border-md-bottom {
+        border-bottom: none !important;
+    }
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: white !important;
     background-color: black !important;
@@ -145,4 +175,37 @@ html {
 
 .obj-fit-contain {
     object-fit: contain !important;
+}
+
+.scale-y3-x1by2 {
+    transform: scale(0.5, 3);
+}
+
+.bg-light-gray {
+    background-color: #D0D3D4;
+}
+
+/* Form control border color with validation error*/
+input.input-validation-error {
+    border-color: #ffeeba;
+}
+
+.alert-warning-color {
+    color: #856404;
+}
+
+.validation-summary-errors {
+    margin: .25rem !important;
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.right-0 {
+    right: 0 !important;
 }

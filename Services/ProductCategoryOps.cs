@@ -283,7 +283,7 @@ namespace Digital_Services_BD.Services
                         select new { item, prices};
 
             var joinTable = query.Distinct().ToList();
-            if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+"))
+            if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$"))
             {
                 decimal minPrice = Convert.ToDecimal(priceRange.Split("to")[0]);
                 decimal maxPrice = Convert.ToDecimal(priceRange.Split("to")[1]);

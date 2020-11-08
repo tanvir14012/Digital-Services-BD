@@ -11,7 +11,10 @@ namespace Digital_Services_BD.Services
     {
         Cart CreateCart(int? userId);
         CartViewModel GetCart(int? cartId, int? userId);
-        CartItemViewModel AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity);
+        AddCartItemViewModel AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity);
+        AddCartItemBundleViewModel AddProductItemBundletoCart(int? cartId, int? userId, int productItemBundleId, int quantity);
+        bool DeleteProductItemBundleFromCart(int cartId, int productItemBundleId);
+        CartJoinProductItemBundle UpdateProductItemBundleQuantity(int cartId, int productItemBundleId, int quantity);
         CartItem DeleteCartItemFromCart(int cartId, int cartItemId);
         CartItem UpdateQuantity(int cartItemId, int quantity);
         Cart MergeCarts(int anonymousCartId, int userId);

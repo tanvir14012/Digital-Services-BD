@@ -1,19 +1,26 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject SignInManager<Customer> signInManager
+@inject UserManager<Customer> userManager
+@inject IAuthorizationService authorizationService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - Digital_Services_BD</title>
+    <title>@ViewBag.Title  Digital Gifts</title>
     <link rel="stylesheet" href="~/css/site.css" />
     <environment include="Development">
-        <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
-        <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+        <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" type="text/css"/>
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css"/>
+        <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
     </environment>
     <environment exclude="Development">
         <!-- Bootstrap CSS  -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
               integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only"
@@ -21,27 +28,24 @@
               asp-fallback-test-value="absolute"
               asp-suppress-fallback-integrity="true">
         <!-- Fontawesome CSS  -->
-        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-              rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-              crossorigin="anonymous"
-              asp-fallback-href="~/lib/font-awesome/css/fontawesome.css"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute"
-              asp-suppress-fallback-integrity="true">
-
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+              rel="stylesheet" type="text/css"
+              asp-fallback-href="~/lib/font-awesome/css/all.css">
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
     </environment>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light fixed-top z-1 shadow">
+        <nav class="navbar navbar-expand-sm navbar-light fixed-top z-10 shadow" id="navbar1">
             <div class="container justify-content-start">
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navLinks"
                         aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand flex-grow-1" href="#">
-                    <img class="img-fluid border" src="~/branding/companylogo.jpg" width="100" height="100" />"
+                <a class="navbar-brand flex-grow-1" href="/">
+                    <img class="" src="~/branding/companylogo.png" width="100" height="40" />
                 </a>
                 <div class="dropdown">
                     <a class="nav-link dropdown-toggle text-secondary" data-toggle="dropdown" href="#">
@@ -55,35 +59,74 @@
                 <div class="dropdown">
                     <a class="nav-link dropdown-toggle text-secondary" data-toggle="dropdown" href="#">
                         <i class="fas fa-user"></i>
-                        <span>Hi, MrJohnson..</span>
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <span>Hi, @(((await userManager.FindByNameAsync(User.Identity.Name))?.FirstName) ?? "there")</span>
+                        }
+
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-item">My action</li>
-                        <li class="dropdown-item">Login out</li>
+                        @if (!signInManager.IsSignedIn(User))
+                        {
+                            <li class="dropdown-item link-normal">
+                                <a asp-action="SignIn" asp-controller="Account" class="d-block">Sign In</a>
+                            </li>
+                            <li class="dropdown-item link-normal">
+                                <a asp-action="SignUp" asp-controller="Account" class="d-block">New user ? Sign Up</a>
+                            </li>
+                        }
+                        else
+                        {
+                            @if ((await authorizationService.AuthorizeAsync(User, "AdminFullAccess")).Succeeded)
+                            {
+                                <li class="dropdown-item link-normal text-center">
+                                    <a asp-action="Index" asp-controller="Home" class="d-block">Home</a>
+                                </li>
+                            }
+                            <li class="dropdown-item">
+                                <form method="post" asp-action="SignOut" asp-controller="Account">
+                                    <input name="returnUrl" value="/" type="hidden" />
+                                    <button type="submit" class="btn btn-sm btn-light w-100">Sign Out</button>
+                                </form>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
         </nav>
-        <div class="navbar-space text-white">________</div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container" id="main_container">
+        <main role="main" class="pb-3 pt-2">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Digital_Services_BD - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container text-center">
+            &copy; 2020 - Digital Gift Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
     <script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(window).on('load resize', function () {
+            //Set main content position at the end of navbar
+            $("#main_container").offset({
+                top: $("#navbar1").offset().top +
+                    document.getElementById("navbar1").getBoundingClientRect().height
+            });
+            //Set footer at the end of main content
+            $("footer").offset({
+                top: $("#main_container").offset().top + document.getElementById("main_container").getBoundingClientRect().height
+            });
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

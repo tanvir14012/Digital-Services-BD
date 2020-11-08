@@ -35,7 +35,7 @@ namespace Digital_Services_BD.Controllers
                     ViewBag.TotalCategory = filteredCategories.TotalCategories;
                     ViewBag.PageNo = pageNo;
                     ViewBag.SortBy = sortBy ?? "m_p";
-                    if(priceRange != null && Regex.IsMatch(priceRange, @"\d+to\d+"))
+                    if(priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$") && priceRange.Length <= 10 )
                     {
                         ViewBag.PriceMin =  Convert.ToInt32(priceRange.Split("to")[0]);
                         ViewBag.PriceMax =  Convert.ToInt32(priceRange.Split("to")[1]);

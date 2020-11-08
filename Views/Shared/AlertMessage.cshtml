@@ -1,0 +1,39 @@
+﻿<div class="row p-2 m-1">
+    <div class="col-12 alert @ViewBag.HeadingClass">
+        <h4 class="alert-heading">@ViewBag.Heading</h4>
+        <p class="">@ViewBag.Message</p>
+    </div>
+    <div class="col-12">
+        @if (ViewBag.DynamicMarkup != null)
+        {
+            @Html.Raw(ViewBag.DynamicMarkup)
+        }
+    </div>
+    <div class="col-12">
+        <ul class="list-group list-group-horizontal-md list-unstyled">
+            <li class="list-group-item p-0 border-0 mr-2 mt-1">
+                <a class="btn btn-sm btn-light nav-link" asp-action="Index" asp-controller="Home">Home</a>
+            </li>
+            @if (ViewBag.Action1 != null)
+            {
+                <li class="list-group-item p-0 border-0 mr-2 mt-1">
+                    <a class="btn btn-sm btn-light nav-link" asp-action="@ViewBag.Action1" asp-controller="@ViewBag.Controller1">@ViewBag.LinkText1</a>
+                </li>
+            }
+            @if (ViewBag.Action2 != null)
+            {
+                <li class="list-group-item p-0 border-0 mr-2 mt-1">
+                    <a class="btn btn-sm btn-light nav-link" asp-action="@ViewBag.Action2" asp-controller="@ViewBag.Controller2">@ViewBag.LinkText2</a>
+                </li>
+            }
+            @if (ViewBag.Action3 != null)
+            {
+                <li class="list-group-item p-0 border-0 mr-2 mt-1">
+                    <a class="btn btn-sm btn-light nav-link" asp-action="@ViewBag.Action3" asp-controller="@ViewBag.Controller3">@ViewBag.LinkText3</a>
+                </li>
+            }
+
+
+        </ul>
+    </div>
+</div>

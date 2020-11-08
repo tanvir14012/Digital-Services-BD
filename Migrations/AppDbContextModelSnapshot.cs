@@ -15,7 +15,6 @@ namespace Digital_Services_BD.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("StoreDb")
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -39,6 +38,9 @@ namespace Digital_Services_BD.Migrations
                         .HasMaxLength(128)
                         .IsUnicode(true);
 
+                    b.Property<int>("AddressType")
+                        .HasColumnType("int");
+
                     b.Property<string>("AltMobile")
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
@@ -50,6 +52,19 @@ namespace Digital_Services_BD.Migrations
                         .IsUnicode(true);
 
                     b.Property<string>("Country")
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16)
+                        .IsUnicode(true);
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16)
+                        .IsUnicode(true);
+
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
                         .IsUnicode(true);
@@ -70,6 +85,8 @@ namespace Digital_Services_BD.Migrations
                         .IsUnicode(true);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Addresses");
                 });
@@ -143,12 +160,12 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCheckedOut")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
 
                     b.HasKey("Id");
 
@@ -201,6 +218,11 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("ProductItemBundleId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.HasKey("CartId", "ProductItemBundleId");
 
                     b.HasIndex("ProductItemBundleId");
@@ -242,6 +264,140 @@ namespace Digital_Services_BD.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Languages");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BillingAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConfirmEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAnonymousOrder")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PriceCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(8)")
+                        .HasMaxLength(8);
+
+                    b.Property<bool>("SendOfferInMail")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(19, 4)");
+
+                    b.Property<long?>("TransactionId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillingAddressId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.PaymentTransaction", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(19, 4)");
+
+                    b.Property<string>("BankTrnxId")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("CardBrand")
+                        .HasColumnType("nvarchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("CardIssuerBank")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("CardIssuerCountry")
+                        .HasColumnType("nvarchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("CardNo")
+                        .HasColumnType("nvarchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("CardType")
+                        .HasColumnType("nvarchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GatewayCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(8)")
+                        .HasMaxLength(8);
+
+                    b.Property<string>("IPAddr")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RiskLevel")
+                        .HasColumnType("nvarchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("StatementShow")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("TrnxType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("PaymentTransactions");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductCategory", b =>
@@ -967,9 +1123,6 @@ namespace Digital_Services_BD.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int>("BillingAddrId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2")
                         .IsUnicode(true);
@@ -984,22 +1137,15 @@ namespace Digital_Services_BD.Migrations
                         .IsUnicode(true);
 
                     b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(8)")
-                        .HasMaxLength(8)
-                        .IsUnicode(true);
-
-                    b.Property<int>("HomeAddrId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdCardNo")
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
                         .IsUnicode(true);
 
-                    b.Property<string>("IdCardType")
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16)
-                        .IsUnicode(true);
+                    b.Property<int>("IdCardType")
+                        .HasColumnType("int");
 
                     b.Property<string>("IdCardVerifyPic")
                         .HasColumnType("nvarchar(64)")
@@ -1023,15 +1169,16 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
-                    b.HasIndex("BillingAddrId")
-                        .IsUnique()
-                        .HasFilter("[BillingAddrId] IS NOT NULL");
-
-                    b.HasIndex("HomeAddrId")
-                        .IsUnique()
-                        .HasFilter("[HomeAddrId] IS NOT NULL");
-
                     b.HasDiscriminator().HasValue("Customer");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Address", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Customer", "Customer")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("FK_Address_CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.CarouselJoinCarouselImage", b =>
@@ -1074,6 +1221,23 @@ namespace Digital_Services_BD.Migrations
                         .WithMany("CartJoinProductItemBundle")
                         .HasForeignKey("ProductItemBundleId")
                         .HasConstraintName("FK_CartJoinProductItemBundle_ProductItemBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Order", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Address", "BillingAddress")
+                        .WithMany()
+                        .HasForeignKey("BillingAddressId");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.PaymentTransaction", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Order", "Order")
+                        .WithOne("Transaction")
+                        .HasForeignKey("Digital_Services_BD.Models.PaymentTransaction", "OrderId")
+                        .HasConstraintName("FK_PaymentTransaction_OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1246,23 +1410,6 @@ namespace Digital_Services_BD.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Digital_Services_BD.Models.Customer", b =>
-                {
-                    b.HasOne("Digital_Services_BD.Models.Address", "BillingAddress")
-                        .WithOne("BillingCustomer")
-                        .HasForeignKey("Digital_Services_BD.Models.Customer", "BillingAddrId")
-                        .HasConstraintName("FK_Customer_BillingAddrId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Digital_Services_BD.Models.Address", "HomeAddress")
-                        .WithOne("HomeCustomer")
-                        .HasForeignKey("Digital_Services_BD.Models.Customer", "HomeAddrId")
-                        .HasConstraintName("FK_Customer_HomeAddrId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

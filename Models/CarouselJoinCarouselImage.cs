@@ -11,7 +11,7 @@ namespace Digital_Services_BD.Models
     {
         public int Id { get; set; }
         [MaxFileSize(1)]
-        [AllowedExtensions(new string[] { "jpg", "png", "gif", "tiff" })]
+        [AllowedExtensions(new string[] { "jpg", "jpeg", "png", "gif", "tiff" })]
         public IFormFile Image { get; set; }
         public string ImageUrl { get; set; }
         public DateTime CreatedOn { get; set; }

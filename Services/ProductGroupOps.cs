@@ -1,5 +1,4 @@
-﻿using Digital_Services_BD.Migrations;
-using Digital_Services_BD.Models;
+﻿using Digital_Services_BD.Models;
 using Digital_Services_BD.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -265,12 +264,67 @@ namespace Digital_Services_BD.Services
                         where prices.PriceCurrency == "BDT"
                         select new { category, item, prices };
             var joinTable = query.Distinct().ToList();
-            if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+"))
+            if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$"))
             {
                 decimal minPrice = Convert.ToDecimal(priceRange.Split("to")[0]);
                 decimal maxPrice = Convert.ToDecimal(priceRange.Split("to")[1]);
-                joinTable = joinTable.Where(jt => (jt.prices.Price - jt.prices.Discount) >= minPrice
-                && (jt.prices.Price - jt.prices.Discount) <= maxPrice).ToList();
+                joinTable = joinTable.GroupBy(jt => jt.category.Id).Select(g => 
+                new {
+                    category = new ProductCategory
+                    {
+                        Id = g.Key,
+                        Name = g.First().category.Name,
+                        Overview = g.First().category.Overview,
+                        AllItemIds = g.First().category.AllItemIds,
+                        AllItems = g.First().category.AllItems,
+                        HowToConsume = g.First().category.HowToConsume,
+                        Image = g.First().category.Image,
+                        ImageUrl = g.First().category.ImageUrl,
+                        LastModifiedOn = g.First().category.LastModifiedOn,
+                        CreatedOn = g.First().category.CreatedOn,
+                        Limitations = g.First().category.Limitations,
+                        WhatCanBeDone = g.First().category.WhatCanBeDone,
+                        ProductCategoryJoinProductGroup = g.First().category.ProductCategoryJoinProductGroup,
+                        ProductItemJoinProductCategory = g.First().category.ProductItemJoinProductCategory
+                    },
+                    item = new ProductItem
+                    {
+                        Id = g.First().item.Id,
+                        Categories = g.First().item.Categories,
+                        ProductItemJoinProductCategory = g.First().item.ProductItemJoinProductCategory,
+                        WhatCanBeDone = g.First().item.WhatCanBeDone,
+                        Limitations = g.First().item.Limitations,
+                        CreatedOn = g.First().item.CreatedOn,
+                        LastModifiedOn = g.First().item.LastModifiedOn,
+                        ImageUrl = g.First().item.ImageUrl,
+                        Image = g.First().item.Image,
+                        CategoryIds = g.First().item.CategoryIds,
+                        HowToConsume = g.First().item.HowToConsume,
+                        IsActive = g.First().item.IsActive,
+                        IsShippable = g.First().item.IsShippable,
+                        Name = g.First().item.Name,
+                        Overview = g.First().item.Overview,
+                        ProductItemBundleJoinProductItem = g.First().item.ProductItemBundleJoinProductItem,
+                        ProductItemFeature = g.First().item.ProductItemFeature,
+                        ProductItemJoinPromoOffer = g.First().item.ProductItemJoinPromoOffer,
+                        ProductItemJoinSearchTagProductItem = g.First().item.ProductItemJoinSearchTagProductItem,
+                        ProductItemPrice = g.First().item.ProductItemPrice,
+                        ProductSectionJoinProductItem = g.First().item.ProductSectionJoinProductItem
+                    },
+                    prices = new ProductItemPrice
+                    {
+                        Id = g.First().prices.Id,
+                        Price = g.First().prices.Price,
+                        CreatedOn = g.First().prices.CreatedOn,
+                        Discount = g.First().prices.Discount,
+                        LastModifiedOn = g.First().prices.LastModifiedOn,
+                        PriceCurrency = g.First().prices.PriceCurrency,
+                        ProductItem = g.First().prices.ProductItem,
+                        ProductItemId = g.First().prices.ProductItemId,
+                        Vat = g.First().prices.Vat
+                    }
+                }).Where(jt => (jt.prices.Price - jt.prices.Discount) >= minPrice 
+                    && (jt.prices.Price - jt.prices.Discount) <= maxPrice).ToList();
             }
             if (sortBy != null)
             {

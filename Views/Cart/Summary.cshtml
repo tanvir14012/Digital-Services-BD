@@ -1,0 +1,62 @@
+﻿@model Order
+
+<div class="row p-3 mt-5">
+    <ul class="list-group list-group-horizontal w-100 d-flex justify-content-between">
+        <li class="list-group-item p-0 border-0">
+            <div class="text-center">
+                <button class="btn btn-dark rounded-circle">1</button>
+                <span class="ml-2 text-nowrap">Your cart</span>
+            </div>
+        </li>
+        <li class="list-group-item p-0 ml-2 mr-2 my-auto border-left-0 border-right-0 border-bottom-0 w-25">
+        </li>
+        <li class="list-group-item p-0 border-0">
+            <div class="text-center">
+                <button class="btn btn-dark rounded-circle">2</button>
+                <span class="ml-2 text-nowrap">Payment</span>
+            </div>
+        </li>
+        <li class="list-group-item p-0 ml-2 mr-2 my-auto border-left-0 border-right-0 border-bottom-0 w-25">
+        </li>
+        <li class="list-group-item p-0 border-0">
+            <div class="text-center">
+                <button class="btn btn-dark rounded-circle bg-primary">3</button>
+                <span class="ml-2 text-nowrap">Summary</span>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="row p-2">
+    <h4>Order Details</h4>
+    <hr />
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Name</th>
+                    <th style="width: 80%;">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.GetType().GetProperties())
+                {
+                    <tr>
+                        <td style="width: 20%;">@row.Name</td>
+                        <td style="width: 80%;">@row.GetValue(Model, null)</td>
+                    </tr>
+                }
+                <tr>
+                    <td class="font-weight-bold text-center" colspan="2">Transaction Details</td>
+                </tr>
+                @foreach (var row in Model.Transaction?.GetType().GetProperties())
+                {
+                    <tr>
+                        <td style="width: 20%;">@row.Name</td>
+                        <td style="width: 80%;">@row.GetValue(Model.Transaction, null)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

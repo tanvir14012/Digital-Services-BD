@@ -255,8 +255,10 @@
             //Price submit
             $("#goPrice").click(function () {
                 window.location.href = locationOrigin + "?sortBy=" + $("#sortBy").val() + "&priceRange=" +
-                    $("#priceRange").slider("option", "values")[0] + "to" + $("#priceRange").slider("option", "values")[1] + 
-                    + "&pageNo=" + pageNo;
+                    $("#priceRange").slider("option", "values")[0].toString().concat("to").concat($("#priceRange").slider("option", "values")[1].toString()) 
+                        +"&pageNo=" + pageNo;
+                
+
             });
             $("#priceLabel").html(priceMin + "<sup>BDT</sup>&nbsp;&mdash;&nbsp;" + priceMax + "<sup>BDT</sup>");
             $("#sortBy").val(sortBy);

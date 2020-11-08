@@ -9,6 +9,7 @@ namespace Digital_Services_BD.Models
     {
         public int CartId { get; set; }
         public int ProductItemBundleId { get; set; }
+        public int Quantity { get; set; }
         //Navigation property
         public Cart Cart { get; set; }
         public ProductItemBundle ProductItemBundle { get; set; }

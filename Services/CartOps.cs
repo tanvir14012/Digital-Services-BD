@@ -36,9 +36,9 @@ namespace Digital_Services_BD.Services
                 return null;
             }
         }
-        public CartItemViewModel AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity)
+        public AddCartItemViewModel AddCartItemtoCart(int? cartId, int? userId, int productItemId, int quantity)
         {
-            CartItemViewModel cartItemViewModel = new CartItemViewModel();
+            AddCartItemViewModel cartItemViewModel = new AddCartItemViewModel();
             Cart cart = null;
             
             if (userId != null)
@@ -137,6 +137,7 @@ namespace Digital_Services_BD.Services
             if(cart != null)
             {
                 context.CartItems.RemoveRange(context.CartItems.Where(item => item.CartId == cart.Id));
+                context.CartJoinProductItemBundles.RemoveRange(context.CartJoinProductItemBundles.Where(j => j.CartId == cartId));
                 try
                 {
                     context.SaveChanges();
@@ -231,38 +232,42 @@ namespace Digital_Services_BD.Services
                                               join cartProductItemBundleMap in context.CartJoinProductItemBundles
                                               on productItemBundle.Id equals cartProductItemBundleMap.ProductItemBundleId
                                               where cartProductItemBundleMap.CartId == cart.Id
-                                              join productItemBundleProductItemMap in context.productItemBundleJoinProductItems
-                                              on productItemBundle.Id equals productItemBundleProductItemMap.ProductItemBundleId
-                                              join productItem in context.ProductItems
-                                              on productItemBundleProductItemMap.ProductItemId equals productItem.Id
-                                              join price in context.ProductItemPrices
-                                              on productItem.Id equals price.ProductItemId
-                                              where price.PriceCurrency == "BDT"
-                                              select new
-                                              {
-                                                  productItemBundle,
-                                                  productItemBundleProductItemMap,
-                                                  productItem,
-                                                  price
-                                              };
+                                              select productItemBundle;
 
                 var bundleList = new List<CartItemBundleViewModel>();
-                decimal subtotal = 0;
-                foreach(var bundleObj in populateCartItemBundles.ToList())
+                decimal subtotal = populateCartItems.Distinct().Sum(ci => ci.Price - ci.Discount + ci.Vat);
+                foreach (var productItemBundle in populateCartItemBundles.ToList())
                 {
                     var bundleViewModel = new CartItemBundleViewModel();
-                    bundleViewModel.Name = bundleObj.productItemBundle.Name;
-                    bundleViewModel.BundleDiscount = bundleObj.productItemBundle.BundleDiscount;
-                    bundleViewModel.BundlePrice += (bundleObj.price.Price - bundleObj.price.Discount + bundleObj.price.Vat) * 
+                    bundleViewModel.ProductItemBundleId = productItemBundle.Id;
+                    bundleViewModel.Name = productItemBundle.Name;
+                    bundleViewModel.Quantity = (int) context.CartJoinProductItemBundles.Where(j => j.CartId == cart.Id && j.ProductItemBundleId == productItemBundle.Id).FirstOrDefault()?.Quantity;
+                    bundleViewModel.PriceCurrency = "BDT";
+                    bundleViewModel.BundleDiscount = productItemBundle.BundleDiscount;
+                    var bundleProductItems = from productItemBundleProductItemMap in context.productItemBundleJoinProductItems
+                                             join productItem2 in context.ProductItems
+                                             on productItemBundleProductItemMap.ProductItemId equals productItem2.Id
+                                             where productItemBundleProductItemMap.ProductItemBundleId == productItemBundle.Id
+                                             join price in context.ProductItemPrices
+                                             on productItem2.Id equals price.ProductItemId
+                                             where price.PriceCurrency == "BDT"
+                                             select new {productItemBundleProductItemMap, productItem2, price};
+                    
+                    foreach(var bundleObj in bundleProductItems.Distinct().ToList())
+                    {
+                        bundleViewModel.IndividualItemsView.Add(new ProductItemBundleIndividualItemView
+                        {
+                            ProductItemName = bundleObj.productItem2.Name,
+                            Quantity = bundleObj.productItemBundleProductItemMap.ProductItemQuantity,
+                            Price = bundleObj.price.Price * bundleObj.productItemBundleProductItemMap.ProductItemQuantity,
+                            Discount = bundleObj.price.Discount * bundleObj.productItemBundleProductItemMap.ProductItemQuantity,
+                            Vat = bundleObj.price.Vat * bundleObj.productItemBundleProductItemMap.ProductItemQuantity
+                        });
+                        bundleViewModel.BundlePrice += (bundleObj.price.Price - bundleObj.price.Discount + bundleObj.price.Vat) *
                         bundleObj.productItemBundleProductItemMap.ProductItemQuantity;
-                    bundleViewModel.IndividualItemsView.Add(new ProductItemBundleIndividualItemView { 
-                        ProductItemName = bundleObj.productItem.Name,
-                        Quantity = bundleObj.productItemBundleProductItemMap.ProductItemQuantity,
-                        Price = bundleObj.price.Price * bundleObj.productItemBundleProductItemMap.ProductItemQuantity,
-                        Discount = bundleObj.price.Discount * bundleObj.productItemBundleProductItemMap.ProductItemQuantity,
-                        Vat = bundleObj.price.Vat * bundleObj.productItemBundleProductItemMap.ProductItemQuantity
-                    });
-                    subtotal += (bundleViewModel.BundlePrice - bundleViewModel.BundleDiscount);
+                    }
+                   
+                    subtotal += (bundleViewModel.BundlePrice - bundleViewModel.BundleDiscount) * bundleViewModel.Quantity;
                     bundleList.Add(bundleViewModel);
                 }
                 cartViewModel = new CartViewModel
@@ -272,6 +277,7 @@ namespace Digital_Services_BD.Services
                     CartItems = populateCartItems.ToList(),
                     CartItemBundlesViewModel = bundleList,
                     PromoCode = null,
+                    PriceCurrency = populateCartItems.Distinct().ToList().FirstOrDefault()?.PriceCurrency,
                     PromoCodeDiscount = 0,
                     Subtotal = subtotal,
                     TaxesAndFees = 0,
@@ -302,6 +308,131 @@ namespace Digital_Services_BD.Services
         private bool DoesProductItemExistInCart(int cartId, int productItemId)
         {
             return context.CartItems.Where(ci => ci.CartId == cartId && ci.ProductItemId == productItemId).Count() > 0;
+        }
+        private bool DoesProductItemBundleExistInCart(int cartId, int productItemBundleId)
+        {
+            var bundles = from prodItmBundles in context.ProductItemBundles
+                          join cartJoinProductItemBundle in context.CartJoinProductItemBundles
+                          on prodItmBundles.Id equals cartJoinProductItemBundle.ProductItemBundleId
+                          where cartJoinProductItemBundle.CartId == cartId
+                          select prodItmBundles;
+            return bundles.ToList().Count() > 0;
+        }
+
+        public AddCartItemBundleViewModel AddProductItemBundletoCart(int? cartId, int? userId, int productItemBundleId, int quantity)
+        {
+            AddCartItemBundleViewModel cartItemBundleViewModel = new AddCartItemBundleViewModel();
+            Cart cart = null;
+
+            if (userId != null)
+            {
+                cart = context.Carts.Where(c => c.UserId == userId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
+            }
+            else if (cartId != null)
+            {
+                cart = context.Carts.Find(cartId);
+            }
+            //No cart found
+            if (cart == null)
+            {
+                cart = CreateCart(userId);
+                cartItemBundleViewModel.IsCartCreatedWhenAdded = true;
+                cartItemBundleViewModel.CreatedCartId = cart.Id;
+            }
+            var productItemBundle = context.ProductItemBundles.Find(productItemBundleId);
+            if (cart != null && productItemBundle != null && quantity > 0)
+            {
+                if (!DoesProductItemBundleExistInCart(cart.Id, productItemBundle.Id))
+                {
+                    var cartJoincartItemBundle = new CartJoinProductItemBundle
+                    {
+                        CartId = cart.Id,
+                        ProductItemBundleId = productItemBundle.Id,
+                        Quantity = quantity
+                    };
+                    context.CartJoinProductItemBundles.Add(cartJoincartItemBundle);
+                    try
+                    {
+                        context.SaveChanges();
+                        cartItemBundleViewModel.ProductItemBundle = productItemBundle;
+                        return cartItemBundleViewModel;
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                }
+                else //In cart there exists the product item bundle already
+                {
+                    var cartJoinProductItemBundle = context.CartJoinProductItemBundles.Where(j => j.CartId == cart.Id && j.ProductItemBundleId == productItemBundle.Id).FirstOrDefault();
+                    if (cartJoinProductItemBundle != null)
+                    {
+                        cartJoinProductItemBundle.Quantity += quantity;
+                        if (cartJoinProductItemBundle.Quantity > ProductConfig.MaxItemAllowedInCart)
+                        {
+                            cartJoinProductItemBundle.Quantity = ProductConfig.MaxItemAllowedInCart;
+                            cartItemBundleViewModel.Message = $"We are glad that you like to buy a lot of stuffs but the " +
+                                $"possible maximum quantity of a product in cart is {ProductConfig.MaxItemAllowedInCart}, that" +
+                                $" is added to your cart.";
+                            cartItemBundleViewModel.MessageClass = "alert alert-info alert-dismissible fade show";
+                        }
+                        context.CartJoinProductItemBundles.Update(cartJoinProductItemBundle);
+                        try
+                        {
+                            context.SaveChanges();
+                            cartItemBundleViewModel.ProductItemBundle = productItemBundle;
+                            return cartItemBundleViewModel;
+                        }
+                        catch (Exception e)
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public bool DeleteProductItemBundleFromCart(int cartId, int productItemBundleId)
+        {
+            var cart = context.Carts.Find(cartId);
+            var bundle = context.ProductItemBundles.Find(productItemBundleId);
+            if (cart != null && bundle != null)
+            {
+                context.CartJoinProductItemBundles.Remove(context.CartJoinProductItemBundles
+                    .Where(j => j.CartId == cartId && j.ProductItemBundleId == productItemBundleId).FirstOrDefault());
+                try
+                {
+                    context.SaveChanges();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public CartJoinProductItemBundle UpdateProductItemBundleQuantity(int cartId, int productItemBundleId, int quantity)
+        {
+            var joinTable = context.CartJoinProductItemBundles
+                .Where(j => j.CartId == cartId && j.ProductItemBundleId == productItemBundleId).FirstOrDefault();
+            if (joinTable != null && quantity > 0)
+            {
+                quantity = quantity > ProductConfig.MaxItemAllowedInCart ? ProductConfig.MaxItemAllowedInCart : quantity;
+                joinTable.Quantity = quantity;
+                context.CartJoinProductItemBundles.Update(joinTable);
+            }
+            try
+            {
+                context.SaveChanges();
+                return joinTable;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
     }
 }

@@ -10,6 +10,9 @@ namespace Digital_Services_BD.Models
 {
     public class AppDbContext : IdentityDbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Language> Languages { get; set; }
@@ -34,17 +37,19 @@ namespace Digital_Services_BD.Models
         public DbSet<ProductItemBundle> ProductItemBundles { get; set; }
         public DbSet<ProductItemBundleJoinProductItem> productItemBundleJoinProductItems { get; set; }
         public DbSet<CartJoinProductItemBundle> CartJoinProductItemBundles { get; set; }
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.HasDefaultSchema("StoreDb");
             //Address table property design
             builder.Entity<Address>(entity =>
             {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.FirstName).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.LastName).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.AddressType).IsRequired();
                 entity.Property(e => e.AddressLineOne).IsUnicode().HasMaxLength(128);
                 entity.Property(e => e.AddressLineTwo).IsUnicode().HasMaxLength(128);
                 entity.Property(e => e.Mobile).IsUnicode().HasMaxLength(16);
@@ -53,31 +58,25 @@ namespace Digital_Services_BD.Models
                 entity.Property(e => e.City).IsUnicode().HasMaxLength(16);
                 entity.Property(e => e.State).IsUnicode().HasMaxLength(16);
                 entity.Property(e => e.Country).IsUnicode().HasMaxLength(16);
+
+                entity.HasOne(e => e.Customer)
+                      .WithMany(e => e.Addresses)
+                      .HasForeignKey(e => e.CustomerId)
+                      .HasConstraintName("FK_Address_CustomerId")
+                      .OnDelete(DeleteBehavior.Cascade);
             });
             //Customer table property design
             builder.Entity<Customer>(entity =>
             {
                 entity.Property(e => e.FirstName).IsUnicode().IsRequired().HasMaxLength(16);
                 entity.Property(e => e.LastName).IsUnicode().IsRequired().HasMaxLength(16);
-                entity.Property(e => e.Gender).IsUnicode().HasMaxLength(8);
                 entity.Property(e => e.ProfilePicLink).HasMaxLength(64);
                 entity.Property(e => e.BirthDate).IsUnicode();
                 entity.Property(e => e.IdCardNo).IsUnicode().HasMaxLength(16);
                 entity.Property(e => e.IdCardVerifyPic).HasMaxLength(64);
-                entity.Property(e => e.IdCardType).IsUnicode().HasMaxLength(16);
                 entity.Property(e => e.IsVerified).HasDefaultValue<bool>(false);
+                entity.Ignore(e => e.AddressIds);
 
-                entity.HasOne(c => c.HomeAddress)
-                      .WithOne(a => a.HomeCustomer)
-                      .HasForeignKey<Customer>(c => c.HomeAddrId)
-                      .HasConstraintName("FK_Customer_HomeAddrId")
-                      .OnDelete(DeleteBehavior.NoAction);
-
-                entity.HasOne(c => c.BillingAddress)
-                      .WithOne(a => a.BillingCustomer)
-                      .HasForeignKey<Customer>(c => c.BillingAddrId)
-                      .HasConstraintName("FK_Customer_BillingAddrId")
-                      .OnDelete(DeleteBehavior.NoAction);
             });
             //ProductItem table property design
             builder.Entity<ProductItem>(entity =>
@@ -291,7 +290,8 @@ namespace Digital_Services_BD.Models
             builder.Entity<Cart>(entity =>
             {
                 entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
-                entity.Property(e => e.IsCheckedOut).IsRequired().HasDefaultValue(false);
+                entity.Property(e => e.IsCheckedOut).IsRequired();
+                entity.Property(e => e.UserId).HasDefaultValue(null);
             });
 
             builder.Entity<CartItem>(entity =>
@@ -347,6 +347,7 @@ namespace Digital_Services_BD.Models
             //CartJoinProductItemBundle
             builder.Entity<CartJoinProductItemBundle>(entity => {
                 entity.HasKey(e => new { e.CartId, e.ProductItemBundleId });
+                entity.Property(e => e.Quantity).IsRequired().HasDefaultValue(1);
                 entity.HasOne(e => e.Cart)
                       .WithMany(e => e.CartJoinProductItemBundle)
                       .HasForeignKey(e => e.CartId)
@@ -356,6 +357,41 @@ namespace Digital_Services_BD.Models
                       .WithMany(e => e.CartJoinProductItemBundle)
                       .HasForeignKey(e => e.ProductItemBundleId)
                       .HasConstraintName("FK_CartJoinProductItemBundle_ProductItemBundleId")
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+            //Order
+            builder.Entity<Order>(entity => {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.CartId).IsRequired();
+                entity.Property(e => e.ConfirmEmail).IsRequired().HasMaxLength(64);
+                entity.Property(e => e.SendOfferInMail).HasDefaultValue(false);
+                entity.Property(e => e.TotalPrice).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.PriceCurrency).IsRequired().HasMaxLength(8);
+                entity.Ignore(e => e.Cart);
+                entity.Ignore(e => e.Customer);
+            });
+            //Transaction
+            builder.Entity<PaymentTransaction>(entity =>
+            {
+                entity.Property(e => e.Id).IsRequired().UseIdentityColumn();
+                entity.Property(e => e.OrderId).IsRequired();
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(64);
+                entity.Property(e => e.TrnxType).IsRequired().HasMaxLength(64);
+                entity.Property(e => e.Amount).IsRequired().HasColumnType("decimal(19, 4)");
+                entity.Property(e => e.GatewayCurrency).IsRequired().HasMaxLength(8);
+                entity.Property(e => e.IPAddr).HasMaxLength(64);
+                entity.Property(e => e.RiskLevel).HasMaxLength(32);
+                entity.Property(e => e.CardType).HasMaxLength(32);
+                entity.Property(e => e.CardNo).HasMaxLength(32);
+                entity.Property(e => e.CardIssuerCountry).HasMaxLength(32);
+                entity.Property(e => e.CardIssuerBank).HasMaxLength(64);
+                entity.Property(e => e.CardBrand).HasMaxLength(32);
+                entity.Property(e => e.BankTrnxId).HasMaxLength(128);
+
+                entity.HasOne(e => e.Order)
+                      .WithOne(e => e.Transaction)
+                      .HasForeignKey<PaymentTransaction>(e => e.OrderId)
+                      .HasConstraintName("FK_PaymentTransaction_OrderId")
                       .OnDelete(DeleteBehavior.Cascade);
             });
         }
