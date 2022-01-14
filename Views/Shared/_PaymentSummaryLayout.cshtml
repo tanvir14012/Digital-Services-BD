@@ -1,0 +1,162 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims;
+@inject IProductGroupOps productGroupOps
+@inject ICartOps cartOps
+
+
+@{
+    var productGroups = await productGroupOps.GetProductGroupsWithNavigation();
+    var cartCount = await cartOps.GetCartItemCount(Convert.ToInt32(Context.Request.Cookies["CartId"]));
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Nilu Digital</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <environment include="Development">
+        <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+    </environment>
+    <environment exclude="Development">
+        <!-- Bootstrap CSS  -->
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+              integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute"
+              asp-suppress-fallback-integrity="true">
+        <!-- Fontawesome CSS  -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+              rel="stylesheet"
+              asp-fallback-href="~/lib/font-awesome/css/all.css">
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+
+    </environment>
+</head>
+<body>
+    <header class="fixed-top z-10">
+        <nav class="navbar navbar-light pb-0" id="navbar1">
+            <div class="container justify-content-start" id="navbar1_container">
+                <a class="navbar-brand" href="/">
+                    <img class="" src="~/branding/companylogo.png" width="100" height="40" />
+                </a>
+                <form class="form-inline flex-grow-1" method="post" asp-controller="Home" asp-action="Search">
+                    @Html.AntiForgeryToken()
+                    <div class="input-group w-100">
+                        <input type="search" class="form-control" autocomplete="off" name="Term" placeholder="Search" id="searchInput" />
+                        <div class="input-group-append">
+                            <button type="submit" id="searchSubmit" disabled class="input-group-text"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-secondary" data-toggle="dropdown" href="#">
+                        <i class="fas fa-language"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">English</li>
+                        <li class="dropdown-item">বাংলা</li>
+                    </ul>
+                </div>
+                <a asp-action="Index" asp-controller="Cart" class="nav-link text-secondary">
+                    <i class="fas fa-shopping-cart align-bottom"></i><span class="badge badge-success rounded-circle align-top">@cartCount</span>
+                </a>
+            </div>
+
+            <nav class="navbar navbar-expand-sm navbar-light w-100 pt-0 bg-white" id="navbar2">
+                <button class="navbar-toggler m-2" data-toggle="collapse" data-target="#navLinks"
+                        aria-controls="navLinks" aria-expanded="false" aria-label="toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="container" id="navbar2_container">
+                    <ul class="navbar-nav collapse navbar-collapse border-md-bottom pl-2 shadow-sm-bottom" id="navLinks">
+                        @foreach (var productGroup in productGroups)
+                        {
+                            <li class="nav-item mr-2 pr-2 pt-2">
+                                <a asp-action="Index" asp-controller="Category" asp-route-id="@productGroup.Id"
+                                   class="nav-link text-muted pl-0 pr-0" id="1" type="button" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <span>@productGroup.Name</span>
+                                </a>
+                                <div class="dropdown-menu w-100 border border-0 pt-0" aria-labelledby="1">
+                                    <div class="container pl-2">
+                                        <div class="row w-100 border rounded pl-0 ml-1">
+                                            @foreach (var productCategory in productGroup.AllCategories)
+                                            {
+                                                <div class="col-lg-3 col-md-4 col-sm-6 pl-0">
+                                                    <a asp-action="Index" asp-controller="Category" asp-route-id="@productGroup.Id"
+                                                       class="dropdown-item dropdown-header font-weight-bold border-bottom overflow-hidden">@productCategory.Name</a>
+
+                                                    @foreach (var productItem in productCategory.AllItems)
+                                                    {
+                                                        <a class="dropdown-item overflow-hidden text-wrap" asp-action="Index" asp-controller="Detail" asp-route-id="@productItem.Id">@productItem.Name</a>
+                                                    }
+                                                </div>
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </nav>
+    </header>
+
+    <div class="container mt-5 pt-5" id="main_container">
+        <main role="main" class="pb-3 mt-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted mt-5">
+        <div class="container border-top">
+            <ul class="list-group list-group-horizontal justify-content-center m-2">
+                <li class="list-group-item mr-2 px-2 py-1 rounded">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </li>
+                <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </li>
+                <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-google"></i>
+                    </a>
+                </li>
+                <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </li>
+            </ul>
+            <div class="container text-center">
+                &copy;2021 Nilu Digital. All rights reserved. <a asp-area="" asp-controller="Home" asp-action="Privacy">Terms & Conditions and Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="~/lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Layout.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

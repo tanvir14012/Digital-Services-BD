@@ -1,0 +1,155 @@
+﻿@model Order
+@{
+    var statusClass = new Dictionary<OrderStatus, string> {
+        {OrderStatus.AWAITING, "badge-secondary" },
+        {OrderStatus.CANCELLED, "badge-dark" },
+        {OrderStatus.COMPLETED, "badge-success" },
+        {OrderStatus.DISPUTED, "badge-warning" },
+        {OrderStatus.FAILED, "badge-danger" },
+        {OrderStatus.PROCESSING, "badge-info" },
+        {OrderStatus.REFUNDED, "badge-primary" },
+    };
+
+    var currencySymbol = new Dictionary<string, char>
+{
+        {
+            "BDT", '৳'
+        },
+        {
+             "USD", '$'
+        }
+    };
+}
+
+<div class="row p-3 mt-5">
+    <div class="col-12 p-0 d-flex">
+        <div class="my-2 mr-2">
+            <a class="nav-link text-dark btn btn-sm btn-light" asp-action="Index" asp-controller="Orders"><i class="fas fa-backward mr-2"></i>Orders</a>
+        </div>
+        <div class="my-2">
+            <form asp-action="ExportInvoice" asp-controller="Orders">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="orderId" value="@Model.Id" />
+                <button class="btn btn-sm btn-light nav-link">
+                    <i class="fas fa-file-export mr-2"></i> Export Invoice
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="card w-100">
+        <div class="card-header">
+            <h5>Order Details</h5>
+            <div class="text-muted">Your order <b>#@Model.Id</b> was placed on <b>@Model.CreatedOn.ToString("dddd, dd MMMM yyyy")</b> and current status is <span class="badge badge-@(statusClass[Model.Status])">@Model.Status</span>.</div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="w-50">Product</th>
+                        <th>Address</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="cursor-pointer">
+                        <td>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <li class="list-group-item px-1 py-1 justify-content-between d-flex">
+                                        <a class="text-decoration-none" asp-action="Index" asp-controller="Detail" asp-route-id="@item.ProductItemId">
+                                            <span class="text-truncate">@item.ProductItem?.Name</span>
+                                            <span class="badge badge-secondary rounded-circle ml-2"><span>x</span>@item.Quantity</span>
+                                        </a>
+                                    </li>
+                                }
+
+                                @foreach (var item in Model.OrderProductItemBundles)
+                                {
+                                    <li class="list-group-item px-1 py-1 justify-content-between d-flex">
+                                        <a click="function(e) { e.preventDefault();}" href="#">
+                                            <span class="text-truncate">@item.ProductItemBundle?.Name</span>
+                                            <span class="badge badge-secondary rounded-circle ml-2"><span>x</span>@item.Quantity</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="text-truncate">@Model.Transaction.Name</div>
+                            <div class="text-truncate">@Model.Transaction.Address</div>
+                            <div class="text-truncate">@Model.Transaction.City</div>
+                            <div class="text-truncate">@Model.Transaction.Email &nbsp; @Model.Transaction.Phone</div>
+                        </td>
+                        <td>
+                            @Model.GrandTotal.ToString("0.00")<sup>@(currencySymbol[Model.PriceCurrency])</sup>
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- Transaction details -->
+                @if (Model.Transaction != null)
+                {
+                    <tbody>
+                        <tr>
+                            <th colspan="2">Transaction details</th>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>@Model.Transaction.CreatedOn</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>@Model.Transaction.Status</td>
+                        </tr>
+                        <tr>
+                            <td>Method</td>
+                            <td>@Model.Transaction.TrnxMethod</td>
+                        </tr>
+                        <tr>
+                            <td>Card Holder Name</td>
+                            <td>@Model.Transaction.CardHolderName</td>
+                        </tr>
+                        <tr>
+                            <td>Card Number</td>
+                            <td>@Model.Transaction.CardNo</td>
+                        </tr>
+                        <tr>
+                            <td>Bank Transaction ID</td>
+                            <td>@Model.Transaction.BankTrnxId</td>
+                        </tr>
+                        <tr>
+                            <td>Bank Status</td>
+                            <td>@Model.Transaction.BankStatus</td>
+                        </tr>
+                        <tr>
+                            <td>Invoice ID</td>
+                            <td>@Model.Transaction.InvoiceId</td>
+                        </tr>
+                        <tr>
+                            <td>Currency</td>
+                            <td>@Model.Transaction.Currency</td>
+                        </tr>
+                        <tr>
+                            <td>Amount</td>
+                            <td>@Model.Transaction.Amount.ToString("0.00")</td>
+                        </tr>
+                    </tbody>
+
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        //Unhide
+        $("li[name='showMore']").click(function (e) {
+            let ul = $(e.target).closest("ul");
+            $(ul).find("li").removeClass("d-none").addClass("d-flex");
+            $(this).remove();
+            e.preventDefault();
+        });
+    </script>
+}

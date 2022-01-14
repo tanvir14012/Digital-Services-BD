@@ -10,11 +10,13 @@ namespace Digital_Services_BD.Services
     public interface IProductGroupOps
     {
         IEnumerable<ProductGroup> GetAllProductGroups();
+        Task<ICollection<ProductGroup>> GetProductGroupsWithNavigation();
         ProductGroup GetProductGroup(int id);
         ProductGroup AddProductGroup(ProductGroup productGroup);
         ProductGroup DeleteProductGroup(int id);
         ProductGroup UpdateProductGroup(ProductGroup productGroup);
         IEnumerable<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId);
         FilteredCategories FilterCategories(int productGroupId, int pageNo, string sortBy, string priceRange);
+        Task<ICollection<ProductGroup>> GetAllProductGroupsIdName();
     }
 }

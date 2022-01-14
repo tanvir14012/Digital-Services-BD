@@ -1,0 +1,105 @@
+﻿@using Digital_Services_BD.ViewModels
+@model VerifyEmail
+
+@{
+    Layout = null;
+    if (string.IsNullOrEmpty(Model.RecipeintName))
+    {
+        Model.RecipeintName = "valued customer";
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta lang="en-us" charset="utf-8" />
+    <title>Change your email address</title>
+</head>
+<body style="margin: 5%; max-width:600px;">
+    <table style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr style="text-align: left; padding: 8px; background-color: tomato; color: white;">
+                <th style="width: 10%;"></th>
+                <th style="width: 80%;"></th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Darkblue heading -->
+            <tr style="background-color: tomato; color: white;">
+                <td style="width: 10%;"></td>
+                <td style="width: 80%;">
+                    <table style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="text-align: left; padding: 8px;">
+                                <th style="width: 30%;"></th>
+                                <th style="width: 10%;"></th>
+                                <th style="width: 60%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align: left; padding: 8px;">
+                                <td>
+                                    <div>@Model.ShopName</div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div style="float: right;">
+                                        <div>
+                                            <a style="text-decoration: none; color: white;" href='@Model.Website'>@Model.Website</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td style="width: 10%;"></td>
+            </tr>
+            <!-- Darkblue heading -->
+            <!-- Thanks message -->
+            <tr>
+                <td style="width: 10%;"></td>
+                <td style="width: 80%;">
+                    <div style="font-size:medium; margin-top: 24px;">
+                        Dear  @Model.RecipeintName,<br />
+                        Please use the following code to change your email address:
+                    </div>
+                    <div style="margin:10px 0 15px 0;">
+                        <h1
+                            style="background-color: darkblue; letter-spacing: 3px; border: none; color: floralwhite;  padding: 15px 32px; text-align: center;
+                            display: inline-block; margin: 4px 2px; -webkit-transition-duration: 0.4s;
+                            transition-duration: 0.4s; border-radius: 12px; font-weight: bold;
+                            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+                            text-decoration: none; text-align:center;">
+                            @Model.VerificationTokenUrl
+                        </h1>
+                    </div>
+                    <div style="margin:32px 0 12px 0">
+                        <div style="font-size: x-large; font-weight: bold;">
+                            <u style="color: black;">@Model.ShopName</u>
+                        </div>
+                        <div style="margin: 5px 0 5px 0">@Model.Address1</div>
+                        <div style="margin: 5px 0 5px 0">@Model.Address2</div>
+                        <div style="margin: 5px 0 5px 0">
+                            <a style="color:darkblue;" href="tel:@Model.ShopPhone?.Replace("-","").Replace("(","").Replace(")", "")">
+                                @Model.ShopPhone
+                            </a>
+                            <span style="color: darkblue; padding: 0 5px 0 5px;"></span>
+                            <a style="color:darkblue" href="tel:@Model.ShopPhone2?.Replace("-","").Replace("(","").Replace(")", "")">
+                                @Model.ShopPhone2
+                            </a>
+                        </div>
+                        <div style="margin: 5px 0 5px 0">
+                            <a style="color: darkblue;" href="mailto:@Model.ShopEmail">@Model.ShopEmail</a>
+                            <span style="color: darkblue; padding: 0 5px 0 5px;"> </span>
+                            <a style="color: darkblue;" href="mailto:@Model.ShopEmail2">@Model.ShopEmail2</a>
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 10%;"></td>
+            </tr>
+            <!-- Thanks message -->
+        </tbody>
+    </table>
+</body>
+</html>

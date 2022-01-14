@@ -1,0 +1,119 @@
+﻿@model PaymentGwConfig
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-sm-12">
+        <h4 class="mb-3 text-secondary">Administrator Area for Payment Gateway</h4>
+        <form enctype="multipart/form-data" method="post" asp-controller="Admin"
+              asp-action="PaymentGw" class="form-row border mt-4 p-4 w-100 rounded">
+            <div class="rounded font-weight-normal col-12" asp-validation-summary="All"></div>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.CreatedOn)
+            @Html.HiddenFor(m => m.ModifiedOn)
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="GwName"></label>
+                <input class="form-control" type="text" asp-for="GwName" />
+                <span class="text-danger" asp-validation-for="GwName"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="Username"></label>
+                <input class="form-control" type="text" asp-for="Username" />
+                <span class="text-danger" asp-validation-for="Username"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="Password"></label>
+                <div>
+                    <i class="fas fa-eye text-secondary position-absolute my-2 ml-2 mr-4 right-0"></i>
+                    <input class="form-control" type="password" value="@Model?.Password" asp-for="Password" />
+                </div>
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="ApiRoot"></label>
+                <input class="form-control" type="text" asp-for="ApiRoot" />
+                <span class="text-danger" asp-validation-for="ApiRoot"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="RedirectUrl"></label>
+                <input class="form-control" type="text" asp-for="RedirectUrl" />
+                <span class="text-danger" asp-validation-for="RedirectUrl"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="SuccessCallbackUrl"></label>
+                <input class="form-control" type="text" asp-for="SuccessCallbackUrl" />
+                <span class="text-danger" asp-validation-for="SuccessCallbackUrl"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="CancelCallbackUrl"></label>
+                <input class="form-control" type="text" asp-for="CancelCallbackUrl" />
+                <span class="text-danger" asp-validation-for="CancelCallbackUrl"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="FailCallbackUrl"></label>
+                <input class="form-control" type="text" asp-for="FailCallbackUrl" />
+                <span class="text-danger" asp-validation-for="FailCallbackUrl"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="Data_a"></label>
+                <input class="form-control" type="text" asp-for="Data_a" />
+                <span class="text-danger" asp-validation-for="Data_a"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="Data_b"></label>
+                <input class="form-control" type="text" asp-for="Data_b" />
+                <span class="text-danger" asp-validation-for="Data_b"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="Data_c"></label>
+                <input class="form-control" type="text" asp-for="Data_c" />
+                <span class="text-danger" asp-validation-for="Data_c"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12 col-md-6">
+                <label asp-for="Data_d"></label>
+                <input class="form-control" type="text" asp-for="Data_d" />
+                <span class="text-danger" asp-validation-for="Data_d"></span>
+            </div>
+
+            <div class=" form-group  col-sm-12">
+                <label asp-for="Data_e"></label>
+                <textarea class="form-control" type="text" asp-for="Data_e"></textarea>
+                <span class="text-danger" asp-validation-for="Data_e"></span>
+            </div>
+
+            <button class="btn btn-primary ml-1" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("div i").click(function (evt) {
+                if ($(evt.currentTarget).hasClass("fa-eye")) {
+                    $(evt.currentTarget).removeClass("fa-eye");
+                    $(evt.currentTarget).addClass("fa-eye-slash");
+                    $(evt.currentTarget).siblings("input").attr("type", "text");
+                }
+                else if ($(evt.currentTarget).hasClass("fa-eye-slash")) {
+                    $(evt.currentTarget).removeClass("fa-eye-slash");
+                    $(evt.currentTarget).addClass("fa-eye");
+                    $(evt.currentTarget).siblings("input").attr("type", "password");
+                }
+            });
+        });
+    </script>
+}

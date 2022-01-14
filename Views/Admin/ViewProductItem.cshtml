@@ -1,11 +1,9 @@
 ﻿@model ProductItem
 @using Digital_Services_BD.Services
-@inject IProductItemOps productItemOps
-@inject IProductCategoryOps productCategoryOps
 
 @{
     Layout = "AdminLayout";
-    var categories = productCategoryOps.GetAllProdCategoryByProdItemId(Model.Id);
+    List<ProductCategory> categories = ViewBag.Categories;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
@@ -17,7 +15,7 @@
                 <span>@Model.Name</span>
             </div>
             <div class="card-body">
-                <img class="card-img-top img-thumbnail" alt="No Image" src="\@Model.ImageUrl" />
+                <img class="card-img-top img-thumbnail w-auto max-h-240 d-flex mx-auto" alt="No Image" src="\@Model.ImageUrl" />
                 <div class="form-row m-4">
                     <div class="form-check col-sm-6">
                         <input type="checkbox" class="form-check-input" asp-for="IsActive" id="isActive" disabled />
@@ -125,6 +123,20 @@
                                 <tr>
                                     <td style="width: 20%;">@featureProperty.Name</td>
                                     <td style="width: 80%;">@featureProperty.GetValue(Model.ProductItemFeature, null)?.ToString()</td>
+                                </tr>
+                            }
+                            @if (Model.ProductItemCustomFields.Any())
+                            {
+                                <tr>
+                                    <td colspan="2" class="font-weight-bold">Custom Fields</td>
+                                </tr>
+                            }
+
+                            @foreach (var cf in Model.ProductItemCustomFields)
+                            {
+                                <tr>
+                                    <td style="width: 40%;">@cf.Key</td>
+                                    <td style="width: 60%;">@cf.Value</td>
                                 </tr>
                             }
                         </tbody>

@@ -2,11 +2,13 @@
 
 @{
     var priceObj = Model.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault();
+    IList<ProductItemBundle> bundles = ViewBag.Bundles;
 }
 
+<div class="spacer"></div>
 @if (ViewBag.Message != null)
 {
-    <div class="row mt-5 p-3">
+    <div class="row p-3">
         <div class="@ViewBag.AlertClass" role="alert">
             @ViewBag.Message
         </div>
@@ -16,6 +18,9 @@
 <div class="row w-100 p-2">
     <!-- Left sidebar (image) -->
     <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="position-absolute right-0 mx-4 my-2 px-2 py-1 badge badge-pill badge-@(Model.ProductStockCount.Count > 0 ? "info": "danger")">
+            @(Model.ProductStockCount.Count > 0 ? "in stock": "out of stock")
+        </div>
         <div class="h-240 w-100">
             <img asp-append-version="true" class="w-100 h-100 obj-fit-contain img-mythumbnail" src="\@Model.ImageUrl" />
         </div>
@@ -23,7 +28,7 @@
     <!-- Left sidebar (image)-->
     <!-- Middle content (description) -->
     <div class="col-lg-6 col-md-6 col-sm-12">
-        <h4>@Model.Name</h4>
+        <h4 class="pt-2">@Model.Name</h4>
         <div class="form-row">
             <div class="col-sm-6">
                 <span class="text-muted">Region: </span>@Model.ProductItemFeature.RegionCodes
@@ -47,37 +52,39 @@
     <!-- Middle content (description)-->
     <!-- Right sidebar (cart) -->
     <div class="col-lg-3 col-md-12 col-sm-12">
-        <h4 class="mt-2">
-            <strong class="text-muted mr-2">Price:</strong>
-            <strong>@string.Format("{0: 0.00}", priceObj.Price - priceObj.Discount + priceObj.Vat)<sup>BDT</sup></strong>
+        <h4 class="mt-2 d-inline-flex">
+            <strong class="mr-2 price-font">Price:</strong>
+            <strong class="price-font">@string.Format("{0: 0.00}", priceObj.Price - priceObj.Discount + priceObj.Vat)<sup>BDT</sup></strong>
         </h4>
         @if (priceObj.Discount > 0)
         {
-            <h5 class="mt-2 p-1">
-                <s class="mr-2">@string.Format("{0: 0.00}", priceObj.Price)</s><sup>BDT</sup>
+            <h5 class="mt-2 p-1 d-inline-flex">
+                <s class="mr-2">@string.Format("{0: 0.00}", priceObj.Price)</s>
                 <span class="border text-danger border-danger font-weight-bold text-nowrap">@string.Format("{0:0.00}", priceObj.Discount * 100 / (priceObj.Price + priceObj.Vat))% OFF</span>
             </h5>
         }
-        <div class="mt-3">
+        <div class="mt-3 d-sm-flex d-lg-block">
             <div class="d-flex">
                 <label for="quantity" class="col-form-label mt-1">Quantity</label>
                 <button id="subtractQuantity" name="subtractQuantity" class="btn btn-sm btn-light m-2"><i class="fas fa-minus"></i></button>
                 <input id="quantity" type="number" class="form-control-sm m-2" min="1" max="10" value="1" />
                 <button id="addQuantity" name="addQuantity" class="btn btn-sm btn-light m-2"><i class="fas fa-plus"></i></button>
             </div>
-            <form method="post" asp-action="AddToCart" asp-controller="Cart">
+            <form class="d-inline-block" method="post" asp-action="AddToCart" asp-controller="Cart">
                 <button name="addToCart" type="button" class="btn btn-light m-1">
                     <i class="fas fa-cart-plus text-primary mr-2"></i>Add to Cart
                 </button>
+                @Html.AntiForgeryToken()
                 @Html.Hidden("userId", null)
                 @Html.Hidden("itemId", Model.Id)
                 @Html.Hidden("returnUrl", @Context.Request.Path)
                 @Html.Hidden("addToCartQuantity", 1)
             </form>
-            <form method="post" asp-action="BuyNow" asp-controller="Cart">
+            <form class="d-inline-block" method="post" asp-action="BuyNow" asp-controller="Cart">
                 <button name="buyNow" type="button" class="btn btn-light m-1">
-                    <i class="fas fa-shopping-bag text-info mr-2"></i>Buy Now
+                    <i class="fas fa-shopping-bag text-info mr-2"></i>Buy Now&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>
+                @Html.AntiForgeryToken()
                 @Html.Hidden("userId2", null)
                 @Html.Hidden("itemId2", Model.Id)
                 @Html.Hidden("buyNowQuantity", 1)
@@ -146,6 +153,78 @@
     </div>
 </div>
 <!-- Description -->
+<!-- Bundles -->
+<h5 class="mt-3">Package Deals (Frequently Bought)</h5>
+<hr />
+<div class="row">
+    @for (var i = 0; i < bundles.Count; i++)
+    {
+        var price = bundles[i].ProductItemBundleJoinProductItem
+            .Sum(join => (join.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Price ?? 0) * join.ProductItemQuantity);
+
+        var discount = bundles[i].ProductItemBundleJoinProductItem
+            .Sum(join => (join.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Discount ?? 0) * join.ProductItemQuantity);
+
+        var vat = bundles[i].ProductItemBundleJoinProductItem
+            .Sum(join => (join.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Vat ?? 0) * join.ProductItemQuantity);
+
+        var minStock = bundles[i].ProductItemBundleJoinProductItem
+            .Min(join => join.ProductItem.ProductStockCount.Count/join.ProductItemQuantity);
+
+        <div class="card-deck col-lg-4 col-md-6 col-sm-12 p-0 pt-2 m-1">
+
+            <div class="card m-2 link-normal">
+                <div class="position-absolute right-0 mx-4 my-2 px-2 py-1 badge badge-pill badge-@(minStock > 0 ? "info": "danger")">
+                    @(minStock > 0 ? "in stock": "out of stock")
+                </div>
+                <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Package" asp-route-id="@bundles[i].Id">
+                    <div class="h-240 w-100 d-flex flex-column">
+                        <div class="position-absolute w-100 h-240 right-0">
+                            <img class="w-100 scale-half" height="240" src="~/ImageResources/UI/gift-ribbon.png">
+                        </div>
+                        @foreach (var join in bundles[i].ProductItemBundleJoinProductItem)
+                        {
+                            <img asp-append-version="true" class="obj-fit-contain"
+                                 height="@(240/bundles[i].ProductItemBundleJoinProductItem.Count)" src="\@join.ProductItem.ImageUrl" />
+                        }
+
+                    </div>
+                    <div class="d-flex flex-grow-1">
+                        <div class="w-100 align-self-end">
+                            <div class="p-1">
+                                <h5 class=" text-truncate">@bundles[i].Name</h5>
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var join in bundles[i].ProductItemBundleJoinProductItem)
+                                    {
+                                        <li class="list-group-item text-truncate p-0">
+                                            <span class="nav-link text-truncate">@join.ProductItem.Name <span class="ml-2 badge badge-dark">@join.ProductItemQuantity x</span></span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="bg-light-gray p-1">
+                                <div class="price-font">
+                                    <strong>@string.Format("{0:0.00}", price + vat - discount - bundles[i].BundleDiscount)</strong>
+                                    <sup>BDT</sup>
+                                </div>
+                                @if (bundles[i].BundleDiscount > 0)
+                                {
+                                    <div class="text-black">
+                                        <s class="text-muted">@(price + vat)</s>
+                                        <sup class="text-muted">BDT</sup>
+                                        <span class="ml-1 bg-primary p-1">
+                                            <span class="text-white">@string.Format("{0:0.00}", ((discount + bundles[i].BundleDiscount) * 100) / (price + vat))% OFF</span>
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+</div>
 
 @section Scripts {
     <script>

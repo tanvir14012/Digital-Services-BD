@@ -1,4 +1,5 @@
 ﻿using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace Digital_Services_BD.Services
@@ -21,7 +21,7 @@ namespace Digital_Services_BD.Services
             this.webHostEnvironment = webHostEnvironment;
         }
         /// <summary>
-        /// Adds a productitem to database, saves the image to wwwroot/imageresource/productitem folder,
+        /// Adds a product item to database, saves the image to wwwroot/imageresource/productitem folder,
         /// stores the relative link to database column imageUrl
         /// </summary>
         /// <param name="productItem">the ProductItem model</param>
@@ -39,27 +39,24 @@ namespace Digital_Services_BD.Services
                 productItem.ProductItemFeature.CreatedOn = DateTime.UtcNow;
                 productItem.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
             }
+
+            //Stock count entry
+            productItem.ProductStockCount = new ProductStockCount
+            {
+                LastUpdated = DateTime.UtcNow,
+                Count = 0
+            };
+
             //Add product item
             context.ProductItems.Add(productItem);
             try
             {
                 var isSaved = context.SaveChanges() > 0;
-                //After obtaining id, add entry to other tables like: price, category etc.
-                //if(productItem.ProductItemPrice != null && productItem.ProductItemPrice.Count > 0)
-                //{
-                //    //productItem.ProductItemPrice is of type IList<> which is a reference type
-                //    //The data referred is modified in the method, so in foreach it'll throw "Collection was modified, enumration operation .." error
-                //    //ToList() will create a copy and pass it
-                //    var isPriceAdded = AddProductPrice(productItem.Id, productItem.ProductItemPrice.ToList());
-                //    if(! isPriceAdded)
-                //    {
-                //        return null;
-                //    }
-                //}
                 if(productItem.CategoryIds != null && productItem.CategoryIds.Count() > 0)
                 {
                     AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
                 }
+
                 return isSaved ? productItem : null;
             }
             catch (Exception e)
@@ -120,6 +117,30 @@ namespace Digital_Services_BD.Services
                 productItem.Categories = GetProductItemCategories(id).ToList();
                 productItem.ProductItemPrice = GetProductItemPrices(id).ToList();
                 productItem.ProductItemFeature = GetProductItemFeature(id);
+                productItem.ProductItemCustomFields = GetProductItemCustomFields(id);
+            }
+            return productItem;
+        }
+
+        /// <summary>
+        /// Get productitem by id
+        /// </summary>
+        /// <param name="id">Id of productitem</param>
+        /// <returns>returns null if not found </returns>
+        public async Task<ProductItem> GetProductItemAsync(int id)
+        {
+            var productItem = await context.ProductItems.AsNoTracking()
+                                    .Include(item => item.ProductItemPrice)
+                                    .Include(item => item.ProductItemJoinProductCategory)
+                                        .ThenInclude(join => join.ProductCategory)
+                                    .Include(item => item.ProductItemFeature)
+                                    .Include(item => item.ProductItemCustomFields)
+                                    .Include(item => item.ProductStockCount)
+                                    .FirstOrDefaultAsync(item => item.Id == id);
+            //Populate associated categories, prices, features for details view
+            if (productItem != null)
+            {
+                productItem.Categories = productItem.ProductItemJoinProductCategory.Select(join => join.ProductCategory).ToList();
             }
             return productItem;
         }
@@ -130,35 +151,49 @@ namespace Digital_Services_BD.Services
         /// <returns>updated product item, null if some error occurred</returns>
         public ProductItem UpdateProductItem(ProductItem productItem)
         {
-            if (productItem.Image != null)
-            {
-                //Delete existing image
-                if (productItem.ImageUrl != null)
-                {
-                    var directoryPath = Path.Combine(webHostEnvironment.WebRootPath, "ImageResources", "ProductItem");
-                    DeleteFile(Path.Combine(directoryPath, productItem.ImageUrl));
-                }
-                productItem.ImageUrl = SaveProductImage(productItem.Image);
-            }
-            //Delete all category entries for this product item
-            RemoveAllCategoryEntriesByItemId(productItem.Id);
-            //Add categories sent from ui
-            if (productItem.CategoryIds != null && productItem.CategoryIds.Count > 0)
-            {
-                AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
-            }
-            if(productItem.ProductItemFeature != null)
-            {
-                productItem.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
-            }
-            productItem.LastModifiedOn = DateTime.UtcNow;
-            context.ProductItems.Update(productItem);
             try
             {
-                var isUpdated = context.SaveChanges() > 0;
-                return isUpdated ? productItem : null;
+                var prodItemEntity = context.ProductItems
+                    .Include(pi => pi.ProductItemCustomFields)
+                    .FirstOrDefault(pi => pi.Id == productItem.Id);
+
+                if(prodItemEntity != null)
+                {
+                    if (productItem.Image != null)
+                    {
+                        //Delete existing image
+                        if (productItem.ImageUrl != null)
+                        {
+                            var directoryPath = Path.Combine(webHostEnvironment.WebRootPath, "ImageResources", "ProductItem");
+                            DeleteFile(Path.Combine(directoryPath, productItem.ImageUrl));
+                        }
+                        prodItemEntity.ImageUrl = SaveProductImage(productItem.Image);
+                    }
+
+                        //Delete all category entries for this product item
+                        RemoveAllCategoryEntriesByItemId(productItem.Id);
+
+                        //Add categories sent from ui
+                        if (productItem.CategoryIds != null && productItem.CategoryIds.Count > 0)
+                        {
+                            AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
+                        }
+                        if (productItem.ProductItemFeature != null)
+                        {
+                            prodItemEntity.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
+                        }
+                        prodItemEntity.LastModifiedOn = DateTime.UtcNow;
+
+                        prodItemEntity.ProductItemCustomFields.Clear();
+                        productItem.ProductItemCustomFields.ToList()
+                            .ForEach(item => prodItemEntity.ProductItemCustomFields.Add(item));
+                        context.ProductItems.Update(prodItemEntity);
+                        context.SaveChanges();
+                    
+                }
+                return prodItemEntity;
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
@@ -249,6 +284,12 @@ namespace Digital_Services_BD.Services
         {
             return context.ProductItemFeatures.Where(f => f.ProductItemId == productItemId).FirstOrDefault();
         }
+
+        private ICollection<ProductItemCustomField> GetProductItemCustomFields(int productItemId)
+        {
+            return context.ProductItemCustomFields.Where(cf => cf.ProductItemId == productItemId).ToList();
+        }
+
         private bool AddProductPrice(int productItemId, IEnumerable<ProductItemPrice> prices)
         {
             foreach(var priceObj in prices)
@@ -359,7 +400,15 @@ namespace Digital_Services_BD.Services
                 ProductItemJoinPromoOffer = model.ProductItemJoinPromoOffer,
                 ProductItemJoinSearchTagProductItem = model.ProductItemJoinSearchTagProductItem,
                 ProductItemPrice = model.ProductItemPrice,
-                WhatCanBeDone = model.WhatCanBeDone
+                WhatCanBeDone = model.WhatCanBeDone,
+
+                ProductItemCustomFieldsViewModel = model.ProductItemCustomFields.Select(cf => new ProductItemCustomFieldViewModel
+                {
+                    Id = cf.Id,
+                    ProductItemId = cf.ProductItemId,
+                    Key = cf.Key,
+                    Value = cf.Value
+                }).ToList()
             };
             return productItemViewModel;
         }
@@ -390,6 +439,7 @@ namespace Digital_Services_BD.Services
                 RequirementRam = model.ProductItemFeature?.RequirementRam,
                 ValidityPeriod = model.ProductItemFeature?.ValidityPeriod
             };
+
             var productItem = new ProductItem
             {
                 ProductItemFeature = productFeature,
@@ -410,7 +460,14 @@ namespace Digital_Services_BD.Services
                 ProductItemJoinPromoOffer = model.ProductItemJoinPromoOffer,
                 ProductItemJoinSearchTagProductItem = model.ProductItemJoinSearchTagProductItem,
                 ProductItemPrice = model.ProductItemPrice,
-                WhatCanBeDone = model.WhatCanBeDone
+                WhatCanBeDone = model.WhatCanBeDone,
+                ProductItemCustomFields = model.ProductItemCustomFieldsViewModel.Select(cf => new ProductItemCustomField
+                {
+                    Id = cf.Id,
+                    ProductItemId = cf.ProductItemId,
+                    Key = cf.Key,
+                    Value = cf.Value
+                }).ToList()
             };
             return productItem;
         }

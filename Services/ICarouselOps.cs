@@ -14,5 +14,6 @@ namespace Digital_Services_BD.Services
         Carousel GetCarousel(int carouselId);
         Carousel UpdateCarousel(Carousel carousel);
         Carousel DeleteCarousel(int carouselId);
+        Task<Carousel> GetFirstCarousel();
     }
 }

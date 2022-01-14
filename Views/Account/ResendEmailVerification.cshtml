@@ -3,7 +3,7 @@
 
 
 <div class="row flex-column m-2">
-    <div class="col-md-8 col-lg-6 mx-auto p-3 border shadow-sm">
+    <div class="col-md-8 col-lg-6 mx-auto p-3 border shadow-sm rounded">
         @if (ViewBag.HeadingClass != null)
         {
             <div class="alert @ViewBag.HeadingClass">
@@ -12,6 +12,7 @@
             </div>
         }
         <form class="form" method="post" asp-action="ResendEmailVerification" asp-controller="Account">
+            @Html.AntiForgeryToken()
             <h4 class="text-secondary">Send email verification link</h4><hr />
             <div asp-validation-summary="All"></div>
             <label class="font-weight-bold" asp-for="Email"></label>

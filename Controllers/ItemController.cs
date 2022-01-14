@@ -13,28 +13,32 @@ namespace Digital_Services_BD.Controllers
     [Route("[controller]/{id}")]
     public class ItemController : Controller
     {
+        private readonly IProductGroupOps productGroupOps;
         private readonly IProductCategoryOps productCategoryOps;
         private readonly IProductItemOps productItemOps;
 
-        public ItemController(IProductCategoryOps productCategoryOps, IProductItemOps productItemOps)
+        public ItemController(IProductGroupOps productGroupOps, 
+            IProductCategoryOps productCategoryOps, IProductItemOps productItemOps)
         {
+            this.productGroupOps = productGroupOps;
             this.productCategoryOps = productCategoryOps;
             this.productItemOps = productItemOps;
         }
-        public IActionResult Index([FromRoute] int id, [FromQuery] int pageNo = 1,
+        public async Task<IActionResult> Index([FromRoute] int id, [FromQuery] int pageNo = 1,
             [FromQuery] string sortBy = null, [FromQuery] string priceRange = null)
         {
             if (ModelState.IsValid)
             {
-                var productCategory = productCategoryOps.GetProductCategory(id);
+                var productCategory = await productCategoryOps.GetProductCategoryAsync(id);
                 if (productCategory != null)
                 {
-                    var filteredItems = productCategoryOps.FilterItems(productCategory.Id, pageNo - 1, sortBy, priceRange);
+                    var filteredItems = productCategoryOps.FilterItems(productCategory, pageNo - 1, sortBy, priceRange);
                     ViewBag.Id = productCategory.Id;
                     ViewBag.ProductCategoryName = productCategory.Name;
                     ViewBag.TotalItem = filteredItems.TotalItems;
                     ViewBag.PageNo = pageNo;
                     ViewBag.SortBy = sortBy ?? "m_p";
+
                     if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$"))
                     {
                         ViewBag.PriceMin = Convert.ToInt32(priceRange.Split("to")[0]);
@@ -45,6 +49,11 @@ namespace Digital_Services_BD.Controllers
                         ViewBag.PriceMin = ProductConfig.MinPrice;
                         ViewBag.PriceMax = ProductConfig.MaxPrice;
                     }
+
+                    ViewBag.AllProductGroups = await productGroupOps.GetAllProductGroupsIdName();
+                    ViewBag.AllProductGroupIdsUnderThisCategory = await productCategoryOps.GetAllProductGroupIdsByCategoryId(ViewBag.Id);
+                    ViewBag.Categories = await productCategoryOps.GetAllProductCategoriesIdName();
+
                     return View(filteredItems.ItemsUnderFilter);
                 }
             }

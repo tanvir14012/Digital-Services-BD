@@ -9,15 +9,15 @@ namespace Digital_Services_BD.Models
     {
         public Cart()
         {
-            CartJoinCartItem = new List<CartJoinCartItem>();
-            CartJoinProductItemBundle = new List<CartJoinProductItemBundle>();
+            CartItems = new HashSet<CartItem>();
+            CartProductItemBundles = new HashSet<CartProductItemBundle>();
         }
         public int Id { get; set; }
-        public int? UserId { get; set; }
+        public string UserId { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool IsCheckedOut { get; set; } = false;
         //Navigation Property
-        public ICollection<CartJoinCartItem> CartJoinCartItem { get; set; }
-        public ICollection<CartJoinProductItemBundle> CartJoinProductItemBundle { get; set; }
+        public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual ICollection<CartProductItemBundle> CartProductItemBundles { get; set; }
     }
 }

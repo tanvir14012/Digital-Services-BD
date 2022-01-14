@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -154,7 +153,7 @@ namespace Digital_Services_BD.Services
         public IEnumerable<ProductCategory> GetAllProdCategoriesByProdGroupId(int productGroupId)
         {
             var query = from category in context.ProductCategories
-                        join categorygroupmap in context.productCategoryJoinProductGroup
+                        join categorygroupmap in context.ProductCategoryJoinProductGroup
                         on category.Id equals categorygroupmap.ProductCategoryId
                         where categorygroupmap.ProductGroupId == productGroupId
                         select category;
@@ -205,7 +204,7 @@ namespace Digital_Services_BD.Services
             //Add rows from the set
             foreach (var catId in ProdCategoryIds)
             {
-                context.productCategoryJoinProductGroup.Add(new ProductCategoryJoinProductGroup
+                context.ProductCategoryJoinProductGroup.Add(new ProductCategoryJoinProductGroup
                 {
                     ProductGroupId = productGroupId,
                     ProductCategoryId = catId
@@ -222,15 +221,15 @@ namespace Digital_Services_BD.Services
             return true;
         }
         /// <summary>
-        /// Remove all rows from productCategoryJoinProductGroup having specified productGroupId
+        /// Remove all rows from ProductCategoryJoinProductGroup having specified productGroupId
         /// </summary>
         /// <param name="productCategoryId"></param>
         /// <returns></returns>
         private bool DeleteProductCategories(int productGroupId)
         {
             //Remove all rows with product group id
-            context.productCategoryJoinProductGroup.RemoveRange(
-                    context.productCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId));
+            context.ProductCategoryJoinProductGroup.RemoveRange(
+                    context.ProductCategoryJoinProductGroup.Where(j => j.ProductGroupId == productGroupId));
             try
             {
                 context.SaveChanges();
@@ -252,7 +251,7 @@ namespace Digital_Services_BD.Services
         public FilteredCategories FilterCategories(int productGroupId, int pageNo, string sortBy, string priceRange)
         {
             var query = from category in context.ProductCategories
-                        join categorygroupmap in context.productCategoryJoinProductGroup
+                        join categorygroupmap in context.ProductCategoryJoinProductGroup
                         on category.Id equals categorygroupmap.ProductCategoryId
                         where categorygroupmap.ProductGroupId == productGroupId
                         join categoryitemmap in context.ProductItemJoinProductCategory
@@ -372,5 +371,38 @@ namespace Digital_Services_BD.Services
             return filteredCategories;
         }
 
+        public async Task<ICollection<ProductGroup>> GetProductGroupsWithNavigation()
+        {
+            return await context.ProductGroups.AsNoTracking()
+                    .Include(pg => pg.ProductCategoryJoinProductGroup)
+                        .ThenInclude(join => join.ProductCategory)
+                        .ThenInclude(pc => pc.ProductItemJoinProductCategory)
+                        .ThenInclude(join => join.ProductItem)
+                    .Select(pg => new ProductGroup 
+                    { 
+                        Id = pg.Id, 
+                        Name = pg.Name,
+                        AllCategories = pg.ProductCategoryJoinProductGroup.Select(join => new ProductCategory
+                        { 
+                            Id = join.ProductCategory.Id,
+                            Name = join.ProductCategory.Name,
+                            AllItems = join.ProductCategory.ProductItemJoinProductCategory.Select(join2 => new ProductItem
+                            {
+                                Id = join2.ProductItem.Id,
+                                Name = join2.ProductItem.Name
+                            }).ToList()
+                        }).ToList()
+                    }).ToListAsync();
+        }
+
+        public async Task<ICollection<ProductGroup>> GetAllProductGroupsIdName()
+        {
+            return await context.ProductGroups.AsNoTracking()
+                   .Select(pg => new ProductGroup
+                   {
+                       Id = pg.Id,
+                       Name = pg.Name,
+                   }).ToListAsync();
+        }
     }
 }

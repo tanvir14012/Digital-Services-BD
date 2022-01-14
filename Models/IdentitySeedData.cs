@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Digital_Services_BD.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -25,6 +26,7 @@ namespace Digital_Services_BD.Models
             serviceProvider = serviceProvider.CreateScope().ServiceProvider;
             UserManager<Customer> userManager = serviceProvider.GetRequiredService<UserManager<Customer>>();
             RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var cartOps = serviceProvider.GetRequiredService<ICartOps>();
 
             //Get admin details from config file
             string userName = configuration["SeedIdentity:Admin:UserName"] ?? "tanvir14012@gmail.com";
@@ -43,7 +45,8 @@ namespace Digital_Services_BD.Models
                 var createResult = await userManager.CreateAsync(user, password);
                 if(createResult.Succeeded)
                 {
-                    if(await roleManager.FindByNameAsync(adminRole) == null)
+                    var role = await roleManager.FindByNameAsync(adminRole);
+                    if (role == null)
                     {
                         var roleCreateResult = await roleManager.CreateAsync(new IdentityRole(adminRole));
                         if(roleCreateResult.Succeeded)
@@ -51,6 +54,13 @@ namespace Digital_Services_BD.Models
                             await userManager.AddToRoleAsync(user, adminRole);
                         }
                     }
+                    else
+                    {
+                        await userManager.AddToRoleAsync(user, adminRole);
+                    }
+
+                    //Add a cart
+                    await cartOps.CreateCart(user.Id);
                 }
 
             }

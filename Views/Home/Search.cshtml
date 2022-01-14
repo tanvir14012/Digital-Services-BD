@@ -1,0 +1,242 @@
+﻿@using static Digital_Services_BD.ViewModels.ProductConfig
+@using Digital_Services_BD.ViewModels
+@model SearchView
+@{
+    ViewData["Title"] = "Nilu Digital";
+    var priceRange = Model.PriceRange?.Split("to");
+    var priceFrom = priceRange != null ? priceRange[0]: MinPrice.ToString();
+    var priceTo = priceRange != null ? priceRange[1] : MaxPrice.ToString();
+}
+
+<form method="post" asp-controller="Home" asp-action="Search" id="searchForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Term" value="@Model.Term" />
+    <input type="hidden" name="PriceRange" value="@Model.PriceRange" id="priceRangeInput" />
+
+    <div class="row pl-3">
+        <div class="col-12 pl-0 my-2">
+            <ul class="breadcrumb w-100 p-0 m-0 link-normal">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-home mr-1"></i>Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a href="#">
+                        Search
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-12 col-md-5 col-lg-3 pl-0">
+            <h4>Search </h4>
+            @{
+                var start = @Model.TotalItems > 0 ? @Model.PageNo : 1;
+                var increament = @Model.TotalItems > 0 ? 1 : 0;
+                var end = @Model.TotalItems > (Model.PageNo * NoOfProductItemPerPage) ? (Model.PageNo * NoOfProductItemPerPage) : @Model.TotalItems;
+            }
+            @if (Model.Products.Count() > 0)
+            {
+                <small>Showing @((start-1) * NoOfProductItemPerPage + increament)-@end of @Model.TotalItems items</small>
+            }
+            else
+            {
+                <small>No item found</small>
+            }
+
+        </div>
+
+        <div class="col-sm-12 col-md-7 col-lg-5 mb-2">
+            <table>
+                <thead>
+                    <tr>
+                        <td class="w-15"></td>
+                        <td class="w-50"></td>
+                        <td class="w-25"></td>
+                        <td class="w-10"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>Price</div>
+                        </td>
+                        <td>
+                            <div id="priceRange" class="mx-2"></div>
+                        </td>
+                        <td>
+                            <div id="priceLabel" for="priceRange" class="text-center mx-2">@MinPrice<sup>BDT</sup>&nbsp;&mdash;&nbsp;@MaxPrice<sup>BDT</sup></div>
+                        </td>
+                        <td>
+                            <div id="goPrice" class="btn btn-dark mx-2">Go</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-12 col-lg-4 d-flex justify-content-end">
+            <label for="sortBy" class="mr-2 pt-1">Sort By</label>
+            <select id="sortBy" value="@Model.SortBy" name="SortBy" class="selectpicker">
+                <option value="name" selected>Name</option>
+                <option value="p_l_h">Price Low &rarr; High</option>
+                <option value="p_h_l">Price High &rarr; Low</option>
+            </select>
+        </div>
+
+        <div class="col-12 pl-0">
+            <hr />
+        </div>
+        <div class="card-deck col-12 p-0 pl-2">
+
+            @for (var j = 0; j < Model.Products.Count(); j++)
+            {
+                var product = Model.Products.ElementAt(j);
+                var priceObj = product.ProductItemPrice.FirstOrDefault(p => p.PriceCurrency == "BDT");
+                @if (priceObj == null)
+                {
+                    continue;
+                }
+
+                <div class="col-lg-3 col-md-4 col-sm-12 py-0 px-1 m-0">
+                    <div class="card p-0 m-0 mr-1 mt-2 mb-3 h-300">
+                        <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Detail" asp-route-id="@product.Id">
+                            <div class="overflow-hidden max-h-240">
+                                <img class="img-fluid" src="\@product.ImageUrl" />
+                            </div>
+                            <div class="d-flex flex-grow-1">
+                                <div class="w-100 align-self-end">
+                                    <div class="p-1">
+                                        <strong>@product.Name</strong>
+                                    </div>
+                                    <div class="p-1 bg-light-gray">
+                                        <div class="price-font">
+                                            <strong>@string.Format("{0:0.00}", priceObj.Price - priceObj.Discount)</strong>
+                                            <sup>BDT</sup>
+                                        </div>
+                                        @if (priceObj.Discount > 0)
+                                        {
+                                            <div class="text-black">
+                                                <s class="text-muted">@priceObj.Price</s>
+                                                <sup class="text-muted">BDT</sup>
+                                                <span class="ml-1 bg-primary p-1">
+                                                    <span class="text-white">@string.Format("{0:0.00}", (priceObj.Discount * 100) / priceObj.Price)% OFF</span>
+                                                </span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (Model.TotalItems > 0)
+        {
+            <div class="col-12 d-flex justify-content-center mt-2">
+                <input type="hidden" name="PageNo" id="pageNoInput" />
+                <ul class="pagination">
+                    @if (Model.PageNo >= 2)
+                    {
+                        <li class="page-item">
+                            <a class="page-link cursor-pointer"
+                               value="@(Model.PageNo-1)">&laquo;</a>
+                        </li>
+                    }
+                    @if (Model.PageNo < 5)
+                    {
+                        @for (var i = 1; i <= Model.PageNo; i++)
+                        {
+                            <li class="page-item @(i == Model.PageNo ? "active": "")">
+                                <a class="page-link cursor-pointer"
+                                   value="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link cursor-pointer"
+                               value="1">1</a>
+                        </li>
+                        <li class="page-item">
+                            ...
+                        </li>
+
+
+
+                        @for (var i = Model.PageNo - 2; i <= Model.PageNo; i++)
+                        {
+                            <li class="page-item @(i == Model.PageNo ? "active": "")">
+                                <a class="page-link cursor-pointer"
+                                   value="@i">@i</a>
+                            </li>
+                        }
+                    }
+
+                    @*--------  Second Half  -------- *@
+                    @if ((Model.Products.Count() / NoOfProductItemPerPage) - Model.PageNo < 5)
+                    {
+                        @for (var i = Model.PageNo + 1; i <= (Model.TotalItems / NoOfProductItemPerPage); i++)
+                        {
+                            <li class="page-item">
+                                <a class="page-link cursor-pointer" value="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @for (var i = Model.PageNo + 1; i <= Model.PageNo + 2; i++)
+                        {
+                            <li class="page-item">
+                                <a class="page-link cursor-pointer" value="@i">@i</a>
+                            </li>
+                        }
+                        <li class="page-item">
+                            ...
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link cursor-pointer"
+                               value="@(Model.TotalItems / NoOfProductItemPerPage)">@(Model.TotalItems / NoOfProductItemPerPage)</a>
+                        </li>
+                    }
+                    @if ((Model.TotalItems / NoOfProductItemPerPage) - Model.PageNo >= 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link cursor-pointer"
+                               value="@(Model.PageNo+1)">&raquo;</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        <!-- Pagination -->
+    </div>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+               //Search term
+                $("#searchInput").val('@Model.Term');
+                //Price slider
+                $("#priceRange").slider({
+                    range: true,
+                    min: parseInt('@MinPrice'),
+                    max: parseInt('@MaxPrice'),
+                    values: [parseInt('@priceFrom'), parseInt('@priceTo')],
+                    slide: function (event, ui) {
+                        $("#priceLabel").html(ui.values[0].toString() + "<sup>BDT</sup>&nbsp;&mdash;&nbsp;" + ui.values[1].toString() + "<sup>BDT</sup>");
+                        let priceRange = $("#priceRange").slider("option", "values")[0].toString()
+                            .concat("to").concat($("#priceRange").slider("option", "values")[1].toString());
+
+                        $("#priceRangeInput").val(priceRange);
+                    }
+                });
+        $("#priceLabel").html("@priceFrom<sup>BDT</sup>&nbsp;&mdash;&nbsp;@priceTo<sup>BDT</sup>");
+                $("#sortBy").val('@Model.SortBy');
+    </script>
+    <script type="text/javascript" src="~/js/SearchView.js" asp-append-version="true"></script>
+}

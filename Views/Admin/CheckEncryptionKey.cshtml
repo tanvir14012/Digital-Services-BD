@@ -1,0 +1,52 @@
+﻿@using Digital_Services_BD.ViewModels
+@model Key
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-sm-12">
+        <h4 class="mb-3 text-secondary">Check Encryption Key</h4>
+        <form enctype="multipart/form-data" method="post" asp-controller="Admin"
+              asp-action="CheckEncryptionKey" class="form-row border mt-4 p-4 w-100 rounded">
+            @if (ViewBag.Message != null)
+            {
+                <div class="rounded font-weight-normal col-12 alert alert-success">@ViewBag.Message</div>
+            }
+            <div class="rounded font-weight-normal col-12" asp-validation-summary="All"></div>
+            @Html.AntiForgeryToken()
+
+            <div class="form-group  col-sm-12 col-md-6">
+                <label asp-for="Value">Key</label>
+                <div>
+                    <i class="fas fa-eye text-secondary position-absolute my-2 ml-2 mr-4 right-0"></i>
+                    <input class="form-control" type="password" asp-for="Value" />
+                </div>
+                <span class="text-danger" asp-validation-for="Value"></span>
+            </div>
+            <div class="col-12 d-flex justify-content-start ml-1">
+                <button type="submit" class="btn btn-primary mr-2">Check</button>
+                <a asp-action="UpdateEncryptionKey" asp-controller="Admin" class="btn btn-secondary">Go to Update</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("div i").click(function (evt) {
+                if ($(evt.currentTarget).hasClass("fa-eye")) {
+                    $(evt.currentTarget).removeClass("fa-eye");
+                    $(evt.currentTarget).addClass("fa-eye-slash");
+                    $(evt.currentTarget).siblings("input").attr("type", "text");
+                }
+                else if ($(evt.currentTarget).hasClass("fa-eye-slash")) {
+                    $(evt.currentTarget).removeClass("fa-eye-slash");
+                    $(evt.currentTarget).addClass("fa-eye");
+                    $(evt.currentTarget).siblings("input").attr("type", "password");
+                }
+            });
+        });
+    </script>
+}

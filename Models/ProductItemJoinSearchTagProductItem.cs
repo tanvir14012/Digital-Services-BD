@@ -14,7 +14,7 @@ namespace Digital_Services_BD.Models
         public int ProductItemId { get; set; }
         public int SearchTagProductItemId { get; set; }
         //Navigation properties
-        public ProductItem ProductItem { get; set; }
-        public SearchTagProductItem SearchTagProductItem { get; set;}
+        public virtual ProductItem ProductItem { get; set; }
+        public virtual SearchTagProductItem SearchTagProductItem { get; set;}
     }
 }

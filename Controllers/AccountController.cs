@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NLog;
@@ -21,18 +28,25 @@ namespace Digital_Services_BD.Controllers
         private readonly UserManager<Customer> userManager;
         private readonly ILogger<AccountController> logger;
         private readonly ICompositeViewEngine viewEngine;
-        private readonly IOptions<AwsSesConfig> awsSesConfig;
         private readonly IEmailService emailService;
+        private readonly ICartOps cartOps;
+        private readonly IConfiguration configuration;
+        private readonly AppDbContext dbContext;
+        private readonly IWebHostEnvironment webHostingEnvironment;
 
         public AccountController(SignInManager<Customer> signInManager, UserManager<Customer> userManager, ILogger<AccountController> logger,
-            ICompositeViewEngine viewEngine, IOptions<AwsSesConfig> awsSesConfig, IEmailService emailService)
+            ICompositeViewEngine viewEngine, IEmailService emailService, ICartOps cartOps, IConfiguration configuration, AppDbContext dbContext,
+            IWebHostEnvironment webHostingEnvironment)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.logger = logger;
             this.viewEngine = viewEngine;
-            this.awsSesConfig = awsSesConfig;
             this.emailService = emailService;
+            this.cartOps = cartOps;
+            this.configuration = configuration;
+            this.dbContext = dbContext;
+            this.webHostingEnvironment = webHostingEnvironment;
         }
 
 
@@ -46,7 +60,9 @@ namespace Digital_Services_BD.Controllers
         {
             return View();
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<IActionResult> SignUp(SignUp model)
         {
             if (ModelState.IsValid)
@@ -73,19 +89,52 @@ namespace Digital_Services_BD.Controllers
                         ViewBag.Controller1 = "Account";
                         ViewBag.LinkText1 = "Sign In";
 
-                        //Generate verification token
                         var newUser = await userManager.FindByEmailAsync(model.Email);
+
+                        //Create cart
+                        await cartOps.CreateCart(newUser.Id);
+
+                        //Generate verification token
+                        var smtpConfig = await dbContext.SmtpConfigs.AsNoTracking().FirstOrDefaultAsync();
                         var token = await userManager.GenerateEmailConfirmationTokenAsync(newUser);
                         var verifyLink = Url.Action("VerifyEmail", "Account", new { Identity = newUser.Id, Token = token }, Request.Scheme);
+                        var logoLinkedRsrc = new EmailLinkedResource
+                        {
+                            ContentId = "logo",
+                            ContentBytes = System.IO.File.ReadAllBytes(Path.Combine(webHostingEnvironment.WebRootPath, "branding",
+                              "companyLogo.png")),
+                            ContentPath = "/branding/companyLogo.png",
+                            ContentType = "image/png"
+                        };
+                        var tempModel = new VerifyEmail
+                        {
+                            Address1 = configuration["Contact:Address1"],
+                            Address2 = configuration["Contact:Address2"],
+                            RecipeintName = $"{newUser.FirstName} {newUser.LastName}",
+                            ShopEmail = configuration["Contact:Email"],
+                            ShopName = configuration["Contact:Name"],
+                            ShopPhone = configuration["Contact:Phone"],
+                            VerificationTokenUrl = verifyLink,
+                            Website = configuration["Contact:Website"],
+                            EmailLinkedResources = new List<EmailLinkedResource>
+                            {
+                                logoLinkedRsrc
+                            }
+                        };
+
                         var email = new Email
                         {
-                            FromAddress = awsSesConfig.Value.SenderAddress,
-                            FromName = "Verification",
+                            FromAddress = smtpConfig?.FromAddress,
+                            FromName = configuration["Contact:Name"],
                             Subject = "Email verification",
                             ToAddresses = new List<string> { model.Email },
-                            BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", verifyLink)
+                            BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel),
+                            EmailLinkedResources = new List<EmailLinkedResource>
+                            {
+                                logoLinkedRsrc
+                            }
                         };
-                        emailService.SendEmailAsync(email);
+                        await emailService.SendEmailAsync(email);
                         return View("AlertMessage");
                     }
                     else
@@ -94,7 +143,7 @@ namespace Digital_Services_BD.Controllers
                         {
                             ModelState.AddModelError(error.Code, error.Description);
                         }
-                        userManager.DeleteAsync(await userManager.FindByEmailAsync(model.Email));
+                        await userManager.DeleteAsync(await userManager.FindByEmailAsync(model.Email));
                     }
                 }
                 else
@@ -104,7 +153,7 @@ namespace Digital_Services_BD.Controllers
             }
             return View(model);
         }
-        [AllowAnonymous]
+
         public async Task<IActionResult> VerifyEmail(string identity, string token)
         {
             if (ModelState.IsValid)
@@ -133,14 +182,16 @@ namespace Digital_Services_BD.Controllers
             ViewBag.LinkText2 = "Sign Up";
             return View("AlertMessage");
         }
-        [AllowAnonymous]
+
         [HttpGet]
         public IActionResult ResendEmailVerification()
         {
             return View();
         }
-        [AllowAnonymous]
+
+
         [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<IActionResult> ResendEmailVerification(ResendEmail emailModel)
         {
             if (ModelState.IsValid)
@@ -149,17 +200,29 @@ namespace Digital_Services_BD.Controllers
                 if (user != null && !user.EmailConfirmed)
                 {
                     //Generate verification token
+                    var smtpConfig = await dbContext.SmtpConfigs.AsNoTracking().FirstOrDefaultAsync();
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     var verifyLink = Url.Action("VerifyEmail", "Account", new { Identity = user.Id, Token = token }, Request.Scheme);
+                    var tempModel = new VerifyEmail
+                    {
+                        Address1 = configuration["Contact:Address1"],
+                        Address2 = configuration["Contact:Address2"],
+                        RecipeintName = $"{user.FirstName} {user.LastName}",
+                        ShopEmail = configuration["Contact:Email"],
+                        ShopName = configuration["Contact:Name"],
+                        ShopPhone = configuration["Contact:Phone"],
+                        VerificationTokenUrl = verifyLink,
+                        Website = configuration["Contact:Website"]
+                    };
                     var email = new Email
                     {
-                        FromAddress = awsSesConfig.Value.SenderAddress,
+                        FromAddress = smtpConfig.FromAddress,
                         FromName = "Verification",
                         Subject = "Email verification",
                         ToAddresses = new List<string> { user.Email },
-                        BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", verifyLink)
+                        BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel)
                     };
-                    emailService.SendEmailAsync(email);
+                    await emailService .SendEmailAsync(email);
                     ViewBag.Heading = "Success !";
                     ViewBag.HeadingClass = "alert-success";
                     ViewBag.Message = $"An email with a verfification link is sent to {emailModel.Email}";
@@ -177,10 +240,10 @@ namespace Digital_Services_BD.Controllers
                     }
                     else
                     {
-                        ViewBag.Heading = "Email is already verified !";
+                        ViewBag.Heading = "Email is already verified!";
                         ViewBag.HeadingClass = "alert-info";
                         ViewBag.Message = $"The email address {emailModel.Email} is verified. If you face any problem to sign in, please send an email to " +
-                            $"support@thecox.xyz describing your issue. Our support team will contact you shortly.";
+                            $"support@niludigital.com describing your issue. Our support team will contact you shortly.";
                     }
                 }
 
@@ -193,15 +256,38 @@ namespace Digital_Services_BD.Controllers
         {
             return View();
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<IActionResult> SignIn(SignIn signInModel, string returnUrl = null)
         {
             if(ModelState.IsValid)
             {
                 var signInAttempt = await signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, true);
-                if(signInAttempt.Succeeded)
+                var user = await userManager.FindByEmailAsync(signInModel.Email);
+
+                if (signInAttempt.Succeeded)
                 {
-                    if(! string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    // Merge carts if applicable
+                    string cartIdCookie = Request.Cookies["CartId"];
+                    int? cartId = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
+                    if (cartId != null)
+                    {
+                        var cart = await cartOps.MergeCarts((int)cartId, user.Id);
+                        if(cart != null)
+                        {
+                            await cartOps.RemoveOutOfStockItems(cart.Id);
+                            AddCartCookie(cart.Id);
+                        }
+                    }
+                    else
+                    {
+                        var cart = await cartOps.CreateCart(user.Id);
+                        AddCartCookie(cart.Id);
+                    }
+
+                    
+                    if (! string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
@@ -221,7 +307,7 @@ namespace Digital_Services_BD.Controllers
                     ViewBag.LinkText1 = "Reset password";
                     return View("AlertMessage");
                 }
-                var user = await userManager.FindByEmailAsync(signInModel.Email);
+
                 if(user != null && ! user.EmailConfirmed)
                 {
                     ViewBag.Heading = "Your email address is not verified yet";
@@ -246,14 +332,14 @@ namespace Digital_Services_BD.Controllers
             return View("AlertMessage");
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
-        [AllowAnonymous]
+
         [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<IActionResult> ForgotPassword(ResendEmail emailModel) // Reusing ResendEmail model
         {
             if (ModelState.IsValid)
@@ -262,17 +348,45 @@ namespace Digital_Services_BD.Controllers
                 if (user != null )
                 {
                     //Generate password reset token
+                    var smtpConfig = await dbContext.SmtpConfigs.AsNoTracking().FirstOrDefaultAsync();
                     var token = await userManager.GeneratePasswordResetTokenAsync(user);
                     var resetLink = Url.Action("ResetPassword", "Account", new { Identity = user.Id, Token = token }, Request.Scheme);
+                    var logoLinkedRsrc = new EmailLinkedResource
+                    {
+                        ContentId = "logo",
+                        ContentBytes = System.IO.File.ReadAllBytes(Path.Combine(webHostingEnvironment.WebRootPath, "branding",
+                              "companyLogo.png")),
+                        ContentPath = "/branding/companyLogo.png",
+                        ContentType = "image/png"
+                    };
+                    var tempModel = new VerifyEmail
+                    {
+                        Address1 = configuration["Contact:Address1"],
+                        Address2 = configuration["Contact:Address2"],
+                        RecipeintName = $"{user.FirstName} {user.LastName}",
+                        ShopEmail = configuration["Contact:Email"],
+                        ShopName = configuration["Contact:Name"],
+                        ShopPhone = configuration["Contact:Phone"],
+                        VerificationTokenUrl = resetLink,
+                        Website = configuration["Contact:Website"],
+                        EmailLinkedResources = new List<EmailLinkedResource>
+                        {
+                            logoLinkedRsrc
+                        }
+                    };
                     var email = new Email
                     {
-                        FromAddress = awsSesConfig.Value.SenderAddress,
-                        FromName = "Password reset",
+                        FromAddress = smtpConfig.FromAddress,
+                        FromName = configuration["Contact:Name"],
                         Subject = "Reset you password",
                         ToAddresses = new List<string> { user.Email },
-                        BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "ResetPasswordEmailTemplate", resetLink)
+                        BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "ResetPasswordEmailTemplate", tempModel),
+                        EmailLinkedResources = new List<EmailLinkedResource>
+                        {
+                            logoLinkedRsrc
+                        }
                     };
-                    emailService.SendEmailAsync(email);
+                    await emailService.SendEmailAsync(email);
                     ViewBag.Heading = "Success !";
                     ViewBag.HeadingClass = "alert-success";
                     ViewBag.Message = $"An email with a password reset link is sent to {emailModel.Email}";
@@ -289,8 +403,8 @@ namespace Digital_Services_BD.Controllers
             }
             return View(emailModel);
         }
+
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(string identity, string token)
         {
             var resetPasswordModel = new ResetPassword
@@ -300,8 +414,9 @@ namespace Digital_Services_BD.Controllers
             };
             return View(resetPasswordModel);
         }
+
         [HttpPost]
-        [AllowAnonymous]
+        [ValidateAntiForgeryToken()]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPasswordModel)
         {
             if(ModelState.IsValid)
@@ -340,10 +455,37 @@ namespace Digital_Services_BD.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken()]
         public async Task<IActionResult> SignOut(string returnUrl ="/")
         {
-            await signInManager.SignOutAsync();
-            return LocalRedirect(returnUrl);
+            if(signInManager.IsSignedIn(User))
+            {
+                // Merge carts if applicable
+                string cartIdCookie = Request.Cookies["CartId"];
+                int? cartId = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
+                if (cartId != null)
+                {
+                    var cart = await cartOps.MergeCarts((int)cartId, User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    if (cart != null)
+                    {
+                        await cartOps.RemoveOutOfStockItems(cart.Id);
+                    }
+                }
+
+                await signInManager.SignOutAsync();
+                Response.Cookies.Delete("CartId");
+                return LocalRedirect(returnUrl);
+            }
+
+            return Redirect("~/");
+            
+        }
+
+        private void AddCartCookie(int cartId)
+        {
+            var option = new CookieOptions();
+            option.Expires = DateTime.Now.AddMonths(6);
+            Response.Cookies.Append("CartId", cartId.ToString(), option);
         }
 
     }

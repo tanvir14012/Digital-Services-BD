@@ -1,10 +1,9 @@
 ﻿@model ProductCategory
 @using Digital_Services_BD.Services
-@inject IProductItemOps productItemOps
 
 @{
     Layout = "AdminLayout";
-    var productItems = productItemOps.GetAllProdItemByProdCatgId(Model.Id);
+    List<ProductItem> productItems = ViewBag.ProductItems;
 
 }
 
@@ -17,7 +16,7 @@
                 <span>@Model.Name</span>
             </div>
             <div class="card-body">
-                <img class="card-img-top img-thumbnail" alt="No Image" src="\@Model.ImageUrl" />
+                <img class="card-img-top img-thumbnail  w-auto max-h-240 d-flex mx-auto" alt="No Image" src="\@Model.ImageUrl" />
             </div>
             <div class="card-body row">
                 <span class="col-md-6">Created on: @Model.CreatedOn</span>

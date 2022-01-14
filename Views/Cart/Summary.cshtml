@@ -1,5 +1,8 @@
 ﻿@model Order
 
+@{
+    Layout = "_PaymentSummaryLayout";
+}
 <div class="row p-3 mt-5">
     <ul class="list-group list-group-horizontal w-100 d-flex justify-content-between">
         <li class="list-group-item p-0 border-0">
@@ -20,7 +23,7 @@
         </li>
         <li class="list-group-item p-0 border-0">
             <div class="text-center">
-                <button class="btn btn-dark rounded-circle bg-primary">3</button>
+                <button class="btn btn-dark btn-outline-light rounded-circle bg-primary">3</button>
                 <span class="ml-2 text-nowrap">Summary</span>
             </div>
         </li>
@@ -28,35 +31,55 @@
 </div>
 
 <div class="row p-2">
-    <h4>Order Details</h4>
+    <h5>Order summary</h5>
+    <div class="text-muted col-12 px-0">
+        <div class="alert alert-@(Model.Status == OrderStatus.CANCELLED ? "success": "secondary")">The order status is: <b>@Model.Status.ToString()</b></div>
+    </div>
     <hr />
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th style="width: 20%;">Name</th>
-                    <th style="width: 80%;">Description</th>
+                    <th colspan="2">Order #@Model.Id</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var row in Model.GetType().GetProperties())
-                {
-                    <tr>
-                        <td style="width: 20%;">@row.Name</td>
-                        <td style="width: 80%;">@row.GetValue(Model, null)</td>
-                    </tr>
-                }
                 <tr>
-                    <td class="font-weight-bold text-center" colspan="2">Transaction Details</td>
+                    <td style="width: 20%;">Email Address</td>
+                    <td style="width: 80%;">@Model.ConfirmEmail</td>
                 </tr>
-                @foreach (var row in Model.Transaction?.GetType().GetProperties())
-                {
-                    <tr>
-                        <td style="width: 20%;">@row.Name</td>
-                        <td style="width: 80%;">@row.GetValue(Model.Transaction, null)</td>
-                    </tr>
-                }
+                <tr>
+                    <td style="width: 20%;">Items</td>
+                    <td style="width: 80%;">
+                        <ul>
+                            @foreach (var item in Model.OrderItems)
+                            {
+                                <li>@item.ProductItem.Name (@item.Quantity x)</li>
+                            }
+                            @foreach (var item in Model.OrderProductItemBundles)
+                            {
+                                <li>@item.ProductItemBundle.Name (@item.Quantity x)</li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 20%;">Subtotal</td>
+                    <td style="width: 80%;">
+                        @Model.GrandTotal.ToString("0.00") <sup>BDT</sup>
+                    </td>
+                </tr>
+
             </tbody>
         </table>
+    </div>
+
+    <div class="col-12 p-0 mt-4 d-flex">
+        <div class="my-2 border-0 btn btn-sm btn-light mr-2">
+            <a class="nav-link text-dark" asp-action="Index" asp-controller="Orders"><i class="fas fa-shopping-bag mr-2"></i>Orders</a>
+        </div>
+        <div class="my-2 border-0 btn btn-sm btn-light">
+            <a class="nav-link text-dark" asp-action="Index" asp-controller="Home"><i class="fas fa-home mr-2"></i>Home</a>
+        </div>
     </div>
 </div>

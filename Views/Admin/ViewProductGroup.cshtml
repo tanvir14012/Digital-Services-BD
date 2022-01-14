@@ -1,10 +1,9 @@
 ﻿@model ProductGroup
 @using Digital_Services_BD.Services
-@inject IProductGroupOps productGroupOps
 
 @{
     Layout = "AdminLayout";
-    var categories = productGroupOps.GetAllProdCategoriesByProdGroupId(Model.Id);
+    List<ProductCategory> categories = ViewBag.Categories;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
@@ -16,7 +15,7 @@
                 <span>@Model.Name</span>
             </div>
             <div class="card-body">
-                <img class="card-img-top img-thumbnail" alt="No Image" src="\@Model.ImageUrl" />
+                <img class="card-img-top img-thumbnail  w-auto max-h-240 d-flex mx-auto" alt="No Image" src="\@Model.ImageUrl" />
             </div>
             <div class="card-body row">
                 <span class="col-md-6">Created on: @Model.CreatedOn</span>

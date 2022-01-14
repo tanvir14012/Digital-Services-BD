@@ -14,7 +14,7 @@ namespace Digital_Services_BD.ViewModels
         }
         public int ProductItemBundleId { get; set; }
         public bool IsCartCreatedWhenAdded { get; set; }
-        public int CreatedCartId { get; set; }
+        public long CreatedCartId { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
         public string PriceCurrency { get; set; }

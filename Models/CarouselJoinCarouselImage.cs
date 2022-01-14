@@ -16,7 +16,7 @@ namespace Digital_Services_BD.Models
         public string ImageUrl { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
-        public Carousel Carousel { get; set; }
+        public virtual Carousel Carousel { get; set; }
         public int CarouselId { get; set; }
     }
 }

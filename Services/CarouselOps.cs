@@ -55,7 +55,7 @@ namespace Digital_Services_BD.Services
             var carousel = context.Carousels.Find(carouselId);
             if (carousel != null)
             {
-                carousel.CarouselJoinCarouselImage = context.carouselJoinCarouselImages.Where(j => j.CarouselId == carousel.Id).ToList();
+                carousel.CarouselJoinCarouselImage = context.CarouselJoinCarouselImages.Where(j => j.CarouselId == carousel.Id).ToList();
                 context.Carousels.Remove(carousel);
 
                 try
@@ -80,7 +80,8 @@ namespace Digital_Services_BD.Services
 
         public IEnumerable<Carousel> GetAllCarousel()
         {
-            return context.Carousels.AsNoTracking().ToList();
+            return context.Carousels.Include(c => c.CarouselJoinCarouselImage)
+                          .AsNoTracking().ToList();
         }
 
         public Carousel GetCarousel(int carouselId)
@@ -88,9 +89,15 @@ namespace Digital_Services_BD.Services
             var carousel = context.Carousels.Find(carouselId);
             if (carousel != null)
             {
-                carousel.CarouselJoinCarouselImage = context.carouselJoinCarouselImages.Where(j => j.CarouselId == carousel.Id).ToList();
+                carousel.CarouselJoinCarouselImage = context.CarouselJoinCarouselImages.Where(j => j.CarouselId == carousel.Id).ToList();
             }
             return carousel;
+        }
+
+        public async Task<Carousel> GetFirstCarousel()
+        {
+            return await context.Carousels.Include(c => c.CarouselJoinCarouselImage)
+                            .OrderBy(c => c.Rank).FirstOrDefaultAsync();
         }
 
         public Carousel UpdateCarousel(Carousel carousel)

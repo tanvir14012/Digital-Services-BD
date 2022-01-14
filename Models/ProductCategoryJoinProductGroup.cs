@@ -14,7 +14,7 @@ namespace Digital_Services_BD.Models
         public int ProductCategoryId { get; set; }
         public int ProductGroupId { get; set; }
         //Ef core navigation properties
-        public ProductCategory ProductCategory { get; set; }
-        public ProductGroup ProductGroup { get; set; }
+        public virtual ProductCategory ProductCategory { get; set; }
+        public virtual ProductGroup ProductGroup { get; set; }
     }
 }

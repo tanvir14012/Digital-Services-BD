@@ -92,6 +92,19 @@ namespace Digital_Services_BD.Services
             return context.ProductSections.AsNoTracking().ToList().OrderBy(s => s.Rank);
         }
 
+        public async Task<ICollection<ProductSection>> GetAllProductSectionsWithNavigation()
+        {
+            return await context.ProductSections.AsNoTracking()
+                    .Include(ps => ps.ProductSectionJoinProductItem)
+                        .ThenInclude(join => join.ProductItem)
+                            .ThenInclude(item => item.ProductItemPrice)
+                        .Include(ps => ps.ProductSectionJoinProductItem)
+                            .ThenInclude(join => join.ProductItem)
+                                .ThenInclude(item => item.ProductStockCount)
+                    .OrderBy(ps => ps.Rank)
+                    .ToListAsync();
+        }
+
         public ProductSection GetProductSection(int productSectionId)
         {
             var productSection = context.ProductSections.Find(productSectionId);
@@ -160,5 +173,6 @@ namespace Digital_Services_BD.Services
             ranks = ranks.Except(context.ProductSections.Select(s => s.Rank).ToList()).ToList();
             return ranks;
         }
+
     }
 }

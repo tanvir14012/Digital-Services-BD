@@ -14,15 +14,18 @@ namespace Digital_Services_BD.Models
         public ProductItem()
         {
             ProductItemPrice = new List<ProductItemPrice>();
-            ProductItemJoinProductCategory = new List<ProductItemJoinProductCategory>();
-            ProductItemJoinSearchTagProductItem = new List<ProductItemJoinSearchTagProductItem>();
-            ProductItemJoinPromoOffer = new List<ProductItemJoinPromoOffer>();
+            ProductItemJoinProductCategory = new HashSet<ProductItemJoinProductCategory>();
+            ProductItemJoinSearchTagProductItem = new HashSet<ProductItemJoinSearchTagProductItem>();
+            ProductItemJoinPromoOffer = new HashSet<ProductItemJoinPromoOffer>();
             CategoryIds = new HashSet<int>();
             Categories = new List<ProductCategory>();
             ProductItemFeature = new ProductItemFeature();
-            ProductSectionJoinProductItem = new List<ProductSectionJoinProductItem>();
-            ProductItemBundleJoinProductItem = new List<ProductItemBundleJoinProductItem>();
-    }
+            ProductSectionJoinProductItem = new HashSet<ProductSectionJoinProductItem>();
+            ProductItemBundleJoinProductItem = new HashSet<ProductItemBundleJoinProductItem>();
+            CartItems = new HashSet<CartItem>();
+            ProductItemCustomFields = new HashSet<ProductItemCustomField>();
+            ProductStocks = new HashSet<ProductStock>();
+        }
         public int Id { get; set; }
         [Required]
         [StringLength(128, ErrorMessage = "Product name field should contain no more than 128 characters")]
@@ -54,13 +57,18 @@ namespace Digital_Services_BD.Models
         [BindProperty]
         public ICollection<int> CategoryIds { get; set; }
         public ICollection<ProductCategory> Categories { get; set; }
+
         //Navigation property
         [BindProperty]
-        public IList<ProductItemPrice> ProductItemPrice { get; set; }
-        public ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
-        public ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
-        public ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
-        public ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
-        public ICollection<ProductItemBundleJoinProductItem> ProductItemBundleJoinProductItem { get; set; }
+        public virtual IList<ProductItemPrice> ProductItemPrice { get; set; }
+        public virtual ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
+        public virtual ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
+        public virtual ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
+        public virtual ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
+        public virtual ICollection<ProductItemBundleJoinProductItem> ProductItemBundleJoinProductItem { get; set; }
+        public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual ICollection<ProductItemCustomField> ProductItemCustomFields { get; set; }
+        public virtual ICollection<ProductStock> ProductStocks { get; set; }
+        public virtual ProductStockCount ProductStockCount { get; set; }
     }
 }

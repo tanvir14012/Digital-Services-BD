@@ -14,7 +14,7 @@ namespace Digital_Services_BD.Models
         public int ProductItemId { get; set; }
         public int PromoOfferId { get; set; }
         //Navigation properties
-        public ProductItem ProductItem { get; set; }
-        public PromoOffer PromoOffer { get; set; }
+        public virtual ProductItem ProductItem { get; set; }
+        public virtual PromoOffer PromoOffer { get; set; }
     }
 }

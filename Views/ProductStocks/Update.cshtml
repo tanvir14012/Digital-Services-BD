@@ -1,0 +1,185 @@
+﻿@model ProductStock
+@using Digital_Services_BD.Services
+
+
+@{
+    Layout = "AdminLayout";
+}
+
+<script type="text/javascript">
+    let productHierarchy = @Html.Raw(ViewBag.ProductHierarchy);
+    let productId = @Html.Raw(Model.ProductItemId);
+</script>
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-sm-12">
+        <h4 class="mb-3">Update a Product Item Stock</h4>
+        <form method="post" asp-controller="ProductStocks"
+              asp-action="Update" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.CreateTime)
+            @Html.HiddenFor(m => m.Id)
+            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+
+            <div class="form-row">
+                <div class="form-group col-sm-6 col-lg-4">
+                    <label class="pt-1">Product Group</label>
+                    <select id="prodGroup" class="selectpicker form-control">
+                    </select>
+                </div>
+                <div class="form-group col-sm-6 col-lg-4">
+                    <label class="pt-1">Product Category</label>
+                    <select id="prodCtg" class="selectpicker form-control">
+                    </select>
+                </div>
+                <div class="form-group col-sm-12 col-lg-4">
+                    <label class="pt-1">Product</label>
+                    <select id="prodItem" asp-for="ProductItemId" class="selectpicker form-control">
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductItemId"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-12 col-lg-6">
+                    <label asp-for="MainCode">Main Code</label>
+                    <input asp-for="MainCode" type="text" class="form-control" />
+                    <span asp-validation-for="MainCode"></span>
+                </div>
+                <div class="form-group col-sm-12 col-lg-6">
+                    <label asp-for="AuxiliaryCode">Auxiliary Code</label>
+                    <input asp-for="AuxiliaryCode" type="text" class="form-control" />
+                    <span asp-validation-for="AuxiliaryCode"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="OptionA">Option A</label>
+                    <input asp-for="OptionA" type="text" class="form-control" />
+                    <span asp-validation-for="OptionA"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="OptionB">Option B</label>
+                    <input asp-for="OptionB" type="text" class="form-control" />
+                    <span asp-validation-for="OptionB"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="OptionC">Option C</label>
+                    <input asp-for="OptionC" type="text" class="form-control" />
+                    <span asp-validation-for="OptionC"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="Remark">Remark</label>
+                    <input asp-for="Remark" type="text" class="form-control" />
+                    <span asp-validation-for="Remark"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="VendorInfo">Vendor/Supplier Info</label>
+                    <textarea class="form-control" maxlength="1000" asp-for="VendorInfo"></textarea>
+                    <span asp-validation-for="VendorInfo"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="pt-1">Status</label>
+                    <select asp-for="Status" class="selectpicker form-control">
+                        <option value="1">Active</option>
+                        <option value="2">Delivered</option>
+                        <option value="3">Halted</option>
+                        <option value="4">Invalid</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="Status"></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-start">
+                <button type="submit" class="btn btn-primary mr-2">Save</button>
+                <a asp-action="Index" asp-controller="ProductStocks" class="btn btn-secondary">Cancel and Go Back to List View</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            let groupId = 0, categoryId = 0;
+
+            //Populate drop downs
+            productHierarchy.forEach(function (prodGrp) {
+                currGrpId = prodGrp.productGroupId;
+                $("#prodGroup").append($("<option>", {
+                    value: prodGrp.productGroupId,
+                    text: prodGrp.productGroupName
+                }));
+
+                //category
+                prodGrp.categories.forEach(function (catg) {
+                    $("#prodCtg").append($("<option>", {
+                        value: catg.id,
+                        text: catg.name
+                    }).attr('data-groupId', prodGrp.productGroupId));
+
+                    //product item
+                    catg.products.forEach(function (item) {
+                        $("#prodItem").append($("<option>", {
+                            value: item.id,
+                            text: item.name
+                        }).attr('data-categoryId', catg.id));
+
+                        
+                        //Find group and category id
+                        if (item.id == productId) {
+                            groupId = prodGrp.productGroupId;
+                            categoryId = catg.id;
+                        }
+                    });
+
+                });
+            });
+
+            $("#prodGroup").val(groupId);
+            $("#prodCtg option").hide();
+            $(`#prodCtg option[data-groupid=${groupId}]`).show();
+            $("#prodCtg").val(categoryId);
+
+            $("#prodItem option").hide();
+            $(`#prodItem option[data-categoryid=${categoryId}]`).show();
+            $("#prodItem").val(productId);
+
+
+            //Even listeners
+            $("#prodGroup").on("change", function () {
+                const id = $(this).val();
+                $("#prodCtg option").hide();
+                $(`#prodCtg option[data-groupid=${id}]`).show();
+                $("#prodCtg").val($(`#prodCtg option[data-groupid=${id}]`).first().val());
+
+                const id2 = $("#prodCtg").val();
+                $("#prodItem option").hide();
+                $(`#prodItem option[data-categoryid=${id2}]`).show();
+                $("#prodItem").val($(`#prodItem option[data-categoryid=${id2}]`).first().val());
+
+                //Refresh selectpicker
+                $(".selectpicker").selectpicker('refresh');
+
+            });
+
+            $("#prodCtg").on("change", function () {
+                const id = $(this).val();
+                $("#prodItem option").hide();
+                $(`#prodItem option[data-categoryid=${id}]`).show();
+                $("#prodItem").val($(`#prodItem option[data-categoryid=${id}]`).first().val());
+
+                //Selectpicker
+                $(".selectpicker").selectpicker('refresh');
+            });
+
+            //Selectpicker
+            $(".selectpicker").selectpicker('refresh');
+        });
+
+    </script>
+}

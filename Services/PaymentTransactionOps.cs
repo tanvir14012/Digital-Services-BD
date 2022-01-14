@@ -19,14 +19,14 @@ namespace Digital_Services_BD.Services
             this.context = context;
         }
 
-        public PaymentTransaction AddPaymentTransaction(PaymentTransaction paymentTransaction)
+        public async Task<PaymentTransaction> AddPaymentTransaction(PaymentTransaction paymentTransaction)
         {
             paymentTransaction.CreatedOn = DateTime.UtcNow;
             paymentTransaction.LastModifiedOn = DateTime.UtcNow;
-            context.PaymentTransactions.Add(paymentTransaction);
+            await context.PaymentTransactions.AddAsync(paymentTransaction);
             try
             {
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return paymentTransaction;
             }
             catch (Exception e)
@@ -35,16 +35,16 @@ namespace Digital_Services_BD.Services
             }
         }
 
-        public PaymentTransaction DeletePaymentTransaction(int paymentTransactionId)
+        public async Task<PaymentTransaction> DeletePaymentTransaction(int paymentTransactionId)
         {
-            var paymentTransaction = context.PaymentTransactions.Find(paymentTransactionId);
+            var paymentTransaction = await context.PaymentTransactions.FindAsync(paymentTransactionId);
             if (paymentTransaction != null)
             {
                 context.PaymentTransactions.Remove(paymentTransaction);
 
                 try
                 {
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                     return paymentTransaction;
                 }
                 catch (Exception e)
@@ -55,24 +55,25 @@ namespace Digital_Services_BD.Services
             return null;
         }
 
-        public IEnumerable<PaymentTransaction> GetAllPaymentTransaction()
+        public async Task<IEnumerable<PaymentTransaction>> GetAllPaymentTransaction()
         {
-            return context.PaymentTransactions.AsNoTracking().ToList();
+            return await context.PaymentTransactions.AsNoTracking().ToListAsync();
         }
 
-        public PaymentTransaction GetPaymentTransaction(int paymentTransactionId)
+        public async Task<PaymentTransaction> GetPaymentTransaction(int paymentTransactionId)
         {
-            var paymentTransaction = context.PaymentTransactions.Find(paymentTransactionId);
+            var paymentTransaction = await context.PaymentTransactions
+                .AsNoTracking().FirstOrDefaultAsync(pt => pt.Id  == paymentTransactionId);
             return paymentTransaction;
         }
 
-        public PaymentTransaction UpdatePaymentTransaction(PaymentTransaction paymentTransaction)
+        public async Task<PaymentTransaction> UpdatePaymentTransaction(PaymentTransaction paymentTransaction)
         {
             paymentTransaction.LastModifiedOn = DateTime.UtcNow;
             context.PaymentTransactions.Update(paymentTransaction);
             try
             {
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return paymentTransaction;
             }
             catch (Exception e)
@@ -81,46 +82,15 @@ namespace Digital_Services_BD.Services
             }
         }
 
-        public PaymentTransaction UpdatePaymentTransaction(long trnxId, string status, string riskLevel, 
-            string cardNo, string cardType, string currency, string bankTrnxId, string cardIssuer,
-            string cardBrand, string cardIssuerCountry)
+        public async Task<bool> UpdatePaymentTransactionStatus(int trnxId, string status)
         {
-            var transaction = context.PaymentTransactions.Find(trnxId);
+            var transaction = await context.PaymentTransactions.FindAsync(trnxId);
             if(transaction != null)
             {
                 transaction.Status = status;
-                transaction.RiskLevel = riskLevel;
-                transaction.CardNo = cardNo;
-                transaction.CardType = cardType;
-                transaction.GatewayCurrency = currency;
-                transaction.BankTrnxId = bankTrnxId;
-                transaction.CardIssuerBank = cardIssuer;
-                transaction.CardBrand = cardBrand;
-                transaction.CardIssuerCountry = cardIssuerCountry;
                 try
                 {
-                    context.PaymentTransactions.Update(transaction);
-                    context.SaveChanges();
-                    return transaction;
-                }
-                catch(Exception e)
-                {
-                    return null;
-                }
-            }
-            throw new NotImplementedException();
-        }
-
-        public bool UpdatePaymentTransactionStatus(long trnxId, string status)
-        {
-            var transaction = context.PaymentTransactions.Find(trnxId);
-            if(transaction != null)
-            {
-                transaction.Status = status;
-                context.PaymentTransactions.Update(transaction);
-                try
-                {
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                     return true;
                 }
                 catch(Exception e)

@@ -10,6 +10,7 @@ namespace Digital_Services_BD.Services
     {
         IEnumerable<ProductItem> GetAllProductItems();
         ProductItem GetProductItem(int id);
+        Task<ProductItem> GetProductItemAsync(int id);
         ProductItem AddProductItem(ProductItem ProductItem);
         ProductItem DeleteProductItem(int id);
         ProductItem UpdateProductItem(ProductItem ProductItem);

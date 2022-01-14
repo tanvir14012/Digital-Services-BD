@@ -1,10 +1,9 @@
 ﻿@model ProductSection
 @using Digital_Services_BD.Services
-@inject IProductSectionOps productSectionOps
 
 @{
     Layout = "AdminLayout";
-    var items = productSectionOps.GetAllProdItemsByProdSectionId(Model.Id);
+    List<ProductItem> items = ViewBag.Items;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">

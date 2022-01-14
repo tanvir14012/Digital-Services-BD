@@ -13,8 +13,8 @@ namespace Digital_Services_BD.Models
     {
         public ProductCategory()
         {
-            ProductItemJoinProductCategory = new List<ProductItemJoinProductCategory>();
-            ProductCategoryJoinProductGroup = new List<ProductCategoryJoinProductGroup>();
+            ProductItemJoinProductCategory = new HashSet<ProductItemJoinProductCategory>();
+            ProductCategoryJoinProductGroup = new HashSet<ProductCategoryJoinProductGroup>();
             AllItemIds = new HashSet<int>();
             AllItems = new List<ProductItem>();
         }
@@ -49,7 +49,7 @@ namespace Digital_Services_BD.Models
         public ICollection<int> AllItemIds { get; set; }
         public ICollection<ProductItem> AllItems { get; set; }
         //Navigation property
-        public ICollection<ProductCategoryJoinProductGroup> ProductCategoryJoinProductGroup { get; set; }
-        public ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
+        public virtual ICollection<ProductCategoryJoinProductGroup> ProductCategoryJoinProductGroup { get; set; }
+        public virtual ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
     }
 }

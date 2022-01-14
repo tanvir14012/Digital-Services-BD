@@ -26,6 +26,6 @@ namespace Digital_Services_BD.Models
         public DateTime OfferEndsAt { get; set; }
         public DateTime CreatedOn { get; set; }
         //Ef core navigation property
-        public ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
+        public virtual ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
     }
 }

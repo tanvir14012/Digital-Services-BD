@@ -1,10 +1,13 @@
 ﻿@model Order
+@{
+    Tuple<dynamic, dynamic, dynamic> Locations = ViewBag.Locations;
+}
 
 <div class="row p-3 mt-5">
     <ul class="list-group list-group-horizontal w-100 d-flex justify-content-between">
         <li class="list-group-item p-0 border-0">
             <div class="text-center">
-                <button class="btn btn-dark rounded-circle bg-primary">1</button>
+                <button class="btn btn-dark rounded-circle bg-primary border-primary">1</button>
                 <span class="ml-2 text-nowrap">Your cart</span>
             </div>
         </li>
@@ -12,7 +15,7 @@
         </li>
         <li class="list-group-item p-0 border-0">
             <div class="text-center">
-                <button class="btn btn-dark rounded-circle bg-primary">2</button>
+                <button class="btn btn-dark rounded-circle bg-primary border-primary">2</button>
                 <span class="ml-2 text-nowrap">Payment</span>
             </div>
         </li>
@@ -29,6 +32,7 @@
 
 
 <form method="post" asp-action="Payment" asp-controller="Cart">
+    @Html.AntiForgeryToken()
     <div class="row p-2">
         <div class="col-12">
             <h4 data-toggle="tooltip" data-placement="auto" title="Your billing address will show up in order invoice">Enter Billing Address</h4>
@@ -59,23 +63,38 @@
             <label asp-for="@Model.BillingAddress.AltMobile"></label>
             <input type="text" class="form-control" asp-for="@Model.BillingAddress.AltMobile" />
         </div>
-        <div class="form-group col-md-6 col-sm-12">
-            <label asp-for="@Model.BillingAddress.Zip"></label>
-            <input type="text" class="form-control" asp-for="@Model.BillingAddress.Zip" />
-        </div>
-        <div class="form-group col-md-6 col-sm-12">
+        <div class="form-group col-md-4 col-sm-12">
             <label asp-for="@Model.BillingAddress.State"></label>
-            <input type="text" class="form-control" asp-for="@Model.BillingAddress.State" />
+            <select type="text" class="form-control" asp-for="@Model.BillingAddress.State">
+                @foreach (var division in Locations.Item1.divisions)
+                {
+                    <option data-id="@division.id" value="@division.name">@division.name</option>
+                }
+            </select>
         </div>
-        <div class="form-group col-md-6 col-sm-12">
+        <div class="form-group col-md-4 col-sm-12">
             <label asp-for="@Model.BillingAddress.City"></label>
-            <input type="text" class="form-control" asp-for="@Model.BillingAddress.City" />
+            <select type="text" class="form-control" asp-for="@Model.BillingAddress.City">
+                @foreach (var district in Locations.Item2.districts)
+                {
+                    <option data-division-id="@district.division_id" data-id="@district.id" value="@district.name">@district.name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-md-4 col-sm-12">
+            <label asp-for="@Model.BillingAddress.Zip"></label>
+            <select type="text" class="form-control" asp-for="@Model.BillingAddress.Zip">
+                @foreach (var postcodes in Locations.Item3.postcodes)
+                {
+                    <option data-district-id="@postcodes.district_id" value="@postcodes.postCode">@postcodes.postCode (@postcodes.postOffice)</option>
+                }
+            </select>
         </div>
         <input id="isAnonymous" type="hidden" asp-for="@Model.IsAnonymousOrder" />
-        <div class="form-group col-md-6 col-sm-12">
+        <div class="form-group col-sm-12">
             <label hidden>Action</label>
-            <div class="form-control border-0">
-                <button id="skip" class="btn btn-light mr-2">Skip and Continue</button>
+            <div class="form-control border-0 px-0">
+                <button id="skip" class="btn btn-light mr-2">Skip</button>
                 <button type="submit" class="btn btn-primary">Continue</button>
             </div>
         </div>
@@ -84,14 +103,5 @@
 
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $("#skip").click(function () {
-                $("#isAnonymous").val(true);
-                $("form").submit();
-            });
-
-            $("[data-toggle='tooltip']").tooltip();
-        });
-    </script>
+    <script type="text/javascript" src="~/js/cartAddressInuputPage.js"></script>
 }

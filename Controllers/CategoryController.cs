@@ -45,6 +45,17 @@ namespace Digital_Services_BD.Controllers
                         ViewBag.PriceMin = ProductConfig.MinPrice;
                         ViewBag.PriceMax = ProductConfig.MaxPrice;
                     }
+                    ViewBag.ProductGroups = productGroupOps.GetAllProductGroups().ToList();
+
+                    var categoryMinMaxPrice = new Dictionary<int, Tuple<decimal, decimal>>(); // category id, min price, max price
+                    filteredCategories.CategoriesUnderFilter.ToList().ForEach(category =>
+                    {
+                        categoryMinMaxPrice.Add(category.Id, new Tuple<decimal, decimal>(
+                            productCategoryOps.GetMinProductPriceByCatgId(category.Id),
+                            productCategoryOps.GetMaxProductPriceByCatgId(category.Id)));
+                    });
+                    ViewBag.CategoryMinMaxPrice = categoryMinMaxPrice;
+
                     return View(filteredCategories.CategoriesUnderFilter);
                 }
             }

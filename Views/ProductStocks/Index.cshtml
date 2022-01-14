@@ -1,0 +1,348 @@
+﻿@using Digital_Services_BD.ViewModels
+@model FilteredProductStocks
+@{
+    Layout = "AdminLayout";
+}
+
+@{
+    var statusClass = new Dictionary<ProductStockStatus, string> {
+        {ProductStockStatus.HALTED, "badge-dark" },
+        {ProductStockStatus.INVALID, "badge-warning" },
+        {ProductStockStatus.DELIVERED, "badge-info" },
+        {ProductStockStatus.ACTIVE, "badge-primary" }
+    };
+
+}
+
+<script type="text/javascript">
+    let pageNo = @Model.PageNo;
+    let productStockPerPage = "@Model.ProductStockPerPage";
+    let sortBy = "@Model.SortBy";
+    let groupId = @Html.Raw(Model.GroupId);
+    let categoryId = @Html.Raw(Model.CategoryId);
+    let productId = @Html.Raw(Model.ProductId);
+    let productHierarchy = @Html.Raw(ViewBag.ProductHierarchy);
+</script>
+
+@if (Model != null)
+{
+    <h4 class="mt-4 mt-md-0 text-secondary">Administrator Area for Product Stocks</h4>
+    <div class="row d-flex justify-content-end mt-4 mx-2">
+        <a class="btn btn-light" asp-action="Create" asp-controller="ProductStocks">
+            <i class="fas fa-plus"></i>
+            <span class="ml-2">Create</span>
+        </a>
+    </div>
+
+    @using (Html.BeginForm("Index", "ProductStocks", FormMethod.Post, new { id = "productStockFilterForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.TotalProductStocks)
+        @Html.Hidden("pageNo", Model.PageNo)
+        <div class="my-2 form-row justify-content-end">
+            <div class="form-group mb-2 col-sm-3">
+                <label class="pt-1">Page size</label>
+                <select name="ProductStockPerPage" id="productStockPerPage" value="@Model.ProductStockPerPage" class="selectpicker form-control">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-2 col-sm-3">
+                <label class="pt-1">Sort by &nbsp;&nbsp;&nbsp;</label>
+                <select name="SortBy" id="sortBy" value="@Model.SortBy" class="selectpicker form-control">
+                    <option value="name">Name</option>
+                    <option value="date_desc">Most Recent</option>
+                    <option value="date_asc">Oldest First</option>
+                    <option value="active">Active</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="halted">Halted</option>
+                    <option value="invalid">Invalid</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-sm-6 col-lg-4">
+                <label class="pt-1">Product Group</label>
+                <select id="prodGroup" value="@Model.GroupId" asp-for="GroupId" class="selectpicker form-control">
+                </select>
+            </div>
+            <div class="form-group col-sm-6 col-lg-4">
+                <label class="pt-1">Product Category</label>
+                <select id="prodCtg" value="@Model.CategoryId" asp-for="CategoryId" class="selectpicker form-control">
+                </select>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4">
+                <label class="pt-1">Product</label>
+                <select id="prodItem" value="@Model.ProductId" asp-for="ProductId" class="selectpicker form-control">
+                </select>
+            </div>
+        </div>
+    }
+    <div class="mx-2px">
+        <div class="card w-100">
+            <div class="card-header px-3">
+                <h5>Product Stocks <sub class="font-weight-lighter">(Total: @Model.TotalProductStocks product@(Model.TotalProductStocks > 1 ? "s": ""))</sub></h5>
+            </div>
+
+            @using (Html.BeginForm("Details", "ProductStocks", FormMethod.Post, new { id = "productStockDetailForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input name="id" type="hidden" id="productStockId" />
+            }
+
+            <div class="table-responsive">
+                <table class="table table-hover" id="productStocks">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Date</th>
+                            <th class="w-50">Name</th>
+                            <th>Status</th>
+                            <th>Remark</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stock in Model.ProductStocksUnderFilter)
+                        {
+                            <tr data-productStockId="@stock.Id" class="cursor-pointer">
+                                <td>@stock.Id</td>
+                                <td>@stock.CreateTime.ToString("dd MMMM yyyy")</td>
+                                <td>
+                                    <div class="text-truncate">@stock.ProductItem.Name</div>
+                                </td>
+                                <td>
+                                    <span class="p-2 badge @(statusClass[stock.Status])">@stock.Status.ToString().ToLower()</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate"> @stock.Remark</div>
+
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-light mt-1" asp-action="Delete" asp-controller="ProductStocks" asp-route-id="@stock.Id">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+
+                                    <a class="btn btn-sm btn-light mt-1" asp-action="Update" asp-controller="ProductStocks" asp-route-id="@stock.Id">
+                                        <i class="fas fa-edit text-info"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalProductStocks > 0)
+    {
+        <div class="row d-flex justify-content-center mt-2">
+            <ul class="pagination">
+                @if (Model.PageNo >= 2)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(@(Model.PageNo-1))">&laquo;</a>
+                    </li>
+                }
+                @if (Model.PageNo < 5)
+                {
+                    @for (var i = 1; i <= Model.PageNo; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNo ? "active": "")">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@i)">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(1)">1</a>
+                    </li>
+                    <li class="page-item">
+                        ...
+                    </li>
+
+
+
+                    @for (var i = Model.PageNo - 2; i <= Model.PageNo; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNo ? "active": "")">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@i)">@i</a>
+                        </li>
+                    }
+                }
+                @*--------  Second Half  -------- *@
+                @if (((int)Math.Ceiling((double)Model.TotalProductStocks / Model.ProductStockPerPage)) - Model.PageNo < 5)
+                {
+                    @for (var i = Model.PageNo + 1; i <= (int)Math.Ceiling((double)Model.TotalProductStocks / Model.ProductStockPerPage); i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@i)">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    @for (var i = Model.PageNo + 1; i <= Model.PageNo + 2; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@ViewBag.Id)">@i</a>
+                        </li>
+                    }
+                    <li class="page-item">
+                        ...
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(@(Model.TotalProductStocks / Model.ProductStockPerPage))">@(Model.TotalProductStocks / Model.ProductStockPerPage)</a>
+                    </li>
+                }
+                @if ((int)Math.Ceiling((double)Model.TotalProductStocks / Model.ProductStockPerPage) - Model.PageNo >= 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(@(Model.PageNo+1))">&raquo;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    <!-- Pagination -->
+}
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+
+
+            //Stock detail form submit
+            $("#productStocks tbody tr").click(function () {
+                let id = $(this).attr('data-productStockId');
+                if (id) {
+                    $("#productStockDetailForm #productStockId").val(id);
+                    $("#productStockDetailForm").submit();
+                }
+            });
+
+            //Filter
+
+            $("#productStockPerPage").change(function () {
+                $("#pageNo").val("1");
+                $("#productStockFilterForm").submit();
+            });
+
+
+            $("#sortBy").change(function () {
+                $("#pageNo").val("1");
+                $("#productStockFilterForm").submit();
+            });
+
+            $("#prodGroup").on("change", function () {
+                $("#pageNo").val("1");
+                $("#prodCtg").off("change");
+                $("#prodCtg").val("-1");
+                $("#prodItem").off("change");
+                $("#prodItem").val("-1");
+                $("#productStockFilterForm").submit();
+            });
+
+            $("#prodCtg").on("change", function () {
+                $("#pageNo").val("1");
+                $("#prodItem").off("change");
+                $("#prodItem").val("-1");
+                $("#productStockFilterForm").submit();
+            });
+
+            $("#prodItem").on("change", function () {
+                $("#pageNo").val("1");
+                $("#productStockFilterForm").submit();
+            });
+
+            //Pagination
+            paginate = function (pageNo) {
+                $("#pageNo").val(pageNo);
+                $("#productStockFilterForm").submit();
+            }
+
+            //Populate drop downs
+            $("#prodGroup").append($("<option>", {
+                value: -1,
+                text: "Any"
+            }));
+            $("#prodCtg").append($("<option>", {
+                value: -1,
+                text: "Any"
+            }));
+            $("#prodItem").append($("<option>", {
+                value: -1,
+                text: "Any"
+            }));
+
+            productHierarchy.forEach(function (prodGrp) {
+                $("#prodGroup").append($("<option>", {
+                    value: prodGrp.productGroupId,
+                    text: prodGrp.productGroupName
+                }));
+
+                //category
+                prodGrp.categories.forEach(function (catg) {
+                    $("#prodCtg").append($("<option>", {
+                        value: catg.id,
+                        text: catg.name
+                    }).attr('data-groupId', prodGrp.productGroupId));
+
+                    //product item
+                    catg.products.forEach(function (item) {
+                        $("#prodItem").append($("<option>", {
+                            value: item.id,
+                            text: item.name
+                        }).attr('data-categoryId', catg.id));
+                    });
+
+
+                });
+            });
+
+            //Select hierarchy fix
+            if (groupId != -1) {
+                $("#prodCtg option").hide();
+                $(`#prodCtg option[data-groupid=${groupId}]`).show();
+                $("#prodCtg option[value=-1]").show();
+            }
+
+            if (categoryId != -1) {
+                $("#prodItem option").hide();
+                $(`#prodItem option[data-categoryid=${categoryId}]`).show();
+                $("#prodItem option[value=-1]").show();
+            }
+            else {
+                if (groupId != -1) {
+                    $("#prodItem option").hide();
+                    $("#prodItem option[value=-1]").show();
+                    let group = productHierarchy.find(hrchy => hrchy.productGroupId == groupId);
+                    group.categories.forEach(function (catg) {
+                        $(`#prodItem option[data-categoryid=${catg.id}]`).show();
+                    });
+                }
+            }
+
+            //Set select values
+            $("#productStockPerPage").val(productStockPerPage);
+            $("#sortBy").val(sortBy);
+            $("#prodGroup").val(groupId);
+            $("#prodCtg").val(categoryId);
+            $("#prodItem").val(productId);
+
+            //Selectpicker
+            $(".selectpicker").selectpicker('refresh');
+        });
+
+    </script>
+}

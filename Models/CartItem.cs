@@ -7,10 +7,6 @@ namespace Digital_Services_BD.Models
 {
     public class CartItem
     {
-        public CartItem()
-        {
-            CartJoinCartItem = new List<CartJoinCartItem>();
-        }
         public int Id { get; set; }
         public string Name { get; set; }
         public int CartId { get; set; }
@@ -21,8 +17,8 @@ namespace Digital_Services_BD.Models
         public decimal Discount { get; set; }
         public decimal Vat { get; set; }
 
-        //Navigation Property
-        public ICollection<CartJoinCartItem> CartJoinCartItem { get; set; }
+        public virtual Cart Cart { get; set; }
+        public virtual ProductItem ProductItem { get; set; }
 
     }
 }

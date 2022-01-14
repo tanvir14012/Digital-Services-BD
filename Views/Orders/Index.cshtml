@@ -1,0 +1,271 @@
+﻿@using Digital_Services_BD.ViewModels
+@model FilteredOrders
+@{
+    var statusClass = new Dictionary<OrderStatus, string> {
+        {OrderStatus.AWAITING, "badge-secondary" },
+        {OrderStatus.CANCELLED, "badge-dark" },
+        {OrderStatus.COMPLETED, "badge-success" },
+        {OrderStatus.DISPUTED, "badge-warning" },
+        {OrderStatus.FAILED, "badge-danger" },
+        {OrderStatus.PROCESSING, "badge-info" },
+        {OrderStatus.REFUNDED, "badge-primary" },
+    };
+
+    var currencySymbol = new Dictionary<string, char>
+{
+        {
+            "BDT", '৳'
+        },
+        {
+             "USD", '$'
+        }
+    };
+}
+
+<script type="text/javascript">
+    var pageNo = @Model.PageNo;
+    var orderPerPage = "@Model.OrderPerPage";
+    var sortBy = "@Model.SortBy";
+</script>
+
+@if (Model != null && Model.TotalOrders > 0)
+{
+    @using (Html.BeginForm("Index", "Orders", FormMethod.Post, new { id = "orderFilterForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.TotalOrders)
+        @Html.Hidden("pageNo", Model.PageNo)
+        <div class="row mt-5 pt-sm-4 py-3 px-5 justify-content-end">
+            <div class="form-row col-12 col-sm-3 mb-2 mt-5 mt-sm-0">
+                <label class="mr-2 pt-1">Page size</label>
+                <select name="OrderPerPage" id="orderPerPage" value="@Model.OrderPerPage" class="selectpicker">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+
+            <div class="form-row col-12 col-sm-3 mb-2">
+                <label class="mr-2 pt-1">Sort by &nbsp;&nbsp;&nbsp;</label>
+                <select name="SortBy" id="sortBy" value="@Model.SortBy" class="selectpicker">
+                    <option value="date_desc">Most Recent</option>
+                    <option value="date_asc">Oldest First</option>
+                    <option value="price_asc">Price Low &rarr; High</option>
+                    <option value="price_desc">Price High &rarr; Low</option>
+                </select>
+            </div>
+        </div>
+    }
+    <div class="row px-3">
+        <div class="card w-100">
+            <div class="card-header">
+                <h5>My Orders <sub class="font-weight-lighter">(@Model.TotalOrders order@(Model.TotalOrders > 1 ? "s": ""))</sub></h5>
+            </div>
+
+            @using (Html.BeginForm("Details", "Orders", FormMethod.Post, new { id = "orderDetailForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input name="id" type="hidden" id="orderId" />
+            }
+
+            <div class="table-responsive">
+                <table class="table table-hover" id="orders">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Date</th>
+                            <th class="w-50">Products</th>
+                            <th>Status</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.OrdersUnderFilter)
+                        {
+                            var i = 0;
+                            <tr data-orderId="@order.Id" class="cursor-pointer">
+                                <td>@order.Id</td>
+                                <td>@order.CreatedOn.ToString("dd MMMM yyyy")</td>
+                                <td>
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var item in order.OrderItems)
+                                        {
+                                            i++;
+                                            <li class="list-group-item px-1 py-1 justify-content-between @(i > 2 ? "d-none": "d-flex")">
+                                                <a  class="text-decoration-none" asp-action="Index" asp-controller="Detail" asp-route-id="@item.ProductItemId">
+                                                    <span class="text-truncate">@item.ProductItem?.Name</span>
+                                                    <span class="badge badge-secondary rounded-circle ml-2"><span>x</span>@item.Quantity</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        @foreach (var item in order.OrderProductItemBundles)
+                                        {
+                                            <li class="list-group-item px-1 py-1 justify-content-between d-flex">
+                                                <a  href="#">
+                                                    <span class="text-truncate">@item.ProductItemBundle?.Name</span>
+                                                    <span class="badge badge-secondary rounded-circle ml-2"><span>x</span>@item.Quantity</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        @if (i > 2)
+                                        {
+                                            <li class="cursor-pointer list-group-item px-0 py-1 text-primary" name="showMore">Show more</li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <span class="badge @(statusClass[order.Status])">@order.Status.ToString().ToLower()</span>
+                                </td>
+                                <td>
+                                    @order.GrandTotal.ToString("0.00")<sup>@(currencySymbol[order.PriceCurrency])</sup>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalOrders > 0)
+    {
+        <div class="row d-flex justify-content-center mt-2">
+            <ul class="pagination">
+                @if (Model.PageNo >= 2)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(@(Model.PageNo-1))">&laquo;</a>
+                    </li>
+                }
+                @if (Model.PageNo < 5)
+                {
+                    @for (var i = 1; i <= Model.PageNo; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNo ? "active": "")">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@i)">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(1)">1</a>
+                    </li>
+                    <li class="page-item">
+                        ...
+                    </li>
+
+
+
+                    @for (var i = Model.PageNo - 2; i <= Model.PageNo; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNo ? "active": "")">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@i)">@i</a>
+                        </li>
+                    }
+                }
+                @*--------  Second Half  -------- *@
+                @if (((int)Math.Ceiling((double)Model.TotalOrders / Model.OrderPerPage)) - Model.PageNo < 5)
+                {
+                    @for (var i = Model.PageNo + 1; i <= (int)Math.Ceiling((double)Model.TotalOrders / Model.OrderPerPage); i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@i)">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    @for (var i = Model.PageNo + 1; i <= Model.PageNo + 2; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0);" onclick="paginate(@ViewBag.Id)">@i</a>
+                        </li>
+                    }
+                    <li class="page-item">
+                        ...
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(@(Model.TotalOrders / Model.OrderPerPage))">@(Model.TotalOrders / Model.OrderPerPage)</a>
+                    </li>
+                }
+                @if ((int)Math.Ceiling((double)Model.TotalOrders / Model.OrderPerPage) - Model.PageNo >= 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="paginate(@(Model.PageNo+1))">&raquo;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    <!-- Pagination -->
+}
+else
+{
+    <div class="row p-2 mt-8 d-flex flex-column justify-content-center">
+        <div class="text-center">
+            <i class="fas fa-first-order text-muted" style="transform: scale(2,2);"></i>
+        </div>
+        <div class="text-center m-2">
+            <h5>Your order list is empty!</h5>
+        </div>
+        <div class="text-center">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Browse Products</a>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+            //Unhide
+            $("li[name='showMore']").click(function (e) {
+                let ul = $(e.target).closest("ul");
+                $(ul).find("li").removeClass("d-none").addClass("d-flex");
+                $(this).remove();
+                e.preventDefault();
+            });
+
+            //Order detail form submit
+            $("#orders tbody tr").click(function () {
+                let orderId = $(this).attr('data-orderId');
+                if (orderId) {
+                    $("#orderDetailForm #orderId").val(orderId);
+                    $("#orderDetailForm").submit();
+                }
+            });
+
+            //Filter
+           
+            $("#orderPerPage").change(function () {
+                $("#pageNo").val("1");
+                $("#orderFilterForm").submit();
+            });
+
+           
+            $("#sortBy").change(function () {
+                $("#pageNo").val("1");
+                $("#orderFilterForm").submit();
+            });
+
+            //Pagination
+            paginate = function (pageNo) {
+                $("#pageNo").val(pageNo);
+                $("#orderFilterForm").submit();
+            }
+
+            //Set select values
+            $("#orderPerPage").val(orderPerPage);
+            $("#sortBy").val(sortBy);
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+    </script>
+}

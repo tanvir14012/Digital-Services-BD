@@ -10,7 +10,7 @@ namespace Digital_Services_BD.Models
         public int ProductSectionId { get; set; }
         public int ProductItemId { get; set; }
         //Navigation property
-        public ProductSection ProductSection { get; set; }
-        public ProductItem ProductItem { get; set; }
+        public virtual ProductSection ProductSection { get; set; }
+        public virtual ProductItem ProductItem { get; set; }
     }
 }

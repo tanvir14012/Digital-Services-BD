@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Digital_Services_BD.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Digital_Services_BD.Models
             CategoryIds = new HashSet<int>();
             Categories = new List<ProductCategory>();
             ProductItemFeature = new ProductItemFeatureViewModel();
+            ProductItemCustomFieldsViewModel = new List<ProductItemCustomFieldViewModel>();
         }
         public int Id { get; set; }
         [Required]
@@ -28,7 +30,7 @@ namespace Digital_Services_BD.Models
         public IFormFile Image { get; set; }
         public string ImageUrl { get; set; }
         [Required]
-        [Display(Name = "Product Category Overview")]
+        [Display(Name = "Product Item Overview")]
         [MaxLength(256, ErrorMessage = "Product overview field should contain no more than 256 characters")]
         public string Overview { get; set; }
         [StringLength(256, ErrorMessage = "What can be done field should contain no more than 256 characters")]
@@ -55,5 +57,8 @@ namespace Digital_Services_BD.Models
         public ICollection<ProductItemJoinProductCategory> ProductItemJoinProductCategory { get; set; }
         public ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
         public ICollection<ProductItemJoinPromoOffer> ProductItemJoinPromoOffer { get; set; }
+
+        [BindProperty]
+        public IList<ProductItemCustomFieldViewModel> ProductItemCustomFieldsViewModel { get; set; }
     }
 }

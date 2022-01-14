@@ -2,7 +2,6 @@ C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Service
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\libman.json
-C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.exe
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.deps.json
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\bin\Debug\netcoreapp3.1\Digital Services BD.runtimeconfig.json
@@ -132,3 +131,4 @@ C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Service
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.pdb
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.genruntimeconfig.cache
 C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\Digital Services BD.csprojAssemblyReference.cache
+C:\Users\TANVIR\Documents\Visual Studio 2019\Digital Services BD\Digital Services BD\Digital Services BD\obj\Debug\netcoreapp3.1\scopedcss\bundle\Digital Services BD.styles.css

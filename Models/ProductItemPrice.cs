@@ -17,7 +17,7 @@ namespace Digital_Services_BD.Models
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         //Navigation property
-        public ProductItem ProductItem { get; set; }
+        public virtual ProductItem ProductItem { get; set; }
 
     }
 }

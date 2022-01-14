@@ -11,8 +11,9 @@ namespace Digital_Services_BD.Models
     {
         public Customer()
         {
-            Addresses = new List<Address>();
+            Addresses = new HashSet<Address>();
             AddressIds = new List<int>();
+            Orders = new HashSet<Order>();
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -26,8 +27,9 @@ namespace Digital_Services_BD.Models
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
         //Navigation property
-        public ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
         [BindProperty]
-        public ICollection<int> AddressIds { get; set; }
+        public virtual ICollection<int> AddressIds { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

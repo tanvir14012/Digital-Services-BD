@@ -1,0 +1,83 @@
+﻿@model List<ProductItemBundle>
+
+@{
+    Layout = "AdminLayout";
+}
+<div class="row d-flex justify-content-between mt-4 pl-4 pr-4">
+    <h4 class="text-secondary">Administrator Area for Product Item Bundles</h4>
+    <a class="btn btn-light" asp-action="CreateProductItemBundle" asp-controller="Admin">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">Create</span>
+    </a>
+</div>
+<div class="row p-2">
+    @if (Model.Count == 0)
+    {
+        <h6 class="pl-3">There is no Product Item Bundle in Database</h6>
+    }
+    else
+    {
+
+        <div class="table-responsive mx-3 mt-3">
+            <h5>Total: @Model.Count </h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th style="width:40%;">Products</th>
+                        <th>Discount</th>
+                        <th>Active?</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bundle in Model)
+                    {
+                    <tr data-Id="@bundle.Id" class="cursor-pointer border-bottom">
+                        <td>@bundle.CreatedOn.ToShortDateString()</td>
+                        <td>
+                            <div class="text-truncate">@bundle.Name</div>
+                        </td>
+
+                        <td>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var join in bundle.ProductItemBundleJoinProductItem)
+                                {
+                                    <li class="list-group-item">
+                                        <span class="text-truncate">@join.ProductItem.Name</span>
+                                        <span class="badge badge-dark ml-2">@join.ProductItemQuantity x</span>
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="text-truncate">@bundle.BundleDiscount.ToString("0.00") <sup>BDT</sup></div>
+                        </td>
+                        <td>
+                            <span class="p-2 badge badge-info p-2">@bundle.IsActiveNow</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-light mt-1" asp-action="DeleteProductItemBundle" asp-controller="Admin" asp-route-id="@bundle.Id">
+                                <i class="fas fa-trash text-danger"></i>
+                            </a>
+
+                            <a class="btn btn-sm btn-light mt-1" asp-action="EditProductItemBundle" asp-controller="Admin" asp-route-id="@bundle.Id">
+                                <i class="fas fa-edit text-info"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

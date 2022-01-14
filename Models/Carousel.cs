@@ -20,6 +20,6 @@ namespace Digital_Services_BD.Models
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         [BindProperty]
-        public List<CarouselJoinCarouselImage> CarouselJoinCarouselImage { get; set; }
+        public virtual List<CarouselJoinCarouselImage> CarouselJoinCarouselImage { get; set; }
     }
 }

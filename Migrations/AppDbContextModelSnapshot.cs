@@ -15,8 +15,8 @@ namespace Digital_Services_BD.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Digital_Services_BD.Models.Address", b =>
@@ -24,65 +24,63 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AddressLineOne")
-                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("AddressLineTwo")
-                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int>("AddressType")
                         .HasColumnType("int");
 
                     b.Property<string>("AltMobile")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("Mobile")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("Zip")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.HasKey("Id");
 
@@ -96,8 +94,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -107,8 +103,8 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int>("Rank")
                         .HasColumnType("int");
@@ -123,8 +119,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CarouselId")
@@ -134,8 +128,8 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
@@ -144,7 +138,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasIndex("CarouselId");
 
-                    b.ToTable("carouselJoinCarouselImages");
+                    b.ToTable("CarouselJoinCarouselImages");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.Cart", b =>
@@ -152,8 +146,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -162,10 +154,8 @@ namespace Digital_Services_BD.Migrations
                     b.Property<bool>("IsCheckedOut")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -177,8 +167,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CartId")
@@ -192,25 +180,14 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductItemId");
+
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinCartItem", b =>
-                {
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CartItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartId", "CartItemId");
-
-                    b.HasIndex("CartItemId");
-
-                    b.ToTable("CartJoinCartItems");
-                });
-
-            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinProductItemBundle", b =>
+            modelBuilder.Entity("Digital_Services_BD.Models.CartProductItemBundle", b =>
                 {
                     b.Property<int>("CartId")
                         .HasColumnType("int");
@@ -227,7 +204,131 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasIndex("ProductItemBundleId");
 
-                    b.ToTable("CartJoinProductItemBundles");
+                    b.ToTable("CartProductItemBundles");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Deliverable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("Deliverables");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableBundle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DeliverableId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductItemBundleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliverableId");
+
+                    b.HasIndex("ProductItemBundleId");
+
+                    b.ToTable("DeliverableBundles");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableBundleItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DeliverableBundleId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductStockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliverableBundleId");
+
+                    b.HasIndex("ProductStockId")
+                        .IsUnique()
+                        .HasFilter("[ProductStockId] IS NOT NULL");
+
+                    b.ToTable("DeliverableBundleItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DeliverableId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductStockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliverableId");
+
+                    b.HasIndex("OrderItemId")
+                        .IsUnique()
+                        .HasFilter("[OrderItemId] IS NOT NULL");
+
+                    b.HasIndex("ProductStockId")
+                        .IsUnique()
+                        .HasFilter("[ProductStockId] IS NOT NULL");
+
+                    b.ToTable("DeliverableItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.EncryptionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EncryptionKeys");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Key = "DbieFWw3PA6GsnHxBxE8Yzxgk3s4oAcruXDMzfxnOLh3O9bS3M6GcSOsMBPYvwhf",
+                            LastUpdated = new DateTime(2022, 1, 11, 17, 12, 5, 298, DateTimeKind.Utc).AddTicks(490)
+                        });
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.Language", b =>
@@ -271,8 +372,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("BillingAddressId")
@@ -283,14 +382,23 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("ConfirmEmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("DeliverableId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("DiscountTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GrandTotal")
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<bool>("IsAnonymousOrder")
                         .HasColumnType("bit");
@@ -300,102 +408,288 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("PriceCurrency")
                         .IsRequired()
-                        .HasColumnType("nvarchar(8)")
-                        .HasMaxLength(8);
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("PromoCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PromoCodeDiscount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("SendOfferInMail")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(19, 4)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("TransactionId")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxesAndFees")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("TransactionId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BillingAddressId");
 
+                    b.HasIndex("CustomerId");
+
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Digital_Services_BD.Models.PaymentTransaction", b =>
+            modelBuilder.Entity("Digital_Services_BD.Models.OrderItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(19, 4)");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("BankTrnxId")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("CardBrand")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
-
-                    b.Property<string>("CardIssuerBank")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
-
-                    b.Property<string>("CardIssuerCountry")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
-
-                    b.Property<string>("CardNo")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
-
-                    b.Property<string>("CardType")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("GatewayCurrency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(8)")
-                        .HasMaxLength(8);
-
-                    b.Property<string>("IPAddr")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("RiskLevel")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("StatementShow")
+                    b.Property<string>("PriceCurrency")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductStockId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Vat")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductItemId");
+
+                    b.HasIndex("ProductStockId");
+
+                    b.ToTable("OrderItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.OrderProductItemBundle", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductItemBundleId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("BundleDiscount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("BundlePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PriceCurrency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("OrderId", "ProductItemBundleId");
+
+                    b.HasIndex("ProductItemBundleId");
+
+                    b.ToTable("OrderProductItemBundle");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.PaymentGwConfig", b =>
+                {
+                    b.Property<short?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApiRoot")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("CancelCallbackUrl")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<string>("Data_a")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Data_b")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Data_c")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Data_d")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Data_e")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FailCallbackUrl")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("GwName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RedirectUrl")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("SuccessCallbackUrl")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentGwConfigs");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.PaymentTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(19,4)");
+
+                    b.Property<decimal>("AmountInUSD")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("BankStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankTrnxId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardHolderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardIssuerBank")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardIssuerCountry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvoiceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<decimal>("RateOfUSD")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("RiskLevel")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TrnxType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                    b.Property<int>("SurjoPayCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SurjoPayMsg")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("SurjoPayOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TrnxMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserVerificationToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
+
+                    b.HasIndex("SurjoPayOrderId");
 
                     b.ToTable("PaymentTransactions");
                 });
@@ -405,8 +699,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -415,12 +707,12 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("HowToConsume")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -428,22 +720,22 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Limitations")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Overview")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WhatCanBeDone")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -462,7 +754,7 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasIndex("ProductGroupId");
 
-                    b.ToTable("productCategoryJoinProductGroup");
+                    b.ToTable("ProductCategoryJoinProductGroup");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductGroup", b =>
@@ -470,8 +762,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -480,12 +770,12 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("HowToConsume")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -493,22 +783,22 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Limitations")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Overview")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WhatCanBeDone")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -520,8 +810,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("CreatedOn")
@@ -530,12 +818,12 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("HowToConsume")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -549,22 +837,22 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Limitations")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Overview")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WhatCanBeDone")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -576,12 +864,10 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("BundleDiscount")
-                        .HasColumnType("decimal(19, 4)");
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -591,8 +877,8 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
@@ -616,7 +902,30 @@ namespace Digital_Services_BD.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("productItemBundleJoinProductItems");
+                    b.ToTable("ProductItemBundleJoinProductItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItemCustomField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductItemId");
+
+                    b.ToTable("ProductItemCustomFields");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemFeature", b =>
@@ -624,85 +933,83 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Company")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeliveryInfo")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(2048)")
-                        .HasMaxLength(2048);
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("Developer")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("DownloadSize")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Genre")
-                        .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Os")
-                        .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<string>("Platform")
-                        .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<int>("ProductItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("Publisher")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("RegionCodes")
-                        .HasColumnType("nvarchar(1024)")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("RegionCountries")
-                        .HasColumnType("nvarchar(1024)")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RequirementCpu")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("RequirementDisk")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("RequirementGpu")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("RequirementRam")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ValidityPeriod")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
@@ -762,8 +1069,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -772,7 +1077,7 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(19, 4)");
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -780,18 +1085,18 @@ namespace Digital_Services_BD.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(19, 4)");
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<string>("PriceCurrency")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<int>("ProductItemId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Vat")
-                        .HasColumnType("decimal(19, 4)");
+                        .HasColumnType("decimal(19,4)");
 
                     b.HasKey("Id");
 
@@ -805,8 +1110,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("CreatedOn")
@@ -816,15 +1119,15 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Overview")
-                        .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<int>("Rank")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
@@ -846,13 +1149,86 @@ namespace Digital_Services_BD.Migrations
                     b.ToTable("ProductSectionJoinProductItem");
                 });
 
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductStock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuxiliaryCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeliverableBundleItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DeliverableItemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MainCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionA")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionB")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VendorInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreateTime");
+
+                    b.HasIndex("ProductItemId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("ProductStocks");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductStockCount", b =>
+                {
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ProductItemId");
+
+                    b.ToTable("ProductStockCounts");
+                });
+
             modelBuilder.Entity("Digital_Services_BD.Models.PromoOffer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -862,19 +1238,19 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("CurrencyCountry")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(19, 4)");
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<DateTime>("OfferBeginsAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OfferCurrency")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTime>("OfferEndsAt")
                         .HasColumnType("datetime2");
@@ -884,8 +1260,8 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("PromoCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.HasKey("Id");
 
@@ -897,8 +1273,6 @@ namespace Digital_Services_BD.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
@@ -909,12 +1283,99 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("TagName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
                     b.ToTable("SearchTagProductItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.SmtpConfig", b =>
+                {
+                    b.Property<short?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<string>("CreatedUserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FromAddress")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("nvarchar(320)");
+
+                    b.Property<string>("FromName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<short>("Port")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Server")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("UpdatedDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<string>("UpdatedUserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("UseAuthentication")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("UseSecureConnection")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SmtpConfigs");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataProtectionKeys");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -927,18 +1388,18 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -985,8 +1446,8 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -998,12 +1459,12 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -1021,17 +1482,17 @@ namespace Digital_Services_BD.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
@@ -1124,32 +1585,32 @@ namespace Digital_Services_BD.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2")
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdCardNo")
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<int>("IdCardType")
                         .HasColumnType("int");
 
                     b.Property<string>("IdCardVerifyPic")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<bool>("IsVerified")
                         .ValueGeneratedOnAdd()
@@ -1158,16 +1619,16 @@ namespace Digital_Services_BD.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16)
-                        .IsUnicode(true);
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProfilePicLink")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
@@ -1179,6 +1640,8 @@ namespace Digital_Services_BD.Migrations
                         .HasForeignKey("CustomerId")
                         .HasConstraintName("FK_Address_CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.CarouselJoinCarouselImage", b =>
@@ -1189,40 +1652,126 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_CarouselJoinCarouselImage_CarouselId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Carousel");
                 });
 
-            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinCartItem", b =>
+            modelBuilder.Entity("Digital_Services_BD.Models.CartItem", b =>
                 {
                     b.HasOne("Digital_Services_BD.Models.Cart", "Cart")
-                        .WithMany("CartJoinCartItem")
+                        .WithMany("CartItems")
                         .HasForeignKey("CartId")
-                        .HasConstraintName("FK_CartJoinCartItem_CartId")
+                        .HasConstraintName("FK_CartItem_CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Digital_Services_BD.Models.CartItem", "CartItem")
-                        .WithMany("CartJoinCartItem")
-                        .HasForeignKey("CartItemId")
-                        .HasConstraintName("FK_CartJoinCartItem_CartItemId")
+                    b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ProductItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("ProductItem");
                 });
 
-            modelBuilder.Entity("Digital_Services_BD.Models.CartJoinProductItemBundle", b =>
+            modelBuilder.Entity("Digital_Services_BD.Models.CartProductItemBundle", b =>
                 {
                     b.HasOne("Digital_Services_BD.Models.Cart", "Cart")
-                        .WithMany("CartJoinProductItemBundle")
+                        .WithMany("CartProductItemBundles")
                         .HasForeignKey("CartId")
                         .HasConstraintName("FK_CartJoinProductItemBundle_CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Digital_Services_BD.Models.ProductItemBundle", "ProductItemBundle")
-                        .WithMany("CartJoinProductItemBundle")
+                        .WithMany("CartProductItemBundle")
                         .HasForeignKey("ProductItemBundleId")
                         .HasConstraintName("FK_CartJoinProductItemBundle_ProductItemBundleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("ProductItemBundle");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Deliverable", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Order", "Order")
+                        .WithOne("Deliverable")
+                        .HasForeignKey("Digital_Services_BD.Models.Deliverable", "OrderId")
+                        .HasConstraintName("FK_Deliverable_OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableBundle", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Deliverable", "Deliverable")
+                        .WithMany("DeliverableBundles")
+                        .HasForeignKey("DeliverableId")
+                        .HasConstraintName("FK_DeliverableBundle_DeliverableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductItemBundle", "ProductItemBundle")
+                        .WithMany()
+                        .HasForeignKey("ProductItemBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Deliverable");
+
+                    b.Navigation("ProductItemBundle");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableBundleItem", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.DeliverableBundle", "DeliverableBundle")
+                        .WithMany("DeliverableBundleItems")
+                        .HasForeignKey("DeliverableBundleId")
+                        .HasConstraintName("FK_DeliverableBundleItem_DeliverableBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductStock", "ProductStock")
+                        .WithOne("DeliverableBundleItem")
+                        .HasForeignKey("Digital_Services_BD.Models.DeliverableBundleItem", "ProductStockId")
+                        .HasConstraintName("FK_DeliverableBundleItem_ProductStockId");
+
+                    b.Navigation("DeliverableBundle");
+
+                    b.Navigation("ProductStock");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableItem", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Deliverable", "Deliverable")
+                        .WithMany("DeliverableItems")
+                        .HasForeignKey("DeliverableId")
+                        .HasConstraintName("FK_DeliverableItem_DeliverableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.OrderItem", "OrderItem")
+                        .WithOne("DeliverableItem")
+                        .HasForeignKey("Digital_Services_BD.Models.DeliverableItem", "OrderItemId")
+                        .HasConstraintName("FK_DeliverableItem_OrderItemId");
+
+                    b.HasOne("Digital_Services_BD.Models.ProductStock", "ProductStock")
+                        .WithOne("DeliverableItem")
+                        .HasForeignKey("Digital_Services_BD.Models.DeliverableItem", "ProductStockId")
+                        .HasConstraintName("FK_DeliverableItem_ProductStockId");
+
+                    b.Navigation("Deliverable");
+
+                    b.Navigation("OrderItem");
+
+                    b.Navigation("ProductStock");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.Order", b =>
@@ -1230,6 +1779,63 @@ namespace Digital_Services_BD.Migrations
                     b.HasOne("Digital_Services_BD.Models.Address", "BillingAddress")
                         .WithMany()
                         .HasForeignKey("BillingAddressId");
+
+                    b.HasOne("Digital_Services_BD.Models.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("FK_Order_CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("BillingAddress");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.OrderItem", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .HasConstraintName("FK_OrderItem_OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
+                        .WithMany()
+                        .HasForeignKey("ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductStock", "ProductStock")
+                        .WithMany()
+                        .HasForeignKey("ProductStockId");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ProductItem");
+
+                    b.Navigation("ProductStock");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.OrderProductItemBundle", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.Order", "Order")
+                        .WithMany("OrderProductItemBundles")
+                        .HasForeignKey("OrderId")
+                        .HasConstraintName("FK_OrderJoinProductItemBundle_OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Digital_Services_BD.Models.ProductItemBundle", "ProductItemBundle")
+                        .WithMany("OrderProductItemBundle")
+                        .HasForeignKey("ProductItemBundleId")
+                        .HasConstraintName("FK_OrderJoinProductItemBundle_ProductItemBundleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ProductItemBundle");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.PaymentTransaction", b =>
@@ -1240,6 +1846,8 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_PaymentTransaction_OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductCategoryJoinProductGroup", b =>
@@ -1257,6 +1865,10 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_ProductCategoryJoinProductGroup_ProductGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductCategory");
+
+                    b.Navigation("ProductGroup");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemBundleJoinProductItem", b =>
@@ -1274,6 +1886,22 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_ProductItemBundleJoinProductItem_ProductItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ProductItem");
+
+                    b.Navigation("ProductItemBundle");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItemCustomField", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
+                        .WithMany("ProductItemCustomFields")
+                        .HasForeignKey("ProductItemId")
+                        .HasConstraintName("FK_ProductItemCustomField_ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductItem");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemFeature", b =>
@@ -1300,6 +1928,10 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_ProductItemJoinProductCategory_ProductItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductCategory");
+
+                    b.Navigation("ProductItem");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemJoinPromoOffer", b =>
@@ -1317,6 +1949,10 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_ProductItemJoinPromoOffer_PromoOfferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductItem");
+
+                    b.Navigation("PromoOffer");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemJoinSearchTagProductItem", b =>
@@ -1334,6 +1970,10 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_ProductItemJoinSearchTagProductItem_SearchTagProductItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductItem");
+
+                    b.Navigation("SearchTagProductItem");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductItemPrice", b =>
@@ -1341,8 +1981,11 @@ namespace Digital_Services_BD.Migrations
                     b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
                         .WithMany("ProductItemPrice")
                         .HasForeignKey("ProductItemId")
+                        .HasConstraintName("FK_ProductItemPrice_ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductItem");
                 });
 
             modelBuilder.Entity("Digital_Services_BD.Models.ProductSectionJoinProductItem", b =>
@@ -1360,6 +2003,34 @@ namespace Digital_Services_BD.Migrations
                         .HasConstraintName("FK_ProductSectionJoinProductItem_ProductSectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductItem");
+
+                    b.Navigation("ProductSection");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductStock", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
+                        .WithMany("ProductStocks")
+                        .HasForeignKey("ProductItemId")
+                        .HasConstraintName("FK_ProductStock_ProductItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductStockCount", b =>
+                {
+                    b.HasOne("Digital_Services_BD.Models.ProductItem", "ProductItem")
+                        .WithOne("ProductStockCount")
+                        .HasForeignKey("Digital_Services_BD.Models.ProductStockCount", "ProductItemId")
+                        .HasConstraintName("FK_ProductStockCount_ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1411,6 +2082,121 @@ namespace Digital_Services_BD.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Carousel", b =>
+                {
+                    b.Navigation("CarouselJoinCarouselImage");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+
+                    b.Navigation("CartProductItemBundles");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Deliverable", b =>
+                {
+                    b.Navigation("DeliverableBundles");
+
+                    b.Navigation("DeliverableItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.DeliverableBundle", b =>
+                {
+                    b.Navigation("DeliverableBundleItems");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Order", b =>
+                {
+                    b.Navigation("Deliverable");
+
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("OrderProductItemBundles");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.OrderItem", b =>
+                {
+                    b.Navigation("DeliverableItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductCategory", b =>
+                {
+                    b.Navigation("ProductCategoryJoinProductGroup");
+
+                    b.Navigation("ProductItemJoinProductCategory");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductGroup", b =>
+                {
+                    b.Navigation("ProductCategoryJoinProductGroup");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItem", b =>
+                {
+                    b.Navigation("CartItems");
+
+                    b.Navigation("ProductItemBundleJoinProductItem");
+
+                    b.Navigation("ProductItemCustomFields");
+
+                    b.Navigation("ProductItemFeature");
+
+                    b.Navigation("ProductItemJoinProductCategory");
+
+                    b.Navigation("ProductItemJoinPromoOffer");
+
+                    b.Navigation("ProductItemJoinSearchTagProductItem");
+
+                    b.Navigation("ProductItemPrice");
+
+                    b.Navigation("ProductSectionJoinProductItem");
+
+                    b.Navigation("ProductStockCount");
+
+                    b.Navigation("ProductStocks");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductItemBundle", b =>
+                {
+                    b.Navigation("CartProductItemBundle");
+
+                    b.Navigation("OrderProductItemBundle");
+
+                    b.Navigation("ProductItemBundleJoinProductItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductSection", b =>
+                {
+                    b.Navigation("ProductSectionJoinProductItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.ProductStock", b =>
+                {
+                    b.Navigation("DeliverableBundleItem");
+
+                    b.Navigation("DeliverableItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.PromoOffer", b =>
+                {
+                    b.Navigation("ProductItemJoinPromoOffer");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.SearchTagProductItem", b =>
+                {
+                    b.Navigation("ProductItemJoinSearchTagProductItem");
+                });
+
+            modelBuilder.Entity("Digital_Services_BD.Models.Customer", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

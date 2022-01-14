@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims;
 @inject IProductGroupOps productGroupOps
-@inject IProductCategoryOps productCategoryOps
-@inject IProductItemOps productItemOps
 @inject SignInManager<Customer> signInManager
 @inject UserManager<Customer> userManager
 @inject IAuthorizationService authorizationService
@@ -10,16 +9,17 @@
 
 
 @{
-    var productGroups = productGroupOps.GetAllProductGroups().ToList();
-    var productCategories = productCategoryOps.GetAllProductCategories().ToList();
+    var productGroups = await productGroupOps.GetProductGroupsWithNavigation();
+    var cartCount = await cartOps.GetCartItemCount(Convert.ToInt32(Context.Request.Cookies["CartId"]));
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - Digital Gift Store</title>
+    <title>@ViewBag.Title - Nilu Digital Store</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="shortcut icon" href="https://sstatic.net/stackoverflow/img/favicon.ico">
     <environment include="Development">
         <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" type="text/css" />
@@ -39,24 +39,25 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
               rel="stylesheet"
               asp-fallback-href="~/lib/font-awesome/css/all.css">
-        <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
-        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css"/>
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 
     </environment>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-light fixed-top z-10 shadow" id="navbar1">
+    <header class="fixed-top z-10">
+        <nav class="navbar navbar-light pb-0" id="navbar1">
             <div class="container justify-content-start" id="navbar1_container">
                 <a class="navbar-brand" href="/">
                     <img class="" src="~/branding/companylogo.png" width="100" height="40" />
                 </a>
-                <form class="form-inline flex-grow-1" method="post">
+                <form class="form-inline flex-grow-1" method="post" asp-controller="Home" asp-action="Search">
+                    @Html.AntiForgeryToken()
                     <div class="input-group w-100">
-                        <input type="search" class="form-control" placeholder="Search" />
+                        <input type="search" class="form-control" autocomplete="off" name="Term" placeholder="Search" id="searchInput" />
                         <div class="input-group-append">
-                            <button type="submit" class="input-group-text"><i class="fas fa-search"></i></button>
+                            <button type="submit" id="searchSubmit" disabled class="input-group-text"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
                 </form>
@@ -81,11 +82,11 @@
                     <ul class="dropdown-menu">
                         @if (!signInManager.IsSignedIn(User))
                         {
-                            <li class="dropdown-item link-normal text-center">
-                                <a asp-action="SignIn" asp-controller="Account" class="d-block">Sign In</a>
+                            <li class="dropdown-item link-normal text-center border-bottom">
+                                <a asp-action="SignIn" asp-controller="Account" class="d-block">Sign in</a>
                             </li>
                             <li class="dropdown-item link-normal text-center">
-                                <a asp-action="SignUp" asp-controller="Account" class="d-block">New user ? Sign Up</a>
+                                <a asp-action="SignUp" asp-controller="Account" class="d-block">New user ? <u>Sign up</u></a>
                             </li>
                         }
                         else
@@ -96,10 +97,14 @@
                                     <a asp-action="Index" asp-controller="Admin" class="d-block">Admin panel</a>
                                 </li>
                             }
+                            <li class="dropdown-item link-normal text-center">
+                                <a asp-action="Index" asp-controller="Orders" class="d-block">My orders</a>
+                            </li>
                             <li class="dropdown-item">
                                 <form method="post" asp-action="SignOut" asp-controller="Account">
+                                    @Html.AntiForgeryToken()
                                     <input name="returnUrl" value="/" type="hidden" />
-                                    <button type="submit" class="btn btn-sm btn-light w-100">Sign Out</button>
+                                    <input type="submit" class="w-100 border-0 bg-white" value="Sign out">
                                 </form>
                             </li>
                         }
@@ -107,140 +112,141 @@
                     </ul>
                 </div>
                 <a asp-action="Index" asp-controller="Cart" class="nav-link text-secondary">
-                    <i class="fas fa-shopping-cart align-bottom"></i><span class="badge badge-success rounded-circle align-top">@cartOps.GetCart(Convert.ToInt32(Context.Request.Cookies["CartId"]), null).CartItems.Count()</span>
-                    <span class="font-weight-bold align-bottom">Cart</span>
+                    <i class="fas fa-shopping-cart align-bottom"></i><span class="badge badge-success rounded-circle align-top">@cartCount</span>
                 </a>
             </div>
-        </nav>
 
-        <nav class="navbar navbar-expand-sm navbar-light z-9 position-fixed w-100 pt-0 bg-white" id="navbar2">
-            <button class="navbar-toggler m-2" data-toggle="collapse" data-target="#navLinks"
-                    aria-controls="navLinks" aria-expanded="false" aria-label="toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="container" id="navbar2_container">
-                <ul class="navbar-nav collapse navbar-collapse border-md-bottom pl-2 shadow rounded" id="navLinks">
-                    @for (var i = 0; i < productGroups.Count; i++)
-                    {
-                        var productGroupCategories = productGroupOps.GetAllProdCategoriesByProdGroupId(productGroups[i].Id).ToList();
-                        <li class="nav-item mr-2 pr-2 pt-2">
-                            <a asp-action="Index" asp-controller="Category" asp-route-id="@productGroups[i].Id"
-                               class="nav-link text-muted pl-0 pr-0" id="1" type="button" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                <span>@productGroups[i].Name</span>
-                            </a>
-                            <div class="dropdown-menu w-100 border border-0 pt-0" aria-labelledby="1">
-                                <div class="container pl-2">
-                                    <div class="row w-100 border rounded pl-0 ml-1">
-                                        @for (var j = 0; j < productGroupCategories.Count; j++)
-                                        {
-                                            <div class="col-lg-3 col-md-4 col-sm-6 pl-0">
-                                                <a asp-action="Index" asp-controller="Category" asp-route-id="@productGroups[i].Id" class="dropdown-item dropdown-header font-weight-bold border-bottom">@productGroupCategories[j].Name</a>
-                                                @{
-                                                    var productItems = productItemOps.GetAllProdItemByProdCatgId(productGroupCategories[j].Id).ToList();
-                                                }
-                                                @for (var k = 0; k < productItems.Count; k++)
-                                                {
-                                                    <a class="dropdown-item" asp-action="Index" asp-controller="Detail" asp-route-id="@productItems[k].Id">@productItems[k].Name</a>
-                                                }
-                                            </div>
-                                        }
+            <nav class="navbar navbar-expand-sm navbar-light w-100 pt-0 bg-white" id="navbar2">
+                <button class="navbar-toggler m-2" data-toggle="collapse" data-target="#navLinks"
+                        aria-controls="navLinks" aria-expanded="false" aria-label="toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="container" id="navbar2_container">
+                    <ul class="navbar-nav collapse navbar-collapse border-md-bottom pl-2 shadow-sm-bottom" id="navLinks">
+                        @foreach (var productGroup in productGroups)
+                        {
+                            <li class="nav-item mr-2 pr-2 pt-2">
+                                <a asp-action="Index" asp-controller="Category" asp-route-id="@productGroup.Id"
+                                   class="nav-link text-muted pl-0 pr-0" id="1" type="button" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <span>@productGroup.Name</span>
+                                </a>
+                                <div class="dropdown-menu w-100 border border-0 pt-0" aria-labelledby="1">
+                                    <div class="container pl-2">
+                                        <div class="row w-100 border rounded pl-0 ml-1">
+                                            @foreach (var productCategory in productGroup.AllCategories)
+                                            {
+                                                <div class="col-lg-3 col-md-4 col-sm-6 pl-0">
+                                                    <a asp-action="Index" asp-controller="Category" asp-route-id="@productGroup.Id"
+                                                       class="dropdown-item dropdown-header font-weight-bold border-bottom overflow-hidden">@productCategory.Name</a>
+
+                                                    @foreach (var productItem in productCategory.AllItems)
+                                                    {
+                                                        <a class="dropdown-item overflow-hidden text-wrap" asp-action="Index" asp-controller="Detail" asp-route-id="@productItem.Id">@productItem.Name</a>
+                                                    }
+                                                </div>
+                                            }
+
+                                        </div>
 
                                     </div>
-
                                 </div>
-                            </div>
-                        </li>
-                    }
-                </ul>
-            </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
         </nav>
     </header>
 
-    <div class="container" id="main_container">
-        <main role="main" class="pb-3">
+    <div class="container mt-5 pt-5" id="main_container">
+        <main role="main" class="pb-3 mt-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; 2020 - Digital Gifts <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer text-muted mt-5 bg-dark">
+        <div class="container py-4">
+            <div class="row gy-4 gx-5">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white">Nilu Digital Store</h5>
+                    <ul class="list-group border-0">
+                        <li class="list-group-item small text-muted d-flex border-0 bg-dark text-light">
+                            <div class="w-10 my-auto"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="w-90">MOM Rokeya Palace, Rammala Road, Thakurpara, Adarsha Sadar, Cumilla-3500</div>
+                        </li>
+                        <li class="list-group-item small text-muted d-flex border-0 bg-dark text-light">
+                            <div class="w-10 my-auto"><i class="fas fa-envelope"></i></div>
+                            <div class="w-90">support@niludigital.com</div>
+                        </li>
+                        <li class="list-group-item small text-muted d-flex border-0 bg-dark text-light">
+                            <div class="w-10 my-auto"><i class="fas fa-phone"></i></div>
+                            <div class="w-">(+88) 0153-492-4386</div>
+                        </li>
+                    </ul>
+                    <p class="small text-muted mb-0">&copy;2022 Nilu Digital Store. All rights reserved.</p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="text-white mb-3 mt-3 mt-md-0">About</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><a class="text-white-50 text-decoration-none small hover-white" href="/home/aboutus">About Us</a></li>
+                        <li><a class="text-white-50 text-decoration-none small hover-white" href="/home/getstarted">Get started</a></li>
+                        <li><a class="text-white-50 text-decoration-none small hover-white" href="home/faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="text-white mb-3">Legal</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><a class="text-white-50 text-decoration-none small hover-white" href="/home/tos">Terms & Conditions</a></li>
+                        <li><a class="text-white-50 text-decoration-none small hover-white" href="/home/privacy">Privacy Policy</a></li>
+                        <li><a class="text-white-50 text-decoration-none small hover-white" href="/home/refundpolicy">Return & Refund Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-3">Newsletter</h5>
+                    <p class="small text-muted">Don't miss our exclusive offers. Subscribe to our newsletter.</p>
+                    <form action="#">
+                        <div class="input-group mb-3">
+                            <input class="form-control" type="text" placeholder="Recipient's email address" aria-label="Recipient's email address" aria-describedby="button-addon2">
+                            <button class="btn btn-primary" id="button-addon2" type="button"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </form>
+                   
+                    <ul class="list-group list-group-horizontal justify-content-center m-2">
+                        <li class="list-group-item mr-2 px-2 py-1 rounded bg-dark border-0">
+                            <span class="small text-muted">Follow Us</span>
+                        </li>
+                        <li class="list-group-item mr-2 px-2 py-1 rounded">
+                            <a href="#" class="">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                            <a href="#" class="text-info">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                            <a href="#" class="text-primary">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <img class="img-fluid" src="~/branding/surjopayLogo.png" width="300" height="200"/>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
-    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        $(document).ready(function () {
-            $("#navLinks li a").click(function (e) {
-                $(e.target).closest("a").addClass("border-wb3-tomato");
-                $(e.target).closest("span").addClass("font-weight-bold");
-                $(e.target).closest(".dropdown-menu").addClass("show");
-            });
-            //Add navlink formatting when dropdown menu is shown
-            $("#navLinks li").on("show.bs.dropdown", function (e) {
-                $(e.target).find("a").first().addClass("border-wb3-tomato");
-                $(e.target).find("a span").first().addClass("font-weight-bold");
-            });
-            //Remove navlink formatting when dropdown menu is closed
-            $("#navLinks").on("hidden.bs.dropdown", function () {
-                $("#navLinks li a").each(function () {
-                    $(this).removeClass("border-wb3-tomato");
-                    $(this).children("span").removeClass("font-weight-bold");
-                });
-            });
-
-            $(window).on('load resize', function () {
-                var nav1_offset = $("#navbar1").offset();
-                //Set second navbar position at the end of first navbar
-                $("#navbar2").offset({
-                    top: nav1_offset.top + document.getElementById("navbar1").getBoundingClientRect().height
-                });
-
-                //Set main content position at the end of second navbar
-                $("#main_container").offset({
-                    top: $("#navbar2").offset().top +
-                        document.getElementById("navbar2").getBoundingClientRect().height
-                });
-
-                //Remove w-100 from navlinks ul -> li for default behaviour
-                $("#navLinks li").removeClass("w-100 p-2");
-
-                //Set footer at the end of main content
-                $("footer").offset({
-                    top: $("#main_container").offset().top + document.getElementById("main_container").getBoundingClientRect().height
-                });
-            });
-
-            //Fix main content position after navbar2 toggler button show/hide
-            $('header').on('shown.bs.collapse hidden.bs.collapse', function () {
-                //Set main content position at the end of second navbar
-                $("#main_container").offset({
-                    top: $("#navbar2").offset().top +
-                        document.getElementById("navbar2").getBoundingClientRect().height
-                });
-                //Set footer at the end of main content
-                $("footer").offset({
-                    top: $("#main_container").offset().top + document.getElementById("main_container").getBoundingClientRect().height
-                });
-            });
-            //Align navlinks to left in vertical state
-            $('header').on('show.bs.collapse', function () {
-                //Set navlinks ul -> li to w-100 to make them align left
-                $("#navLinks li").addClass("w-100 p-2");
-            });
-            //Default navlinks behaviour in horizontal state
-            $('header').on('hide.bs.collapse', function () {
-                //Remove navlinks ul -> li to w-100 p-2
-                $("#navLinks li").removeClass("w-100 p-2");
-            });
-        });
-    </script>
+    <script type="text/javascript" src="~/lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Layout.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,132 @@
+﻿@model SmtpConfig
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="row mt-4 p-2">
+    <div class="col-sm-12 col-lg-8">
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">Outgoing Mail (SMTP) Configuration</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form class="form-horizontal" method="post" asp-controller="Admin" asp-action="EmailConfig">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.CreatedDateTime)
+                @Html.HiddenFor(m => m.UpdatedDateTime)
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Server</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" asp-for="Server" placeholder="SMTP server address">
+                            <span class="text-danger" asp-validation-for="Server"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" asp-for="Username" placeholder="SMTP username">
+                            <span class="text-danger" asp-validation-for="Username"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="password" class="form-control" value="@Model.Password" asp-for="Password" placeholder="SMTP password">
+                                <div class="input-group-append">
+                                    <i id="password-eye" role="button" class="input-group-text fas fa-eye"></i>
+                                </div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="port" class="col-sm-2 col-form-label">Port</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" value="587" asp-for="Port">
+                                <option value="587">587 (TSL required)</option>
+                                <option value="465">465 (SSL required)</option>
+                                <option value="25">25</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="Port"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">From username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" asp-for="FromName" placeholder="Sender name">
+                            <span class="text-danger" asp-validation-for="FromName"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">From email address</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" asp-for="FromAddress" placeholder="Sender email address">
+                            <span class="text-danger" asp-validation-for="FromAddress"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" asp-for="UseAuthentication">
+                                <label for="UseAuthentication" class="form-check-label">Use authentication</label>
+                            </div>
+                        </div>
+                        <div class="offset-sm-2 col-sm-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" asp-for="UseSecureConnection">
+                                <label for="UseSecureConnection" class="form-check-label">Use secure connection</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.CreatedUserId)
+                @Html.HiddenFor(m => m.CreatedDateTime)
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a asp-controller="Admin" asp-action="EmailConfig" class="btn btn-default float-right">Cancel</a>
+                </div>
+                <!-- /.card-footer -->
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /* Password eye toggle*/
+            $("#password-eye").click(function () {
+                let inputEl = $(this).closest(".input-group").find("input");
+                if ($(this).hasClass("fa-eye")) {
+                    $(inputEl).attr("type", "text");
+                    $(this).removeClass("fa-eye");
+                    $(this).addClass("fa-eye-slash");
+                }
+                else if ($(this).hasClass("fa-eye-slash")) {
+                    $(inputEl).attr("type", "password");
+                    $(this).removeClass("fa-eye-slash");
+                    $(this).addClass("fa-eye");
+                }
+            });
+
+            /*Use secure connection checkbox check-uncheck, updates port value in dropdown */
+            $("#Smtp_UseSecureConnection").change(function () {
+                if (!$(this).is(":checked")) {
+                    $("#Smtp_Port").val("25");
+                } else {
+                    if ($("#Smtp_Port").val() === "25") {
+                        $("#Smtp_Port").val("587");
+                    }
+                }
+            });
+        });
+    </script>
+}

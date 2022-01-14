@@ -1,13 +1,11 @@
 ﻿@using Digital_Services_BD.ViewModels
 @model List<ProductItem>
-@inject IProductGroupOps productGroupOps
-@inject IProductItemOps productItemOps
-@inject IProductCategoryOps productCategoryOps
 
 @{
     var locationOrigin = Url.Action("Index", "Item", new { id = ViewBag.Id });
-    var allProductGroups = productGroupOps.GetAllProductGroups().ToList();
-    var allProductGroupIdsUnderThisCategory = productCategoryOps.GetAllProductGroupIdsByCategoryId(ViewBag.Id);
+    List<ProductGroup> allProductGroups = ViewBag.AllProductGroups;
+    List<int> allProductGroupIdsUnderThisCategory = ViewBag.AllProductGroupIdsUnderThisCategory;
+    List<ProductCategory> Categories = ViewBag.Categories;
 }
 <script type="text/javascript">
     var locationOrigin = "@locationOrigin";
@@ -17,8 +15,9 @@
     var sortBy = "@ViewBag.SortBy";
 </script>
 
-<div class="row mt-8 p-3">
-    <ul class="breadcrumb w-100 p-0 m-0 link-normal">
+<div class="spacer"></div>
+<div class="row p-3">
+    <ul class="breadcrumb w-100 p-2 m-0 link-normal">
         <li class="breadcrumb-item">
             <a asp-controller="Home" asp-action="Index">
                 <i class="fas fa-home mr-1"></i>Home
@@ -71,7 +70,7 @@
                         <div class="collapse show" @*data-parent="#accordion"*@ id="filter2">
                             <div class="card-body p-0 pl-2 pr-2">
                                 <ul class="list-group list-group-flush link-normal">
-                                    @foreach (var productCategory in productCategoryOps.GetAllProductCategories())
+                                    @foreach (var productCategory in Categories)
                                     {
                                         <li class="list-group-item p-0 pt-2">
                                             <a asp-controller="Item" asp-action="Index" asp-route-id="@productCategory.Id">
@@ -124,40 +123,49 @@
             </select>
         </div>
         <hr />
-        <div class="card-deck row">
-            @for (var i = 0; i < Model.Count; i++)
-            {
-                var priceObj = Model[i].ProductItemPrice.FirstOrDefault();
-                <div class="col-lg-4 col-md-6 col-sm-12 p-0 pt-2">
-                    <div class="card m-2 link-normal">
-                        <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Detail" asp-route-id="@Model[i].Id">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <img class="img-fluid h-240" src="\@Model[i].ImageUrl" />
-                            </div>
-                            <div class="card-body p-1">
-                                <h5>@Model[i].Name</h5>
-
-                            </div>
-                            <div class="card-footer p-1">
-                                <div class="price-font">
-                                    <strong>@string.Format("{0:0.00}", priceObj.Price - priceObj.Discount)</strong>
-                                    <sup>BDT</sup>
+        <div class="row">
+            <div class="card-deck col-12">
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var priceObj = Model[i].ProductItemPrice.FirstOrDefault(pr => pr.PriceCurrency == "BDT");
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-0 pt-2">
+                        <div class="card m-2 link-normal h-300">
+                            <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Detail" asp-route-id="@Model[i].Id">
+                                <div class="position-absolute right-0 mx-4 my-2 px-2 py-1 badge badge-pill badge-@(Model[i].ProductStockCount.Count > 0 ? "info": "danger")">
+                                    @(Model[i].ProductStockCount.Count > 0 ? "in stock": "out of stock")
+                                </div>    
+                                <div class="overflow-hidden max-h-240">
+                                        <img class="img-fluid" src="\@Model[i].ImageUrl" />
                                 </div>
-                                @if (priceObj.Discount > 0)
-                                {
-                                    <div class="text-black">
-                                        <s class="text-muted">@priceObj.Price</s>
-                                        <sup class="text-muted">BDT</sup>
-                                        <span class="ml-1 bg-primary p-1">
-                                            <span class="text-white">@string.Format("{0:0.00}", -(priceObj.Discount * 100) / priceObj.Price)%</span>
-                                        </span>
+
+                                <div class="d-flex flex-grow-1">
+                                    <div class="w-100 align-self-end">
+                                        <div class="p-1">
+                                            <h5>@Model[i].Name</h5>
+                                        </div>
+                                        <div class="bg-light-gray p-1">
+                                            <div class="price-font">
+                                                <strong>@string.Format("{0:0.00}", priceObj.Price - priceObj.Discount)</strong>
+                                                <sup>BDT</sup>
+                                            </div>
+                                            @if (priceObj.Discount > 0)
+                                            {
+                                                <div class="text-black">
+                                                    <s class="text-muted">@priceObj.Price</s>
+                                                    <sup class="text-muted">BDT</sup>
+                                                    <span class="ml-1 bg-primary p-1">
+                                                        <span class="text-white">@string.Format("{0:0.00}", (priceObj.Discount * 100) / priceObj.Price)% OFF</span>
+                                                    </span>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                }
-                            </div>
-                        </a>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
 
         @if (Model.Count > 0)
@@ -202,9 +210,9 @@
                         }
                     }
                     @*--------  Second Half  -------- *@
-                    @if ((ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage) - ViewBag.PageNo < 5)
+                    @if ((int) Math.Ceiling((double)ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage) - ViewBag.PageNo < 5)
                     {
-                        @for (var i = ViewBag.PageNo + 1; i <= (ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage); i++)
+                        @for (var i = ViewBag.PageNo + 1; i <= (int) Math.Ceiling((double)ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage); i++)
                         {
                             <li class="page-item">
                                 <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id" asp-route-pageNo="@i">@i</a>
@@ -227,7 +235,7 @@
                                asp-route-pageNo="@(ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage)">@(ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage)</a>
                         </li>
                     }
-                    @if ((ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage) - ViewBag.PageNo >= 1)
+                    @if ((int) Math.Ceiling((double)ViewBag.TotalItem / ProductConfig.NoOfProductItemPerPage) - ViewBag.PageNo >= 1)
                     {
                         <li class="page-item">
                             <a class="page-link" asp-controller="Item" asp-action="Index" asp-route-id="@ViewBag.Id"

@@ -1,0 +1,236 @@
+﻿@using Digital_Services_BD.ViewModels
+@model OrderEmailTemplate
+
+@{
+    Layout = null;
+    if (string.IsNullOrEmpty(Model.RecipeintName) || string.IsNullOrWhiteSpace(Model.RecipeintName))
+    {
+        Model.RecipeintName = "valued customer";
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta lang="en-us" charset="utf-8" />
+    <title>Order summary</title>
+</head>
+<body style="width: 100%; background-color: ghostwhite;">
+    <table align="center" border="0" cellspacing="0" cellpadding="0" max-width: 600px;">
+        <tr>
+            <td>
+                <table style="border-collapse: collapse; background-color: white; margin-top: 20px; width: 600px;">
+                    <thead>
+                        <tr style="text-align: left; padding: 8px;">
+                            <th style="width: 10%;"></th>
+                            <th style="width: 80%;"></th>
+                            <th style="width: 10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="center" colspan="3">
+                                <div style="margin: 5px;">
+                                    <img src="cid:@(Model.EmailLinkedResources[0].ContentId)" width="144" height="80" />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr style="background-color: tomato; color: white;">
+                            <td style="width: 10%;"></td>
+                            <td style="width: 80%;">
+                                <table style="border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="text-align: left; padding: 8px;">
+                                            <th style="width: 30%;"></th>
+                                            <th style="width: 10%;"></th>
+                                            <th style="width: 60%;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="text-align: left; padding: 8px;">
+                                            <td>
+                                                <div>@Model.ShopName</div>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <div style="float: right;">
+                                                    <div>
+                                                        <a style="text-decoration: none; color: white;"
+                                                           href='@Model.Website'>@Model.Website</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td style="width: 10%;"></td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 10%;"></td>
+                            <td style="width: 80%;">
+                                <div style="font-size:medium; font-weight: bold; margin-top: 24px; margin-bottom: 24px;">
+                                    Dear @Model.RecipeintName,<br />
+                                    We have received your order.Thank you for shopping with us!
+                                </div>
+                            </td>
+                            <td style="width: 10%;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style="border-collapse: collapse; background-color: white; width: 600px;">
+                    <thead style="background-color:ghostwhite">
+                        <tr>
+                            <th colspan="4" style="border:1px solid ghostwhite; padding:5px; text-align:center;">Order Summary</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th colspan="1" style="border:1px solid ghostwhite; padding:5px; text-align:left;">Order #@Model.Order.Id</th>
+                            <th colspan="3" style="border:1px solid ghostwhite; padding:5px; text-align:right;">Placed on: @Model.Order.CreatedOn</th>
+                        </tr>
+                    </thead>
+                    <thead style="background-color:ghostwhite;">
+                        <tr>
+                            <th colspan="1" style="border:1px solid ghostwhite; padding:5px; text-align:left;">Order Item</th>
+                            <th colspan="1" style=" border:1px solid ghostwhite; padding:5px; text-align:center;">Quantity</th>
+                            <th colspan="1" style="border:1px solid ghostwhite; padding:5px; text-align:right;">Unit Price</th>
+                            <th colspan="1" style=" border:1px solid ghostwhite; padding:5px; text-align:right;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Order.OrderItems)
+                        {
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@item.ProductItem.Name</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:center;">@item.Quantity</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:right;">BDT @string.Format("{0:0.00}", item.Price + item.Vat - item.Discount)</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:right;">BDT @string.Format("{0:0.00}", (item.Price + item.Vat - item.Discount) * item.Quantity)</td>
+                            </tr>
+                        }
+
+                        @foreach (var bundle in Model.Order.OrderProductItemBundles)
+                        {
+                            decimal bundlePrice = 0;
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">
+                                    <div>@bundle.ProductItemBundle.Name</div>
+                                    <ul>
+                                        @foreach (var bundleItem in bundle.ProductItemBundle.ProductItemBundleJoinProductItem)
+                                        {
+                                            bundlePrice += bundleItem.ProductItemQuantity * bundleItem.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Price ?? 0;
+                                            bundlePrice += bundleItem.ProductItemQuantity * bundleItem.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Vat ?? 0;
+                                            bundlePrice -= bundleItem.ProductItemQuantity * bundleItem.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Discount ?? 0;
+                                            <li>
+                                                <div style="word-break: break-all;">
+                                                    @bundleItem.ProductItem.Name &nbsp;&#8212;&nbsp; @bundleItem.ProductItemQuantity x
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:center;">@bundle.Quantity</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:right;">BDT @string.Format("{0:0.00}", bundlePrice - bundle.ProductItemBundle.BundleDiscount)</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:right;">BDT @string.Format("{0:0.00}", (bundlePrice - bundle.ProductItemBundle.BundleDiscount) * bundle.Quantity)</td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td colspan="3" style="border:1px solid ghostwhite; padding:5px; text-align:right;">Subtotal</td>
+                            <td colspan="1" style="border:1px solid ghostwhite; padding:5px; text-align:right;">BDT @string.Format("{0:0.00}", Model.Order.GrandTotal)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                @if (Model.Order.Transaction != null)
+                {
+                    <table style="margin-top: 20px; width: 600px; border-collapse: collapse;  background-color: white;">
+                        <thead style="background-color:ghostwhite">
+                            <tr>
+                                <th colspan="2" style="border:1px solid ghostwhite; padding:5px; text-align:center;">Payment Transaction</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Date</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.CreatedOn</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Status</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.Status</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Method</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.TrnxMethod</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Card Holder Name</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.CardHolderName</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Card Number</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.CardNo</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Bank Transaction ID</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.BankTrnxId</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Bank Status</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.BankStatus</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Invoice ID</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.InvoiceId</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Currency</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">@Model.Order.Transaction.Currency</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">Amount</td>
+                                <td style="border:1px solid ghostwhite; padding:5px; text-align:left;">BDT @string.Format("{0:0.00}", Model.Order.Transaction.Amount)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                }
+            </td>
+        </tr>
+    </table>
+
+    <!-- Footer -->
+    <table align="center" style="width: 600px; margin-top: 5px;">
+        <tr>
+            <td align="center">
+                <div style="margin:20px 0 12px 0">
+                    <div style="font-size: x-large; font-weight: bold;">
+                        <b style="color: black;">@Model.ShopName</b>
+                    </div>
+                    <div style="margin: 5px 0 5px 0">@Model.Address1</div>
+                    <div style="margin: 5px 0 5px 0">@Model.Address2</div>
+                    <div style="margin: 5px 0 5px 0">
+                        <a style="color:darkblue;" href="tel:@Model.ShopPhone?.Replace("-","").Replace("(","").Replace(")", "")">
+                            @Model.ShopPhone
+                        </a>
+                        <span style="color: darkblue; padding: 0 5px 0 5px;"></span>
+                        <a style="color:darkblue" href="tel:@Model.ShopPhone2?.Replace("-","").Replace("(","").Replace(")", "")">
+                            @Model.ShopPhone2
+                        </a>
+                    </div>
+                    <div style="margin: 5px 0 5px 0">
+                        <a style="color: darkblue;" href="mailto:@Model.ShopEmail">@Model.ShopEmail</a>
+                        <span style="color: darkblue; padding: 0 5px 0 5px;"></span>
+                        <a style="color: darkblue;" href="mailto:@Model.ShopEmail2">@Model.ShopEmail2</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

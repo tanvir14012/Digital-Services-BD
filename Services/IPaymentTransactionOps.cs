@@ -8,13 +8,11 @@ namespace Digital_Services_BD.Services
 {
     public interface IPaymentTransactionOps
     {
-        PaymentTransaction AddPaymentTransaction(PaymentTransaction paymentTransaction);
-        IEnumerable<PaymentTransaction> GetAllPaymentTransaction();
-        PaymentTransaction GetPaymentTransaction(int paymentTransactionId);
-        PaymentTransaction UpdatePaymentTransaction(PaymentTransaction paymentTransaction);
-        PaymentTransaction UpdatePaymentTransaction(long trnxId, string status, string riskLevel,
-            string cardNo, string cardType, string currency, string bankTrnxId, string cardIssuer, string cardBrand, string cardIssuerCountry);
-        PaymentTransaction DeletePaymentTransaction(int paymentTransactionId);
-        public bool UpdatePaymentTransactionStatus(long trnxId, string status);
+        Task<PaymentTransaction> AddPaymentTransaction(PaymentTransaction paymentTransaction);
+        Task<IEnumerable<PaymentTransaction>> GetAllPaymentTransaction();
+        Task<PaymentTransaction> GetPaymentTransaction(int paymentTransactionId);
+        Task<PaymentTransaction> UpdatePaymentTransaction(PaymentTransaction paymentTransaction);
+        Task<PaymentTransaction> DeletePaymentTransaction(int paymentTransactionId);
+        Task<bool> UpdatePaymentTransactionStatus(int trnxId, string status);
     }
 }

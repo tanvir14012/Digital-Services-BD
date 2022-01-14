@@ -7,7 +7,8 @@
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-sm-12">
         <form enctype="multipart/form-data" method="post" asp-controller="Admin"
-              asp-action="EditCarousel" asp-route-id="@Model.Id" class="border mt-4 p-4">
+              asp-action="EditCarousel" asp-route-id="@Model.Id" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
             <h4 class="mb-3">Edit a Carousel</h4>
             <h6 class="text-muted">If you select an image file, corresponding image will be updated. Otherwise it will remain unmodified.</h6>
             <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
@@ -25,27 +26,27 @@
                 @for (var i = 0; i < Model?.CarouselJoinCarouselImage.Count; i++)
                 {
                     var imageItem = Model.CarouselJoinCarouselImage[i];
-                <div>
-                    <strong>@(i+1).</strong>
-                    <div class="form-group">
-                        <label>Image Preview</label><br />
-                        <img class="img-thumbnail" id=@("thumbnail" + i) src="\@imageItem.ImageUrl" alt="No image" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="CarouselJoinCarouselImage[i].Image">Image</label>
-                        <div class="custom-file">
-                            <input id="imageFile0" data-count="@i" class="form-control custom-file-input" type="file"
-                                   asp-for="CarouselJoinCarouselImage[i].Image" />
-                            <label id=@("fileName"+i) class="custom-file-label" for=@("imageFile" + i)>Choose a photo if you want to update..</label>
+                    <div>
+                        <strong>@(i+1).</strong>
+                        <div class="form-group">
+                            <label>Image Preview</label><br />
+                            <img class="img-thumbnail" id=@("thumbnail" + i) src="\@imageItem.ImageUrl" alt="No image" />
                         </div>
-                        <span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[i].Image"></span>
+                        <div class="form-group">
+                            <label asp-for="CarouselJoinCarouselImage[i].Image">Image</label>
+                            <div class="custom-file">
+                                <input id="imageFile0" data-count="@i" class="form-control custom-file-input" type="file"
+                                       asp-for="CarouselJoinCarouselImage[i].Image" />
+                                <label id=@("fileName"+i) class="custom-file-label" for=@("imageFile" + i)>Choose a photo if you want to update..</label>
+                            </div>
+                            <span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[i].Image"></span>
+                        </div>
+                        <!--Add Id, CreatedOn, ImageUrl etc. in hidden field-->
+                        <input type="hidden" asp-for="CarouselJoinCarouselImage[i].Id" />
+                        <input type="hidden" asp-for="CarouselJoinCarouselImage[i].CarouselId" />
+                        <input type="hidden" asp-for="CarouselJoinCarouselImage[i].CreatedOn" />
+                        <input type="hidden" asp-for="CarouselJoinCarouselImage[i].ImageUrl" />
                     </div>
-                    <!--Add Id, CreatedOn, ImageUrl etc. in hidden field-->
-                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].Id" />
-                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].CarouselId" />
-                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].CreatedOn" />
-                    <input type="hidden" asp-for="CarouselJoinCarouselImage[i].ImageUrl" />
-                </div>
                 }
 
             </div>

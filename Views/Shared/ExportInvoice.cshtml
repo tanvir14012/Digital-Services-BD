@@ -1,0 +1,219 @@
+﻿@using Digital_Services_BD.Models
+@model Order
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="utf-8" lang="en-us" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="container p-4">
+        <div class="row">
+            <div class="col-12 p-2">
+                <h5>Order Invoice# @Model.Transaction.InvoiceId</h5>
+                <div>Date: @DateTime.Today.ToString("dd-MM-yyyy")</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-6 p-2 float-left">
+                <div class="font-weight-bold">@ViewData["Shopname"]</div>
+                <div>@ViewData["ShopAddress1"]</div>
+                <div>@ViewData["ShopAddress2"]</div>
+                <div>@ViewData["Phone"] | @ViewData["Email"]</div>
+                <div><a class="text-body" href="https://@ViewBag.Website">@ViewData["Website"]</a></div>
+            </div>
+            <div class="col-6 p-4 float-right">
+                <img class="w-75" src="~/branding/companyLogo.png" height="80" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <!-- Order Items table starts-->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="" style=" background-color: ghostwhite">
+                            <td colspan="2">
+                                <div class="w-100">
+                                    <div class="font-weight-bold float-left w-50">ORDER #@Model.Id</div>
+                                    @if (Model.Customer != null)
+                                    {
+                                    <div class="font-weight-bold float-right w-50">PLACED ON @Model.Transaction.CreatedOn.ToString("dd-MM-yyyy")</div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="w-35">
+                                <div class="font-weight-bold">Billing Address</div>
+                                <div>@Model.Transaction.Name</div>
+                                <div>@Model.BillingAddress.AddressLineOne</div>
+                                <div>@Model.BillingAddress.AddressLineTwo</div>
+                                <div>@Model.Transaction.Email</div>
+                                <div>@Model.Transaction.Phone</div>
+
+                                <div class="font-weight-bold mt-2">Payment Transaction</div>
+                                <div>Status: @Model.Transaction.SurjoPayMsg</div>
+                                <div>Transaction Method: @Model.Transaction.TrnxMethod</div>
+                                <div>Card Holder: @Model.Transaction.CardHolderName</div>
+                                <div>Card Number: @Model.Transaction.CardNo</div>
+                                <div>Bank Trnx ID: @Model.Transaction.BankTrnxId</div>
+                                <div>Bank Status: @Model.Transaction.BankStatus</div>
+                                <div>Currency: @Model.Transaction.Currency</div>
+                                <div>Amount: @string.Format("{0:n}", @Model.Transaction.Amount) </div>
+                            </td>
+                            <td class="w-65">
+                                <div class="form-row">
+                                    <div class="col-9 float-left">
+                                        <div class="font-weight-bold">Order Items</div>
+                                    </div>
+                                    <div class="col-3 float-right">
+                                        <div class="font-weight-bold">Price</div>
+                                    </div>
+                                </div>
+                                @for (var i = 0; i < Model.OrderItems.Count; i++)
+                                {
+                                    var item = Model.OrderItems.ElementAt(i);
+                                    <div class="form-row">
+                                        <div class="col-9 p-1 pl-2 float-left">
+                                            <div class="d-flex p-0 text-break">
+                                                <div class="col-1 float-left">
+                                                    <span>@(i + 1).</span>
+                                                </div>
+                                                <div class="col-11 float-right">
+                                                    <span>@item.Name &nbsp;&#8212;&nbsp; @item.Quantity x</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 float-right text-break">
+                                            <div class="">BDT @string.Format("{0:n}", (item.Price + item.Vat - item.Discount) * item.Quantity))</div>
+                                        </div>
+                                    </div>
+
+                                }
+
+                                @for(var i = 0; i < Model.OrderProductItemBundles.Count; i++) {
+                                    var bundle = Model.OrderProductItemBundles.ElementAt(i);
+                                    decimal bundlePrice = 0;
+                                    <div class="form-row">
+                                        <div class="col-9 p-1 pl-2 float-left">
+                                            <div class="d-flex p-0 text-break">
+                                                <div class="col-1 float-left">
+                                                    <span>@(Model.OrderItems.Count + i + 1).</span>
+                                                </div>
+                                                <div class="col-11 float-right">
+                                                    <span>Package: @bundle.ProductItemBundle.Name &nbsp;&#8212;&nbsp; @bundle.Quantity x</span>
+                                                </div>
+                                            </div>
+                                            <div class="pl-4">
+                                                <ul class="ml-3">
+                                                    @foreach (var bundleItem in bundle.ProductItemBundle.ProductItemBundleJoinProductItem)
+                                                    {
+                                                        bundlePrice += bundleItem.ProductItemQuantity * bundleItem.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Price ?? 0;
+                                                        bundlePrice += bundleItem.ProductItemQuantity * bundleItem.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Vat ?? 0;
+                                                        bundlePrice -= bundleItem.ProductItemQuantity * bundleItem.ProductItem.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault()?.Discount ?? 0;
+                                                        <li>
+                                                            <div style="word-break: break-all;">
+                                                                @bundleItem.ProductItem.Name &nbsp;&#8212;&nbsp; @bundleItem.ProductItemQuantity x
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 float-right text-break">
+                                            <div class="">BDT @string.Format("{0:n}", (bundlePrice - bundle.ProductItemBundle.BundleDiscount) * bundle.Quantity)</div>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="form-row mt-3">
+                                    <div class="col-6 float-left">&nbsp;</div>
+                                    <div class="col-6 float-right">
+                                        <div class="form-row">
+                                            <div class="col-6 text-break p-1 float-left">
+                                                Items Subtotal:
+                                            </div>
+                                            <div class="col-6 p-1 text-break float-right">
+                                                BDT @string.Format("{0:n}", Model.GrandTotal + Model.PromoCodeDiscount)
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-row ">
+                                            <div class="col-6 text-break p-1 float-left">
+                                                Processing & Other Fees:
+                                            </div>
+                                            <div class="col-6 p-1 text-break float-right">
+                                                BDT @string.Format("{0:n}", 0.0)
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-row">
+                                            <div class="col-6 text-break p-1 float-left">
+                                                &nbsp;
+                                            </div>
+                                            <div class="col-6 p-1 text-break float-right">
+                                                ---
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-row">
+                                            <div class="col-6 text-break p-1 float-left">
+                                                Subtotal:
+                                            </div>
+                                            <div class="col-6 p-1 text-break float-right">
+                                                BDT @string.Format("{0:n}", Model.GrandTotal + Model.PromoCodeDiscount)
+                                            </div>
+                                        </div>
+                                        @if (Model.PromoCodeDiscount > 0)
+                                        {
+                                        <div class="clearfix"></div>
+                                        <div class="form-row">
+                                            <div class="col-6 text-break p-1 float-left">
+                                                Coupon Discount (@Model.PromoCode):
+                                            </div>
+                                            <div class="col-6 p-1 text-break float-right">
+                                                BDT @string.Format("{0:n}", -@Model.PromoCodeDiscount)
+                                            </div>
+                                        </div>
+                                        }
+                                        <div class="clearfix"></div>
+                                        <div class="form-row">
+                                            <div class="col-6 text-break p-1 font-weight-bold float-left">
+                                                Grand Total:
+                                            </div>
+                                            <div class="col-6 p-1 font-weight-bold text-break float-right">
+                                                BDT @string.Format("{0:n}", Model.GrandTotal)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Order Items table ends-->
+
+            <div class="font-weight-bold p-2">
+                For refund policy related information, please check the website <a class="text-decoration-none" href="https://niludigital.com">(https://niludigital.com)</a> for details.<br>
+                For any query, you can mail us at support@niludigital.com
+            </div>
+
+
+            <div class="mt-5 col-12 mx-auto">
+                <div class="shadow-sm p-2 bg-white text-center">
+                    <img src="~/branding/surjopayLogo.png" width="720" height="144" class="img-fluid rounded scale-half objfit-cover" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

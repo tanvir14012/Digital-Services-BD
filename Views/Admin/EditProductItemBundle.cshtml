@@ -1,0 +1,154 @@
+﻿@using Newtonsoft.Json
+@model ProductItemBundle
+
+
+@{
+    Layout = "AdminLayout";
+    var Items = JsonConvert.DeserializeObject(ViewBag.Items);
+}
+
+
+<div class="row justify-content-center align-items-center mt-4 p-2">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <form method="post" asp-controller="Admin"
+              asp-action="EditProductItemBundle" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.CreatedOn)
+            <h4 class="mb-3">Edit a Product Item Bundle</h4>
+            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">Title</label>
+                <input class="form-control" type="text" asp-for="Name" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label asp-for="BundleDiscount">Discount</label>
+                    <input class="form-control" type="number" asp-for="BundleDiscount" />
+                    <span class="text-danger" asp-validation-for="BundleDiscount"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="IsActiveNow" class="form-control border-0 mt-4 pt-3">
+                        <input asp-for="IsActiveNow" type="checkbox" class="custom-checkbox">
+                        <span class="ml-2">Is Active?</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="items">
+                <div class="mt-2">
+                    <h4>Bundle Product Items</h4><hr />
+                </div>
+                @for (var i = 0; i < Model.ProductItemBundleJoinProductItem.Count; i++)
+                {
+                    <div class="form-row" data-index=@i>
+                        <div class="form-group col-sm-8">
+                            <label>Product Item</label>
+                            <select name="ProductItemBundleJoinProductItem[@i].ProductItemId"
+                                    asp-for="ProductItemBundleJoinProductItem.ElementAt(i).ProductItemId"
+                                    class="selectpicker form-control" required id="productSelect_@i">
+                                @foreach (var item in Items)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                        </div>
+
+                        <div class="form-group col-sm-3">
+                            <label>Quantity</label>
+                            <input class="form-control" min="1" name="ProductItemBundleJoinProductItem[@i].ProductItemQuantity"
+                                   value="@Model.ProductItemBundleJoinProductItem.ElementAt(i).ProductItemQuantity"
+                                   type="number" required />
+                        </div>
+                        <div class="col-sm-1 d-flex justify-content-center align-items-center">
+                            <button type="button" name="removeField" class="btn btn-sm btn-light form-control mt-3">
+                                <i class="fas fa-trash text-danger"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="form-row justify-content-end">
+                <button id="addField" type="button" class="btn btn-light m-2"><i class="fas fa-plus mr-2"></i>Add</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+    let productItems = @Html.Raw(ViewBag.Items);
+
+    /** Event handler for delete button of items */
+    function attachDeleteEventHandlers() {
+        $("#items button[name='removeField']").on("click", function () {
+            let index = $(this).closest("div[data-index]").data("index");
+
+            $("#items").children("div").eq(index + 1).remove();
+
+            const total = $("#items").children("div").length - 1;
+
+            for (let i = index; i < total; i++) {
+                let el = $("#items").children("div").eq(i + 1);
+                $(el).data("index", i);
+
+                $(el).children("div").each(function (idx, outerDiv) {
+                    if (idx == 0) {
+                        $(outerDiv).find("select").attr("name", `ProductItemBundleJoinProductItem[${i}].ProductItemId`);
+                    }
+                    else if(idx == 1) {
+                        $(outerDiv).find("input").attr("name", `ProductItemBundleJoinProductItem[${i}].ProductItemQuantity`);
+                    }
+                });
+            }
+        });
+    }
+
+        $(document).ready(function () {
+        attachDeleteEventHandlers();
+        $(".selectpicker").selectpicker();
+
+        $("#addField").click(function () {
+            let nextIndex = $("#items").children("div").length - 1;
+            let template = `<div class="form-row" data-index=${nextIndex}>
+                    <div class="form-group col-sm-8">
+                        <label>Product Item</label>
+                        <select name="ProductItemBundleJoinProductItem[${nextIndex}].ProductItemId"
+                                class="selectpicker form-control" required id="productSelect_${nextIndex}">
+                        </select>
+                    </div>
+
+                    <div class="form-group col-sm-3">
+                        <label>Quantity</label>
+                        <input class="form-control" min="1" name="ProductItemBundleJoinProductItem[${nextIndex}].ProductItemQuantity"
+                               type="number" required />
+                    </div>
+                    <div class="col-sm-1 d-flex justify-content-center align-items-center">
+                        <button type="button" name="removeField" class="btn btn-sm btn-light form-control mt-3">
+                            <i class="fas fa-trash text-danger"></i>
+                        </button>
+                    </div>
+                </div>`;
+
+            $("#items").append(template);
+
+            $(productItems).each(function (idx, product) {
+                $(`#productSelect_${nextIndex}`).append($('<option>', {
+                    value: product.Id,
+                    text: product.Name
+                }));
+            });
+            $(".selectpicker").selectpicker("refresh");
+            $("#items button[name='removeField']").off("click");
+            attachDeleteEventHandlers();
+        });
+    });
+    </script>
+
+}

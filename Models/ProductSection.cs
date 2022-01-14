@@ -11,9 +11,9 @@ namespace Digital_Services_BD.Models
     {
         public ProductSection()
         {
-            ProductSectionJoinProductItem = new List<ProductSectionJoinProductItem>();
+            ProductSectionJoinProductItem = new HashSet<ProductSectionJoinProductItem>();
             ProductItemIds = new HashSet<int>();
-            ProductItems = new List<ProductItem>();
+            ProductItems = new HashSet<ProductItem>();
         }
         public int Id { get; set; }
         [StringLength(128, ErrorMessage = "Product section title field should not take more than 128 characters")]
@@ -24,9 +24,9 @@ namespace Digital_Services_BD.Models
         //Not mapped to database
         [BindProperty]
         public ICollection<int> ProductItemIds { get; set; }
-        public ICollection<ProductItem> ProductItems { get; set; }
+        public virtual ICollection<ProductItem> ProductItems { get; set; }
         //Navigation property
-        public ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set;}
+        public virtual ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set;}
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
 }

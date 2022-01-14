@@ -271,80 +271,62 @@ namespace Digital_Services_BD.Services
             return prices.Any() ? prices.Max() : 5000;
         }
 
-        public FilteredItems FilterItems(int productCategoryId, int pageNo, string sortBy, string priceRange)
+        public FilteredItems FilterItems(ProductCategory category, int pageNo, string sortBy, string priceRange)
         {
-            var query = from item in context.ProductItems
-                        join categoryitemmap in context.ProductItemJoinProductCategory
-                        on item.Id equals categoryitemmap.ProductItemId
-                        where categoryitemmap.ProductCategoryId == productCategoryId && item.IsActive
-                        join prices in context.ProductItemPrices 
-                        on item.Id equals prices.ProductItemId
-                        where prices.PriceCurrency == "BDT"
-                        select new { item, prices};
+            var productItems = category.ProductItemJoinProductCategory
+                    .Select(join => join.ProductItem)
+                    .Where(item => item.ProductItemPrice.Any(pr => pr.PriceCurrency == "BDT"))
+                    .ToList();
 
-            var joinTable = query.Distinct().ToList();
             if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$"))
             {
                 decimal minPrice = Convert.ToDecimal(priceRange.Split("to")[0]);
                 decimal maxPrice = Convert.ToDecimal(priceRange.Split("to")[1]);
-                joinTable = joinTable.Where(jt => (jt.prices.Price - jt.prices.Discount) >= minPrice
-                && (jt.prices.Price - jt.prices.Discount) <= maxPrice).ToList();
+
+                productItems = productItems.Where(item => (item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Price -
+                    item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Discount) >= minPrice
+                    && (item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Price -
+                    item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Discount) <= maxPrice).ToList();
             }
             if (sortBy != null)
             {
                 switch (sortBy)
                 {
                     case "name":
-                        joinTable = joinTable.OrderBy(jt => jt.item.Name).ToList();
+                        productItems = productItems.OrderBy(item => item.Name).ToList();
                         break;
                     case "p_l_h":
-                        joinTable = joinTable.OrderBy(jt => (jt.prices.Price - jt.prices.Discount)).ToList();
+                        productItems = productItems.OrderBy(item => (item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Price -
+                            item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Discount)).ToList();
                         break;
                     case "p_h_l":
-                        joinTable = joinTable.OrderByDescending(jt => (jt.prices.Price - jt.prices.Discount)).ToList();
+                        productItems = productItems.OrderByDescending(item => (item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Price -
+                            item.ProductItemPrice.First(pr => pr.PriceCurrency == "BDT").Discount)).ToList();
                         break;
                     default:
                         break;
                 }
             }
-            var items = joinTable.Select(jt => jt.item).Distinct().ToList();
-            var totalItems = items.Count();
-            //Load price
-            foreach (var item in items)
-            {
-                var price = joinTable.Where(jt => jt.prices.ProductItemId == item.Id).FirstOrDefault().prices;
-                    item.ProductItemPrice = new List<ProductItemPrice> { 
-                        new ProductItemPrice
-                        {
-                            Id = price.Id,
-                            Price = price.Price,
-                            Discount  = price.Discount,
-                            Vat = price.Vat,
-                            PriceCurrency = price.PriceCurrency,
-                            ProductItemId = price.ProductItemId,
-                            CreatedOn = price.CreatedOn,
-                            LastModifiedOn = price.LastModifiedOn,
-                            ProductItem = item
-                        }
-                    };
-            } 
 
-            if (pageNo >= 0 && pageNo < items.Count)
+            var totalItems = productItems.Count();
+
+
+            if (pageNo >= 0 && pageNo < productItems.Count())
             {
                 var start = pageNo * ProductConfig.NoOfProductItemPerPage;
                 try
                 {
-                    items = items.GetRange(start, ProductConfig.NoOfProductItemPerPage);
+                    productItems = productItems.GetRange(start, ProductConfig.NoOfProductItemPerPage);
                 }
                 catch (ArgumentException e)
                 {
-                    if (start > items.Count)
+                    if (start > productItems.Count())
                     {
-                        items = items.TakeLast(ProductConfig.NoOfProductItemPerPage).ToList();
+                        productItems = productItems.TakeLast(ProductConfig.NoOfProductItemPerPage).ToList();
                     }
-                    else if (start + ProductConfig.NoOfProductItemPerPage >= items.Count)
+                    else if (start + ProductConfig.NoOfProductItemPerPage >= productItems.Count())
                     {
-                        items = items.GetRange(start, items.Count() - start);
+                        productItems = productItems.GetRange(start, productItems.Count() - start);
                     }
                 }
 
@@ -352,18 +334,38 @@ namespace Digital_Services_BD.Services
             var filteredItems = new FilteredItems
             {
                 TotalItems = totalItems,
-                ItemsUnderFilter = items
+                ItemsUnderFilter = productItems
             };
 
             return filteredItems;
         }
 
-        public IEnumerable<int> GetAllProductGroupIdsByCategoryId(int categoryId)
+        public async Task<IEnumerable<int>> GetAllProductGroupIdsByCategoryId(int categoryId)
         {
-            return context.productCategoryJoinProductGroup.AsNoTracking()
+            return await context.ProductCategoryJoinProductGroup.AsNoTracking()
                 .Where(jt => jt.ProductCategoryId == categoryId)
-                .Select(jt => jt.ProductGroupId).ToList();
+                .Select(jt => jt.ProductGroupId).ToListAsync();
         }
 
+        public async Task<IEnumerable<ProductCategory>> GetAllProductCategoriesIdName()
+        {
+            return await context.ProductCategories.AsNoTracking()
+                .Select(c => new ProductCategory { 
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToListAsync();
+        }
+
+        public async Task<ProductCategory> GetProductCategoryAsync(int id)
+        {
+            return await context.ProductCategories.AsNoTracking()
+                          .Include(c => c.ProductItemJoinProductCategory)
+                            .ThenInclude(join => join.ProductItem)
+                            .ThenInclude(item => item.ProductItemPrice)
+                           .Include(c => c.ProductItemJoinProductCategory)
+                            .ThenInclude(join => join.ProductItem)
+                            .ThenInclude(item => item.ProductStockCount)
+                          .FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }

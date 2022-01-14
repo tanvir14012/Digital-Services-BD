@@ -22,6 +22,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.Razor.Compilation;
+using Microsoft.Extensions.Logging;
+using Digital_Services_BD.Services.Surjopay;
+using Wkhtmltopdf.NetCore;
+using Rotativa.AspNetCore;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 namespace Digital_Services_BD
 {
@@ -38,18 +45,15 @@ namespace Digital_Services_BD
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            //Enable runtime compilation only in development mode
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
             //Injecting connection string to AppDbContext constructor by di
             services.AddDbContextPool<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("SqlServerConn"));
             });
-            //Enable no-access to every controller if user is not logged in, except [AllowAnynomous] by this filter
-            services.AddMvc(options =>
-            {
-                //var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                //options.Filters.Add(new AuthorizeFilter(policy));
-            });
+
             //Use Identity framework for authentication, token etc. with ef core
             services.AddIdentity<Customer, IdentityRole>(options =>
             {
@@ -63,21 +67,24 @@ namespace Digital_Services_BD
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Tokens.EmailConfirmationTokenProvider = "ConfirmEmailTokenProvider";
 
-                options.Lockout.MaxFailedAccessAttempts = 1;
+                options.Lockout.MaxFailedAccessAttempts = 10;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
             })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<Models.EmailTokenProvider<Customer>>("ConfirmEmailTokenProvider");
+
             //Configure all token lifetime except custom tokens
             services.Configure<DataProtectionTokenProviderOptions>(options => {
                 options.TokenLifespan = TimeSpan.FromHours(3);
             });
+
             //Configure email confirm token lifetime
             services.Configure<Models.EmailTokenProviderOptions>(options =>
             {
                 options.TokenLifespan = TimeSpan.FromDays(3);
             });
+
             //Configure cookies
             services.ConfigureApplicationCookie(options => {
                 options.LoginPath = "/Account/SignIn";
@@ -85,28 +92,39 @@ namespace Digital_Services_BD
                 options.AccessDeniedPath = "/Account/Unavailable";
                 //Make cookie unaccessible through client side script
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                options.SlidingExpiration = true;
             });
+
             //Add  localization services, resource path
             services.AddLocalization(options =>
             {
                 options.ResourcesPath = "Resources";
             });
+
             //Adds support for localized view files(view suffix like: home.fr.cshtml => fr, extension excluded naturally), data annotations
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
+
+            //Add Http client factory
+            services.AddHttpClient();
+
             //Add product group, category, item ops
             services.AddScoped<IProductGroupOps, ProductGroupOps>();
             services.AddScoped<IProductCategoryOps, ProductCategoryOps>();
             services.AddScoped<IProductItemOps, ProductItemOps>();
             services.AddScoped<IProductSectionOps, ProductSectionOps>();
+            services.AddScoped<IProductItemBundleOps, ProductItemBundleOps>();
+            services.AddScoped<IProductStockOps, ProductStockOps>();
             services.AddScoped<ICarouselOps, CarouselOps>();
             services.AddScoped<ICartOps, CartOps>();
             services.AddScoped<IOrderOps, OrderOps>();
             services.AddScoped<IPaymentTransactionOps, PaymentTransactionOps>();
-            services.AddScoped<IEmailService, AwsEmailService>();
-            services.AddScoped<SslCommerzeOps, SslCommerzeOps>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ISearchService, SearchService>();
+            services.AddSingleton<IEncryptionService, EncryptionService>();
+            services.AddScoped<ISurjopayService, SurjopayService>();
 
             //Add Amazon's aws ses credentials
             services.Configure<AwsSesConfig>(configuration.GetSection("AwsSesConfig"));
@@ -118,8 +136,29 @@ namespace Digital_Services_BD
                     return AuthorizePolicyAssertions.AdminFullAccess(context, configuration);
                 }));
             });
-            //Load config data
-            services.Configure<SslConfig>(configuration.GetSection("SslCommerzeConfig"));
+
+            //Add SSLCommerze IPN Filter to MVC filters collection
+            services.AddScoped<SurjopayIPNIpFilter>(serviceProvider =>
+            {
+                var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger<SurjopayIPNIpFilter>();
+
+                return new SurjopayIPNIpFilter(
+                    configuration["SurjopayConfig:IpAddressSafeListForIPN"], logger);
+            });
+
+            //services.AddWkhtmltopdf(); //For localhost, to generate pdf invoices.
+            services.AddWkhtmltopdf(System.IO.Path.Combine("wwwroot", "Rotativa")); //For production
+
+            //Lowercase routing
+            services.AddRouting(options => {
+                options.LowercaseUrls = true;
+            });
+
+            //Add data protection
+            services.AddDataProtection()
+                    .PersistKeysToDbContext<AppDbContext>()
+                    .SetApplicationName("Nilu Digital Store");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -131,9 +170,10 @@ namespace Digital_Services_BD
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseHsts();
             }
             app.UseHttpsRedirection();
 
@@ -172,6 +212,10 @@ namespace Digital_Services_BD
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //Configure Rotativa for PDF generation
+            RotativaConfiguration.Setup(env.WebRootPath);
+
             //Create admin account and role
             IdentitySeedData.CreateAdminEntries(app.ApplicationServices, configuration);
         }

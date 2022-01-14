@@ -10,7 +10,7 @@ namespace Digital_Services_BD.ViewModels
     {
         public ProductItemBundle ProductItemBundle { get; set; }
         public bool IsCartCreatedWhenAdded { get; set; }
-        public int CreatedCartId { get; set; }
+        public long CreatedCartId { get; set; }
         public string Message { get; set; }
         public string MessageClass { get; set; }
     }

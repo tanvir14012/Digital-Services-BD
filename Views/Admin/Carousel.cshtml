@@ -1,5 +1,4 @@
 ﻿@model List<Carousel>
-@inject ICarouselOps carouselOps
 @{
     Layout = "AdminLayout";
 }
@@ -18,14 +17,13 @@
     }
     @foreach (var carousel in Model)
     {
-        var carouselObj = carouselOps.GetCarousel(carousel.Id); //Get details
         <div class="col-lg-4 col-md-6 col-sm-12 card-group">
             <div class="card m-1">
                 <div class="card-header">
                     <span>@carousel.Name</span>
                 </div>
                 <div class="card-body row">
-                    @foreach (var image in carouselObj.CarouselJoinCarouselImage)
+                    @foreach (var image in carousel.CarouselJoinCarouselImage)
                     {
                         <div class="col-5 m-1">
                             <img asp-append-version="true" height="100" class="w-100 h-100 img-mythumbnail" alt="No Image" src="\@image.ImageUrl" />

@@ -14,7 +14,7 @@ namespace Digital_Services_BD.Models
         public int Id { get; set; }
         public string TagName{ get; set; }
         //Ef core navigation properties
-        public ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
+        public virtual ICollection<ProductItemJoinSearchTagProductItem> ProductItemJoinSearchTagProductItem { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
     }

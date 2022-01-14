@@ -1,18 +1,18 @@
 ﻿@model ProductSection
 @using Digital_Services_BD.Services
-@inject IProductSectionOps productSectionOps
-@inject IProductItemOps productItemOps
 
 @{
     Layout = "AdminLayout";
-    var thisSectionItems = productSectionOps.GetAllProdItemsByProdSectionId(Model.Id);
-    var allItems = productItemOps.GetAllProductItems().ToList();
+    List<ProductItem> thisSectionItems = ViewBag.ThisSectionItems;
+    List<ProductItem> allItems = ViewBag.AllItems;
+    List<ProductSection> allProductSections = ViewBag.AllProductSections;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-sm-12">
         <form enctype="multipart/form-data" method="post" asp-controller="Admin"
-              asp-action="EditProductSection" class="border mt-4 p-4">
+              asp-action="EditProductSection" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
             <h4 class="mb-3">Edit a Product Section</h4>
             <div class="alert-danger rounded" asp-validation-summary="All"></div>
             <div class="form-group">
@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label asp-for="Rank">Rank</label>
                 <select class="from-control" asp-for="Rank">
-                    @for (var i = 1; i <= productSectionOps.GetAllProductSections().Count(); i++)
+                    @for (var i = 1; i <= allProductSections.Count(); i++)
                     {
                         <option value="@i">@i</option>
                     }
@@ -70,7 +70,7 @@
                                         <!-- name must match the [BindProperty] property in model -->
                                         <input class="form-check-input" name="ProductItemIds" type="checkbox" id="@item.Id"
                                                value="@item.Id" @(isItemIncluded ? "checked" : "") />
-                                        <label for="@item.Id" class="form-check-label">Included ?</label>
+                                        <label for="@item.Id" class="form-check-label">Include? </label>
                                     </div>
                                 </td>
                                 <td style="width: 10%;">

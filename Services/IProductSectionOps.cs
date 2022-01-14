@@ -10,6 +10,7 @@ namespace Digital_Services_BD.Services
     {
         ProductSection AddProductSection(ProductSection model);
         IEnumerable<ProductSection> GetAllProductSections();
+        Task<ICollection<ProductSection>> GetAllProductSectionsWithNavigation();
         ProductSection GetProductSection(int productSectionId);
         ProductSection UpdateProductSection(ProductSection model);
         ProductSection DeleteProductSection(int productSectionId);

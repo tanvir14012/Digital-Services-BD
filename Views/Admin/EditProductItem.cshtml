@@ -1,18 +1,17 @@
 ﻿@model ProductItemViewModel
 @using Digital_Services_BD.Services
-@inject IProductItemOps productItemOps
-@inject IProductCategoryOps productCategoryOps
 
 @{
     Layout = "AdminLayout";
-    var thisItemCategories = productCategoryOps.GetAllProdCategoryByProdItemId(Model.Id);
-    var allCategories = productCategoryOps.GetAllProductCategories().ToList();
+    List<ProductCategory> thisItemCategories = ViewBag.ThisItemCategories;
+    List<ProductCategory> allCategories = ViewBag.AllCategories;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-sm-12">
         <form enctype="multipart/form-data" method="post" asp-controller="Admin"
-              asp-action="EditProductItem" class="border mt-4 p-4">
+              asp-action="EditProductItem" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
             <h4 class="mb-3">Edit a Product Item</h4>
             <div class="alert-danger rounded" asp-validation-summary="All"></div>
             <div class="form-group">
@@ -22,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label>Image Preview</label><br />
-                <img class="img-thumbnail" src="\@Model.ImageUrl" id="thumbnail" alt="No image" />
+                <img class="img-thumbnail w-auto max-h-240 d-flex mx-auto" src="\@Model.ImageUrl" id="thumbnail" alt="No image" />
             </div>
             <div class="form-group">
                 <label asp-for="Image">@Html.DisplayNameFor(m => m.Image)</label>
@@ -69,20 +68,20 @@
                     <ul class="list-group list-group-horizontal-md list-unstyled mt-1">
                         <li class="list-group-item d-flex flex-column bordr-0 m-1">
                             <label>Currency</label>
-                            <input class="form-contro-sm input-disabled" type="text" value="@SupportedCurrencies.Currencies[i]"
+                            <input class="form-control input-disabled" type="text" value="@SupportedCurrencies.Currencies[i]"
                                    asp-for="ProductItemPrice[i].PriceCurrency" />
                         </li>
                         <li class="list-group-item d-flex flex-column bordr-0 m-1">
                             <label>Price</label>
-                            <input class="form-contro-sm" asp-for="ProductItemPrice[i].Price" type="number" required />
+                            <input class="form-control" asp-for="ProductItemPrice[i].Price" type="number" required />
                         </li>
                         <li class="list-group-item d-flex flex-column bordr-0 m-1">
                             <label>Discount</label>
-                            <input class="form-contro-sm" asp-for="ProductItemPrice[i].Discount" type="number" required />
+                            <input class="form-control" asp-for="ProductItemPrice[i].Discount" type="number" required />
                         </li>
                         <li class="list-group-item d-flex flex-column bordr-0 m-1">
                             <label>Vat</label>
-                            <input asp-for="ProductItemPrice[i].Vat" class="form-contro-sm" type="number" required />
+                            <input asp-for="ProductItemPrice[i].Vat" class="form-control" type="number" required />
                         </li>
                     </ul>
                     <!-- Store Id,CreatedOn in hidden field-->
@@ -124,7 +123,7 @@
                                         <!-- name must match the [BindProperty] property in model -->
                                         <input class="form-check-input" name="CategoryIds" type="checkbox" id="@category.Id"
                                                value="@category.Id" @(isCatgIncluded ? "checked" : "") />
-                                        <label for="@category.Id" class="form-check-label">Included ?</label>
+                                        <label for="@category.Id" class="form-check-label">Include? </label>
                                     </div>
                                 </td>
                                 <td style="width: 10%;">
@@ -239,6 +238,41 @@
                 <input type="hidden" asp-for="ProductItemFeature.CreatedOn" />
             </div>
 
+            <!-- Custom fields -->
+            <div id="customFields">
+                <div class="mt-2">
+                    <h4>Custom Fields</h4><hr />
+                </div>
+                @for (var i = 0; i < Model.ProductItemCustomFieldsViewModel.Count; i++)
+                {
+                    <div class="form-group form-row" data-index=@i>
+                        <div class="col-5">
+                            <input class="form-control" type="text" value="@Model.ProductItemCustomFieldsViewModel[i].Key"
+                                   name="ProductItemCustomFieldsViewModel[@i].Key" />
+                        </div>
+                        <div class="col-6">
+                            <input class="form-control" type="text" value="@Model.ProductItemCustomFieldsViewModel[i].Value"
+                                   name="ProductItemCustomFieldsViewModel[@i].Value" />
+                        </div>
+                        <div class="col-1 d-flex justify-content-center">
+                            <button type="button" name="removeField" class="btn btn-sm btn-light mt-1">
+                                <i class="fas fa-trash text-danger"></i>
+                            </button>
+                        </div>
+                        <!-- Id fields as hidden input -->
+                        <input type="hidden" value="@Model.ProductItemCustomFieldsViewModel[i].Id"
+                               name="ProductItemCustomFieldsViewModel[@i].Id" />
+                        <input type="hidden" value="@Model.ProductItemCustomFieldsViewModel[i].ProductItemId"
+                               name="ProductItemCustomFieldsViewModel[@i].ProductItemId" />
+                    </div>
+
+                }
+            </div>
+
+            <div class="form-row justify-content-end">
+                <button id="addField" type="button" class="btn btn-light m-2"><i class="fas fa-plus mr-2"></i>Add</button>
+            </div>
+
             <!-- Bind 'Id', 'ImgeUrl', 'CreatedOn' in hidden field-->
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="ImageUrl" />
@@ -263,6 +297,32 @@
                 reader.readAsDataURL(input.files[0]); // convert to base64 string
             }
         }
+
+        /** Event handler for delete button of custom fields */
+        function attachDeleteEventHandlers() {
+            $("#customFields button[name='removeField']").on("click", function () {
+                let index = $(this).closest("div[data-index]").data("index");
+
+                $("#customFields").children("div").eq(index + 1).remove();
+
+                const total = $("#customFields").children("div").length - 1;
+
+                for (let i = index; i < total; i++) {
+                    let el = $("#customFields").children("div").eq(i + 1);
+                    $(el).data("index", i);
+
+                    $(el).children("div").each(function (idx, outerDiv) {
+                        if (idx == 0) {
+                            $(outerDiv).find("input").attr("name", `ProductItemCustomFieldsViewModel[${i}].Key`);
+                        }
+                        else {
+                            $(outerDiv).find("input").attr("name", `ProductItemCustomFieldsViewModel[${i}].Value`);
+                        }
+                    });
+                }
+            });
+        }
+
         $(document).ready(function () {
             $("#imageFile").change(function () {
                 readImage(this);
@@ -273,6 +333,30 @@
             $("#releaseDate").datetimepicker({
                 format: 'Y/m/d',
                 formatDate: 'Y/m/d'
+            });
+
+
+            //Custom fields
+            attachDeleteEventHandlers();
+            $("#addField").click(function () {
+                let nextIndex = $("#customFields").children("div").length - 1;
+                let template = `<div class="form-group form-row" data-index=${nextIndex}>
+                        <div class="col-5">
+                            <input class="form-control" type="text" placeholder="Key" name="ProductItemCustomFieldsViewModel[${nextIndex}].Key" />
+                        </div>
+                        <div class="col-6">
+                            <input class="form-control" type="text" placeholder="Value" name="ProductItemCustomFieldsViewModel[${nextIndex}].Value" />
+                        </div>
+                        <div class="col-1 d-flex justify-content-center">
+                            <button type="button" name="removeField" class="btn btn-sm btn-light mt-1">
+                                <i class="fas fa-trash text-danger"></i>
+                            </button>
+                        </div>
+                    </div>`;
+
+                $("#customFields").append(template);
+                $("#customFields button[name='removeField']").off("click");
+                attachDeleteEventHandlers();
             });
         });
     </script>

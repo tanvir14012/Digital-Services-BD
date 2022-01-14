@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title  Digital Gifts</title>
+    <title>@ViewBag.Title - Nilu Digital</title>
     <link rel="stylesheet" href="~/css/site.css" />
     <environment include="Development">
         <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -38,7 +38,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light fixed-top z-10 shadow" id="navbar1">
+        <nav class="navbar navbar-expand-sm navbar-light fixed-top z-10 shadow-sm-bottom" id="navbar1">
             <div class="container justify-content-start">
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navLinks"
                         aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,6 +82,9 @@
                                 <li class="dropdown-item link-normal text-center">
                                     <a asp-action="Index" asp-controller="Home" class="d-block">Home</a>
                                 </li>
+                                <li class="dropdown-item link-normal text-center">
+                                    <a asp-action="Index" asp-controller="Admin" class="d-block">Admin panel</a>
+                                </li>
                             }
                             <li class="dropdown-item">
                                 <form method="post" asp-action="SignOut" asp-controller="Account">
@@ -96,37 +99,48 @@
             </div>
         </nav>
     </header>
-    <div class="container" id="main_container">
-        <main role="main" class="pb-3 pt-2">
+    <div class="container mt-5 pt-5" id="main_container">
+        <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; 2020 - Digital Gift Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer text-muted mt-5">
+        <div class="container border-top">
+            <ul class="list-group list-group-horizontal justify-content-center m-2">
+                <li class="list-group-item mr-2 px-2 py-1 rounded">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </li>
+                <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </li>
+                <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-google"></i>
+                    </a>
+                </li>
+                <li class="list-group-item mr-2 px-2 py-1 rounded border-left">
+                    <a href="#" class="text-primary">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </li>
+            </ul>
+            <div class="container text-center">
+                &copy;2021 Nilu Digital. All rights reserved. <a asp-area="" asp-controller="Home" asp-action="Privacy">Terms & Conditions and Privacy Policy</a>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        $(window).on('load resize', function () {
-            //Set main content position at the end of navbar
-            $("#main_container").offset({
-                top: $("#navbar1").offset().top +
-                    document.getElementById("navbar1").getBoundingClientRect().height
-            });
-            //Set footer at the end of main content
-            $("footer").offset({
-                top: $("#main_container").offset().top + document.getElementById("main_container").getBoundingClientRect().height
-            });
-        });
-    </script>
+    <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.js"></script>
+    <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

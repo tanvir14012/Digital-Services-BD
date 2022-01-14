@@ -1,17 +1,17 @@
 ﻿@model ProductSection
 @using Digital_Services_BD.Services
-@inject IProductItemOps productItemOps
-@inject IProductSectionOps productSectionOps
 
 @{
     Layout = "AdminLayout";
-    var allItems = productItemOps.GetAllProductItems().ToList();
+    List<ProductItem> allItems = ViewBag.Items;
+    List<int> ranks = ViewBag.Ranks;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-lg-8 col-md-10 col-sm-12">
         <form method="post" asp-controller="Admin"
-              asp-action="CreateProductSection" class="border mt-4 p-4">
+              asp-action="CreateProductSection" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
             <h4 class="mb-3">Create a Product Section</h4>
             <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
             <div class="form-group">
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label asp-for="Rank">Rank</label>
                 <select class="from-control" asp-for="Rank"
-                        asp-items="@productSectionOps.GetAvailableRanks().Select(r => new SelectListItem(r.ToString(), r.ToString()))">
+                        asp-items="@ranks.Select(r => new SelectListItem(r.ToString(), r.ToString()))">
                 </select>
                 <span class="text-danger" asp-validation-for="Rank"></span>
             </div>

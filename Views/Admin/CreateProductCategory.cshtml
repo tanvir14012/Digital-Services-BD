@@ -1,17 +1,16 @@
 ﻿@model ProductCategory
 @using Digital_Services_BD.Services
-@inject IProductCategoryOps productCategoryOps
-@inject IProductItemOps productItemOps
 
 @{
     Layout = "AdminLayout";
-    var allItems = productItemOps.GetAllProductItems();
+    List<ProductItem> allItems = ViewBag.Items;
 }
 
 <div class="row justify-content-center align-items-center mt-4 p-2">
     <div class="col-sm-12">
         <form enctype="multipart/form-data" method="post" asp-controller="Admin"
-              asp-action="CreateProductCategory" class="border mt-4 p-4">
+              asp-action="CreateProductCategory" class="border mt-4 p-4 rounded">
+            @Html.AntiForgeryToken()
             <h4 class="mb-3">Create a Product Category</h4>
             <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
             <div class="form-group">
@@ -21,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label>Image Preview</label><br />
-                <img class="img-thumbnail" id="thumbnail" alt="No image" />
+                <img class="img-thumbnail w-auto max-h-240 d-flex mx-auto" id="thumbnail" alt="No image" />
             </div>
             <div class="form-group">
                 <label asp-for="Image">@Html.DisplayNameFor(m => m.Image)</label>
@@ -84,7 +83,7 @@
                                         <!-- name must match the [BindProperty] property in model -->
                                         <input class="form-check-input" name="AllItemIds" type="checkbox" id="@item.Id"
                                                value="@item.Id" />
-                                        <label for="@item.Id" class="form-check-label">Included ?</label>
+                                        <label for="@item.Id" class="form-check-label">Include? </label>
                                     </div>
                                 </td>
                                 <td style="width: 10%;">

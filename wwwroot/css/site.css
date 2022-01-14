@@ -62,9 +62,11 @@ body {
     z-index: 10 !important;
     background: white;
 }
+
 .z-9 {
     z-index: 9 !important;
 }
+
 .z-8 {
     z-index: 8 !important;
 }
@@ -78,6 +80,7 @@ body {
 .border-md-bottom {
     border-bottom: 1px solid #dee2e6 !important;
 }
+
 @media screen and (max-width: 768px) {
     .border-md-bottom {
         border-bottom: none !important;
@@ -115,9 +118,19 @@ body {
 .h-240 {
     height: 240px !important;
 }
+
 .max-h-240 {
     max-height: 240px !important;
 }
+
+.max-h-360 {
+    max-height: 360px !important;
+}
+
+.h-300 {
+    height: 300px !important;
+}
+
 /* Image size of product group, category, item */
 .input-disabled {
     pointer-events: none;
@@ -178,7 +191,9 @@ body {
 }
 
 .scale-y3-x1by2 {
-    transform: scale(0.5, 3);
+    transform: scale(0.35, 3);
+    -moz-transform: scale(0.35, 3);
+    -webkit-transform: scale(0.35, 3);
 }
 
 .bg-light-gray {
@@ -209,3 +224,144 @@ input.input-validation-error {
 .right-0 {
     right: 0 !important;
 }
+
+.shadow-sm-bottom {
+    box-shadow: 0 .125rem .25rem -.12rem rgba(0,0,0,.075);
+    -webkit-box-shadow: 0 .125rem .25rem -.12rem rgba(0,0,0,.075);
+    -moz-box-shadow: 0 .125rem .25rem -.12rem rgba(0,0,0,.075);
+}
+
+.scale-2x {
+    transform: scale(2, 2);
+}
+
+.carousel-control-next-icon {
+    background-image: url('../ImageResources/UI/next-icon.svg') !important;
+}
+
+.carousel-control-prev-icon {
+    background-image: url('../ImageResources/UI/previous-icon.svg') !important;
+}
+
+.price-font {
+    font-size: 1.25rem !important;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/**
+    Tooltip arrow (jQuery tooltip)
+*/
+.ui-tooltip-content::after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+}
+
+.bottom .ui-tooltip-content::after {
+    top: -10px;
+    left: 45%;
+    border-color: white transparent;
+    border-width: 0 10px 10px;
+}
+
+.mx-2px {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.scale-half {
+    transform: scale(0.5, 0.5);
+}
+
+/* For Invoice PDF */
+.w-35 {
+    width: 35%;
+}
+
+.w-65 {
+    width: 65%;
+}
+
+.w-40 {
+    width: 40%;
+}
+
+.w-60 {
+    width: 60%;
+}
+
+
+.h-50px {
+    height: 50px;
+}
+
+.bottom-0 {
+    bottom: 0 !important;
+}
+
+
+.objfit-cover {
+    object-fit: cover;
+}
+/* For Invoice PDF */
+
+.w-10 {
+    width: 10%;
+}
+
+.w-90 {
+    width: 90%;
+}
+
+a.hover-white:hover {
+    color: white !important;
+}
+
+/**
+    Spacer for content from the navigation bar.
+*/
+
+.spacer {
+    margin-top: 85px;
+}
+
+@media screen and (min-width: 375px) {
+    .spacer {
+        margin-top: 55px;
+    }
+}
+
+@media screen and (min-width: 529px) {
+    .spacer {
+        margin-top: 25px;
+    }
+}
+
+@media screen and (min-width: 577px) {
+    .spacer {
+        margin-top: 50px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .spacer {
+        margin-top: 0px;
+    }
+}
+
+/**
+    Spacer for content from the navigation bar.
+*/

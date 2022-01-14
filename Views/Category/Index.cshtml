@@ -1,11 +1,10 @@
 ﻿@using Digital_Services_BD.ViewModels
 @model List<ProductCategory>
-@inject IProductItemOps productItemOps
-@inject IProductGroupOps productGroupOps
-@inject IProductCategoryOps productCategoryOps
 
 @{
     var locationOrigin = Url.Action("Index", "Category", new { id = ViewBag.Id });
+    List<ProductGroup> productGroups = ViewBag.ProductGroups;
+    Dictionary<int, Tuple<decimal, decimal>> categoryMinMaxPrice = ViewBag.CategoryMinMaxPrice;
 }
 <script type="text/javascript">
     var locationOrigin = "@locationOrigin";
@@ -15,8 +14,10 @@
     var sortBy = "@ViewBag.SortBy";
 </script>
 
-<div class="row mt-8 p-3">
-    <ul class="breadcrumb w-100 p-0 m-0 link-normal">
+<div class="spacer"></div>
+
+<div class="row p-3">
+    <ul class="breadcrumb w-100 p-2 m-0 link-normal">
         <li class="breadcrumb-item">
             <a asp-controller="Home" asp-action="Index">
                 <i class="fas fa-home mr-1"></i>Home
@@ -65,7 +66,7 @@
                         <div class="collapse show" @*data-parent="#accordion"*@ id="filter2">
                             <div class="card-body p-0 pl-2 pr-2">
                                 <ul class="list-group list-group-flush link-normal">
-                                    @foreach (var productGroup in productGroupOps.GetAllProductGroups())
+                                    @foreach (var productGroup in productGroups)
                                     {
                                         <li class="list-group-item p-0 pt-2">
                                             <a asp-controller="Category" asp-action="Index" asp-route-id="@productGroup.Id">
@@ -96,58 +97,63 @@
             </select>
         </div>
         <hr />
-        <div class="card-deck row">
-            @for (var i = 0; i < Model.Count; i++)
-            {
-                <div class="col-lg-4 col-md-6 col-sm-12 p-0 pt-2">
-                    <div class="card m-2 link-normal">
-                        <a class="text-decoration-none text-black" asp-action="Index" asp-controller="Item" asp-route-id="@Model[i].Id">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <img class="img-fluid h-240" src="\@Model[i].ImageUrl" />
-                            </div>
-                            <div class="card-body p-1">
-                                <h5>@Model[i].Name</h5>
-                                <ul class="list-group list-group-horizontal form-row">
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].Overview">
-                                            <i class="fas fa-book"></i>
-                                            Overview
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].WhatCanBeDone">
-                                            <i class="fas fa-info-circle"></i>
-                                            Benefits
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].HowToConsume">
-                                            <i class="fas fa-comment"></i>
-                                            Guide
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item list-unstyled p-0 border-0">
-                                        <span class="btn btn-light" data-toggle="tooltip" data-placement="auto" title="@Model[i].Limitations">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                            Pitfall
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="card-footer p-1">
-                                <div class="price-font">
-                                    From
-                                    <strong>@string.Format("{0:0.00}", productCategoryOps.GetMinProductPriceByCatgId(Model[i].Id))</strong>
-                                    <sup>BDT</sup><br />
-                                    To
-                                    <strong>@string.Format("{0:0.00}", productCategoryOps.GetMaxProductPriceByCatgId(Model[i].Id))</strong>
-                                    <sup>BDT</sup>
+        <div class="row">
+            <div class="card-deck">
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-0 pt-2">
+                        <div class="card m-2 link-normal h-300">
+                            <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Item" asp-route-id="@Model[i].Id">
+                                <div class="overflow-hidden max-h-240">
+                                    <img class="img-fluid" src="\@Model[i].ImageUrl" />
                                 </div>
-                            </div>
-                        </a>
+                                <div class="d-flex flex-grow-1">
+                                    <div class="w-100 align-self-end">
+                                        <div class="p-1">
+                                            <h5>@Model[i].Name</h5>
+                                            <ul class="list-group list-group-horizontal m-1 justify-content-between">
+                                                <li class="list-group-item list-unstyled p-0 border-0">
+                                                    <span class="p-2 mx-2" data-popper-arrow data-toggle="tooltip" data-placement="auto" title="@Model[i].Overview">
+                                                        <i class="fas fa-book"></i>
+                                                    </span>
+                                                </li>
+                                                <li class="list-group-item list-unstyled p-0 border-0">
+                                                    <span class="p-2" data-toggle="tooltip" data-placement="auto" title="@Model[i].WhatCanBeDone">
+                                                        <i class="fas fa-info-circle"></i>
+
+                                                    </span>
+                                                </li>
+                                                <li class="list-group-item list-unstyled p-0 border-0">
+                                                    <span class="p-2 mx-2" data-toggle="tooltip" data-placement="auto" title="@Model[i].HowToConsume">
+                                                        <i class="fas fa-comment"></i>
+
+                                                    </span>
+                                                </li>
+                                                <li class="list-group-item list-unstyled p-0 border-0">
+                                                    <span class="p-2" data-toggle="tooltip" data-placement="auto" title="@Model[i].Limitations">
+                                                        <i class="fas fa-exclamation-circle"></i>
+
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-light-gray p-1">
+                                            <div class="price-font">
+                                                From
+                                                <strong>@string.Format("{0:0.00}", categoryMinMaxPrice[Model[i].Id].Item1)</strong>
+                                                <sup>BDT</sup><br />
+                                                To
+                                                <strong>@string.Format("{0:0.00}", categoryMinMaxPrice[Model[i].Id].Item2)</strong>
+                                                <sup>BDT</sup>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
         <!-- Pagination -->
         @if (Model.Count > 0)
@@ -192,9 +198,9 @@
                         }
                     }
                     @*--------  Second Half  -------- *@
-                    @if ((ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage) - ViewBag.PageNo < 5)
+                    @if ((int)Math.Ceiling((double)ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage) - ViewBag.PageNo < 5)
                     {
-                        @for (var i = ViewBag.PageNo + 1; i <= (ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage); i++)
+                        @for (var i = ViewBag.PageNo + 1; i <= (int) Math.Ceiling((double)ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage); i++)
                         {
                             <li class="page-item">
                                 <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id" asp-route-pageNo="@i">@i</a>
@@ -217,7 +223,7 @@
                                asp-route-pageNo="@(ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage)">@(ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage)</a>
                         </li>
                     }
-                    @if ((ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage) - ViewBag.PageNo >= 1)
+                    @if ((int) Math.Ceiling((double)ViewBag.TotalCategory / ProductConfig.NoOfProductCategoryPerPage) - ViewBag.PageNo >= 1)
                     {
                         <li class="page-item">
                             <a class="page-link" asp-controller="Category" asp-action="Index" asp-route-id="@ViewBag.Id"
@@ -235,7 +241,13 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="tooltip"]').tooltip({
+                position: {
+                    my: 'center top',
+                    at: 'center bottom+10'
+                },
+                tooltipClass: 'bottom'
+            });
             //Select change
             $("#sortBy").change(function () {
                 window.location.href = locationOrigin + "?sortBy=" + $(this).val() + "&priceRange=" +
@@ -255,13 +267,14 @@
             //Price submit
             $("#goPrice").click(function () {
                 window.location.href = locationOrigin + "?sortBy=" + $("#sortBy").val() + "&priceRange=" +
-                    $("#priceRange").slider("option", "values")[0].toString().concat("to").concat($("#priceRange").slider("option", "values")[1].toString()) 
-                        +"&pageNo=" + pageNo;
-                
+                    $("#priceRange").slider("option", "values")[0].toString().concat("to").concat($("#priceRange").slider("option", "values")[1].toString())
+                    + "&pageNo=" + pageNo;
+
 
             });
             $("#priceLabel").html(priceMin + "<sup>BDT</sup>&nbsp;&mdash;&nbsp;" + priceMax + "<sup>BDT</sup>");
             $("#sortBy").val(sortBy);
+
         });
     </script>
 }
