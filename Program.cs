@@ -228,6 +228,7 @@ END");
     }
 
     SetAllConstraintsEnabled(connection, dbTransaction, enabled: false);
+    DeleteAllSeedTargetData(connection, dbTransaction);
 
     int skippedBatchCount = 0;
     foreach (string batch in Regex.Split(scriptContent, @"^\s*GO\s*(?:--.*)?$", RegexOptions.Multiline | RegexOptions.IgnoreCase))
@@ -334,6 +335,24 @@ SELECT @sql += N'ALTER TABLE '
     + CHAR(10)
 FROM sys.tables
 WHERE is_ms_shipped = 0;
+
+EXEC sp_executesql @sql;");
+}
+
+static void DeleteAllSeedTargetData(DbConnection connection, DbTransaction transaction)
+{
+    ExecuteNonQuery(connection, transaction, @"
+DECLARE @sql NVARCHAR(MAX) = N'';
+
+SELECT @sql += N'DELETE FROM '
+    + QUOTENAME(SCHEMA_NAME([schema_id]))
+    + N'.'
+    + QUOTENAME([name])
+    + N';'
+    + CHAR(10)
+FROM sys.tables
+WHERE is_ms_shipped = 0
+  AND [name] NOT IN (N'__EFMigrationsHistory', N'__SeedScripts');
 
 EXEC sp_executesql @sql;");
 }
