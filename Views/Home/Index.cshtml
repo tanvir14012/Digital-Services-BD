@@ -54,7 +54,7 @@
     </div>
     <hr />
     <div class="row ps-4">
-        <div class="card-deck col-12 p-0 ps-1" id="section_@productSection.Id">
+        <div class="card-deck row p-0 ps-1" id="section_@productSection.Id">
 
             @foreach (var product in productItems)
             {
@@ -117,7 +117,7 @@
 </div>
 <hr />
 <div class="row ps-4">
-    <div class="card-deck col-12 p-0 ps-1" id="section_9999">
+    <div class="card-deck row p-0 ps-1" id="section_9999">
         @{ 
             int idx = -1;
         }
@@ -136,7 +136,7 @@
             var minStock = bundle.ProductItemBundleJoinProductItem
                 .Min(join => join.ProductItem.ProductStockCount.Count/join.ProductItemQuantity);
 
-            <div class="card-deck col-lg-@(Model.Bundles.Count()>= MaxColumnAllowedInLandingPageSectionRow ?
+            <div class="card-deck row col-lg-@(Model.Bundles.Count()>= MaxColumnAllowedInLandingPageSectionRow ?
                     12/MaxColumnAllowedInLandingPageSectionRow: 12/Model.Bundles.Count())
                      col-md-@(Model.Bundles.Count() >= MaxColumnAllowedInLandingPageSectionRow/2 ? 12/(MaxColumnAllowedInLandingPageSectionRow/2): 12/Model.Bundles.Count())
                      col-sm-@(Model.Bundles.Count() >= 2 ? 6: 12/Model.Bundles.Count()) py-0 px-1 m-0">
