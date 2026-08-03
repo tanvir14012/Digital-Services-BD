@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.DataEncryption;
-using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
+using SoftFluent.EntityFrameworkCore.DataEncryption;
+using SoftFluent.EntityFrameworkCore.DataEncryption.Providers;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
