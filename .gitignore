@@ -363,3 +363,28 @@ FodyWeavers.xsd
 
 # exclude wwwroot images
 /wwwroot/ImageResources/*
+
+# Modern .NET and tooling artifacts
+/.idea/
+/.vscode/
+/.vs/
+/.history/
+*.code-workspace
+
+# Local app configuration overrides
+appsettings.Local.json
+appsettings.*.local.json
+secrets.local.json
+
+# Test and coverage artifacts
+TestResults/
+**/TestResults/
+coverage/
+coverage-reports/
+*.trx
+
+# Frontend package caches
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
