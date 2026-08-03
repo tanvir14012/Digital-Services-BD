@@ -26,6 +26,25 @@ END;
 
 IF COL_LENGTH('dbo.PaymentGwConfigs', 'IsOperational') IS NOT NULL
 BEGIN
+    DECLARE @defaultConstraintName sysname;
+
+    SELECT @defaultConstraintName = dc.name
+    FROM sys.default_constraints dc
+    INNER JOIN sys.columns c
+        ON c.default_object_id = dc.object_id
+    INNER JOIN sys.tables t
+        ON t.object_id = c.object_id
+    INNER JOIN sys.schemas s
+        ON s.schema_id = t.schema_id
+    WHERE s.name = N'dbo'
+      AND t.name = N'PaymentGwConfigs'
+      AND c.name = N'IsOperational';
+
+    IF @defaultConstraintName IS NOT NULL
+    BEGIN
+        EXEC(N'ALTER TABLE [dbo].[PaymentGwConfigs] DROP CONSTRAINT [' + @defaultConstraintName + N']');
+    END;
+
     ALTER TABLE [dbo].[PaymentGwConfigs] DROP COLUMN [IsOperational];
 END;");
         }
