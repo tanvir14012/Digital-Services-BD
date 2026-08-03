@@ -1,4 +1,4 @@
-﻿@model ProductCategory
+@model ProductCategory
 @using Digital_Services_BD.Services
 
 @{
@@ -12,7 +12,7 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
-                <span class="mr-2">@Model.Id</span>
+                <span class="me-2">@Model.Id</span>
                 <span>@Model.Name</span>
             </div>
             <div class="card-body">
@@ -79,19 +79,19 @@
             </div>
             <div class="card-footer">
                 <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="EditProductCategory" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                     </li>
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="DeleteProductCategory" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
                     </li>
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="ProductCategory" asp-controller="Admin"
                            class="btn btn-secondary text-white" data-toggle="tooltip" data-placement="auto" title="Back to product category">
                             <i class="fas fa-backward"></i>

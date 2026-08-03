@@ -1,4 +1,4 @@
-﻿@model ProductStock
+@model ProductStock
 @using Digital_Services_BD.Services
 
 
@@ -18,12 +18,12 @@
             @Html.AntiForgeryToken()
             @if (ViewBag.Message != null)
             {
-                <div class="rounded font-weight-normal col-12 alert alert-success">@ViewBag.Message</div>
+                <div class="rounded fw-normal col-12 alert alert-success">@ViewBag.Message</div>
             }
             @Html.AntiForgeryToken()
-            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="alert-danger rounded fw-normal" asp-validation-summary="All"></div>
 
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-sm-6 col-lg-4">
                     <label class="pt-1">Product Group</label>
                     <select id="prodGroup" class="selectpicker form-control">
@@ -41,7 +41,7 @@
                     <span class="text-danger" asp-validation-for="ProductItemId"></span>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-sm-12 col-lg-6">
                     <label asp-for="MainCode">Main Code</label>
                     <input asp-for="MainCode" type="text" class="form-control" />
@@ -53,7 +53,7 @@
                     <span asp-validation-for="AuxiliaryCode"></span>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="OptionA">Option A</label>
                     <input asp-for="OptionA" type="text" class="form-control" />
@@ -65,7 +65,7 @@
                     <span asp-validation-for="OptionB"></span>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="OptionC">Option C</label>
                     <input asp-for="OptionC" type="text" class="form-control" />
@@ -77,7 +77,7 @@
                     <span asp-validation-for="Remark"></span>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-sm-8">
                     <label asp-for="VendorInfo">Vendor/Supplier Info</label>
                     <textarea class="form-control" maxlength="1000" asp-for="VendorInfo"></textarea>

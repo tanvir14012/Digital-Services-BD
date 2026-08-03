@@ -1,4 +1,4 @@
-﻿@model ProductItem
+@model ProductItem
 @using Digital_Services_BD.Services
 
 @{
@@ -11,12 +11,12 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
-                <span class="mr-2">@Model.Id</span>
+                <span class="me-2">@Model.Id</span>
                 <span>@Model.Name</span>
             </div>
             <div class="card-body">
                 <img class="card-img-top img-thumbnail w-auto max-h-240 d-flex mx-auto" alt="No Image" src="\@Model.ImageUrl" />
-                <div class="form-row m-4">
+                <div class="row m-4">
                     <div class="form-check col-sm-6">
                         <input type="checkbox" class="form-check-input" asp-for="IsActive" id="isActive" disabled />
                         <label class="form-check-label" asp-for="IsActive">Is active ?</label>
@@ -128,7 +128,7 @@
                             @if (Model.ProductItemCustomFields.Any())
                             {
                                 <tr>
-                                    <td colspan="2" class="font-weight-bold">Custom Fields</td>
+                                    <td colspan="2" class="fw-bold">Custom Fields</td>
                                 </tr>
                             }
 
@@ -145,19 +145,19 @@
             </div>
             <div class="card-footer">
                 <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="EditProductItem" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                     </li>
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="DeleteProductItem" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
                     </li>
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="ProductItem" asp-controller="Admin"
                            class="btn btn-secondary text-white" data-toggle="tooltip" data-placement="auto" title="Back to product item">
                             <i class="fas fa-backward"></i>

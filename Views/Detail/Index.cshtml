@@ -1,4 +1,4 @@
-﻿@model ProductItem
+@model ProductItem
 
 @{
     var priceObj = Model.ProductItemPrice.Where(p => p.PriceCurrency == "BDT").FirstOrDefault();
@@ -29,7 +29,7 @@
     <!-- Middle content (description) -->
     <div class="col-lg-6 col-md-6 col-sm-12">
         <h4 class="pt-2">@Model.Name</h4>
-        <div class="form-row">
+        <div class="row">
             <div class="col-sm-6">
                 <span class="text-muted">Region: </span>@Model.ProductItemFeature.RegionCodes
             </div>
@@ -37,12 +37,12 @@
                 <span class="text-muted">Key For: </span>@Model.ProductItemFeature.Company
             </div>
         </div>
-        <div class="form-row">
+        <div class="row">
             <div class="col-sm-12">
                 <span class="text-muted">Supported Country: </span>@Model.ProductItemFeature.RegionCountries
             </div>
         </div>
-        <div class="form-row">
+        <div class="row">
             <div class="col-sm-12">
                 <h6 class="text-muted">Overview</h6>
                 @Model.Overview
@@ -53,14 +53,14 @@
     <!-- Right sidebar (cart) -->
     <div class="col-lg-3 col-md-12 col-sm-12">
         <h4 class="mt-2 d-inline-flex">
-            <strong class="mr-2 price-font">Price:</strong>
+            <strong class="me-2 price-font">Price:</strong>
             <strong class="price-font">@string.Format("{0: 0.00}", priceObj.Price - priceObj.Discount + priceObj.Vat)<sup>BDT</sup></strong>
         </h4>
         @if (priceObj.Discount > 0)
         {
             <h5 class="mt-2 p-1 d-inline-flex">
-                <s class="mr-2">@string.Format("{0: 0.00}", priceObj.Price)</s>
-                <span class="border text-danger border-danger font-weight-bold text-nowrap">@string.Format("{0:0.00}", priceObj.Discount * 100 / (priceObj.Price + priceObj.Vat))% OFF</span>
+                <s class="me-2">@string.Format("{0: 0.00}", priceObj.Price)</s>
+                <span class="border text-danger border-danger fw-bold text-nowrap">@string.Format("{0:0.00}", priceObj.Discount * 100 / (priceObj.Price + priceObj.Vat))% OFF</span>
             </h5>
         }
         <div class="mt-3 d-sm-flex d-lg-block">
@@ -72,7 +72,7 @@
             </div>
             <form class="d-inline-block" method="post" asp-action="AddToCart" asp-controller="Cart">
                 <button name="addToCart" type="button" class="btn btn-light m-1">
-                    <i class="fas fa-cart-plus text-primary mr-2"></i>Add to Cart
+                    <i class="fas fa-cart-plus text-primary me-2"></i>Add to Cart
                 </button>
                 @Html.AntiForgeryToken()
                 @Html.Hidden("userId", null)
@@ -82,7 +82,7 @@
             </form>
             <form class="d-inline-block" method="post" asp-action="BuyNow" asp-controller="Cart">
                 <button name="buyNow" type="button" class="btn btn-light m-1">
-                    <i class="fas fa-shopping-bag text-info mr-2"></i>Buy Now&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fas fa-shopping-bag text-info me-2"></i>Buy Now&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>
                 @Html.AntiForgeryToken()
                 @Html.Hidden("userId2", null)
@@ -95,32 +95,32 @@
     <!-- Right sidebar (cart)-->
     <!-- Description -->
 </div>
-<h5 class="pl-2">Product Information</h5>
-<hr class="ml-2" />
+<h5 class="ps-2">Product Information</h5>
+<hr class="ms-2" />
 <div class="row p-2">
 
     <div class="col-md-6 col-sm-12">
-        <label class="text-muted font-weight-bold">Description</label>
+        <label class="text-muted fw-bold">Description</label>
         <div>
             @Model.ProductItemFeature.Description
         </div>
     </div>
     <div class="col-md-6 col-sm-12">
-        <label class="text-muted font-weight-bold">Key Benefits</label>
+        <label class="text-muted fw-bold">Key Benefits</label>
         <div>
             @Model.WhatCanBeDone
         </div>
     </div>
     <div class="col-md-6 col-sm-12">
-        <label class="text-muted font-weight-bold">Instruction</label>
+        <label class="text-muted fw-bold">Instruction</label>
         <div>
             @Model.HowToConsume
         </div>
     </div>
     <div class="col-md-6 col-sm-12">
-        <label class="text-muted font-weight-bold">Limitation</label>
+        <label class="text-muted fw-bold">Limitation</label>
         <div>
-            <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
             @Model.Limitations
         </div>
     </div>
@@ -197,7 +197,7 @@
                                     @foreach (var join in bundles[i].ProductItemBundleJoinProductItem)
                                     {
                                         <li class="list-group-item text-truncate p-0">
-                                            <span class="nav-link text-truncate">@join.ProductItem.Name <span class="ml-2 badge badge-dark">@join.ProductItemQuantity x</span></span>
+                                            <span class="nav-link text-truncate">@join.ProductItem.Name <span class="ms-2 badge text-bg-dark">@join.ProductItemQuantity x</span></span>
                                         </li>
                                     }
                                 </ul>
@@ -212,7 +212,7 @@
                                     <div class="text-black">
                                         <s class="text-muted">@(price + vat)</s>
                                         <sup class="text-muted">BDT</sup>
-                                        <span class="ml-1 bg-primary p-1">
+                                        <span class="ms-1 bg-primary p-1">
                                             <span class="text-white">@string.Format("{0:0.00}", ((discount + bundles[i].BundleDiscount) * 100) / (price + vat))% OFF</span>
                                         </span>
                                     </div>

@@ -1,4 +1,4 @@
-﻿@using Digital_Services_BD.ViewModels
+@using Digital_Services_BD.ViewModels
 @model List<ProductItem>
 
 @{
@@ -20,7 +20,7 @@
     <ul class="breadcrumb w-100 p-2 m-0 link-normal">
         <li class="breadcrumb-item">
             <a asp-controller="Home" asp-action="Index">
-                <i class="fas fa-home mr-1"></i>Home
+                <i class="fas fa-home me-1"></i>Home
             </a>
         </li>
         <li class="breadcrumb-item">
@@ -36,19 +36,19 @@
     </ul>
 </div>
 <div class="row p-2">
-    <div class="col-lg-3 col-md-4 col-sm-12 pl-0">
+    <div class="col-lg-3 col-md-4 col-sm-12 ps-0">
         <div class="navbar-expand-md">
             <button class="btn btn-light navbar-toggler m-2" data-toggle="collapse" data-target="#filterContent">
                 <i class="fas fa-filter"></i>
                 <span>Filter</span>
             </button>
             <div class="collapse navbar-collapse" id="filterContent">
-                <div id="accordion" class="w-100 link-normal ml-1">
+                <div id="accordion" class="w-100 link-normal ms-1">
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-left pl-2" data-target="#filter1" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter1" data-toggle="collapse">
                                 Price Range
-                                <i class="float-right fas fa-angle-down text-muted"></i>
+                                <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
                         <div class="collapse show" @*data-parent="#accordion"*@ id="filter1">
@@ -62,19 +62,19 @@
 
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-left pl-2" data-target="#filter2" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter2" data-toggle="collapse">
                                 Subcategory
-                                <i class="float-right fas fa-angle-down text-muted"></i>
+                                <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
                         <div class="collapse show" @*data-parent="#accordion"*@ id="filter2">
-                            <div class="card-body p-0 pl-2 pr-2">
+                            <div class="card-body p-0 ps-2 pe-2">
                                 <ul class="list-group list-group-flush link-normal">
                                     @foreach (var productCategory in Categories)
                                     {
                                         <li class="list-group-item p-0 pt-2">
                                             <a asp-controller="Item" asp-action="Index" asp-route-id="@productCategory.Id">
-                                                <span class=" @(productCategory.Id == ViewBag.Id ? "text-muted font-weight-bold": "")"> @productCategory.Name</span>
+                                                <span class=" @(productCategory.Id == ViewBag.Id ? "text-muted fw-bold": "")"> @productCategory.Name</span>
                                             </a>
                                         </li>
                                     }
@@ -86,19 +86,19 @@
 
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-left pl-2" data-target="#filter3" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter3" data-toggle="collapse">
                                 Category
-                                <i class="float-right fas fa-angle-down text-muted"></i>
+                                <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
                         <div class="collapse show" @*data-parent="#accordion"*@ id="filter3">
-                            <div class="card-body p-0 pl-2 pr-2">
+                            <div class="card-body p-0 ps-2 pe-2">
                                 <ul class="list-group list-group-flush link-normal">
                                     @foreach (var productGroup in allProductGroups)
                                     {
                                         <li class="list-group-item p-0 pt-2">
                                             <a asp-controller="Category" asp-action="Index" asp-route-id="@productGroup.Id">
-                                                <span class=" @(allProductGroupIdsUnderThisCategory.Contains(productGroup.Id) ? "text-muted font-weight-bold": "")"> @productGroup.Name</span>
+                                                <span class=" @(allProductGroupIdsUnderThisCategory.Contains(productGroup.Id) ? "text-muted fw-bold": "")"> @productGroup.Name</span>
                                             </a>
                                         </li>
                                     }
@@ -112,9 +112,9 @@
         </div>
     </div>
     <div class="col-lg-9 col-md-8 col-sm-12">
-        <h4>@ViewBag.ProductCategoryName<sub class="text-muted ml-2">(@ViewBag.TotalItem item/s)</sub></h4>
-        <div class="form-row d-flex justify-content-end">
-            <label class="mr-2 pt-1">Sort By</label>
+        <h4>@ViewBag.ProductCategoryName<sub class="text-muted ms-2">(@ViewBag.TotalItem item/s)</sub></h4>
+        <div class="row d-flex justify-content-end">
+            <label class="me-2 pt-1">Sort By</label>
             <select id="sortBy" class="selectpicker">
                 <option value="m_p" selected>Most Popular</option>
                 <option value="name">Name</option>
@@ -153,7 +153,7 @@
                                                 <div class="text-black">
                                                     <s class="text-muted">@priceObj.Price</s>
                                                     <sup class="text-muted">BDT</sup>
-                                                    <span class="ml-1 bg-primary p-1">
+                                                    <span class="ms-1 bg-primary p-1">
                                                         <span class="text-white">@string.Format("{0:0.00}", (priceObj.Discount * 100) / priceObj.Price)% OFF</span>
                                                     </span>
                                                 </div>

@@ -1,4 +1,4 @@
-﻿@model Order
+@model Order
 @{
     Tuple<dynamic, dynamic, dynamic> Locations = ViewBag.Locations;
 }
@@ -8,23 +8,23 @@
         <li class="list-group-item p-0 border-0">
             <div class="text-center">
                 <button class="btn btn-dark rounded-circle bg-primary border-primary">1</button>
-                <span class="ml-2 text-nowrap">Your cart</span>
+                <span class="ms-2 text-nowrap">Your cart</span>
             </div>
         </li>
-        <li class="list-group-item p-0 ml-2 mr-2 my-auto border-left-0 border-right-0 border-bottom-0 w-25">
+        <li class="list-group-item p-0 ms-2 me-2 my-auto border-start-0 border-end-0 border-bottom-0 w-25">
         </li>
         <li class="list-group-item p-0 border-0">
             <div class="text-center">
                 <button class="btn btn-dark rounded-circle bg-primary border-primary">2</button>
-                <span class="ml-2 text-nowrap">Payment</span>
+                <span class="ms-2 text-nowrap">Payment</span>
             </div>
         </li>
-        <li class="list-group-item p-0 ml-2 mr-2 my-auto border-left-0 border-right-0 border-bottom-0 w-25">
+        <li class="list-group-item p-0 ms-2 me-2 my-auto border-start-0 border-end-0 border-bottom-0 w-25">
         </li>
         <li class="list-group-item p-0 border-0">
             <div class="text-center">
                 <button class="btn btn-dark rounded-circle">3</button>
-                <span class="ml-2 text-nowrap">Summary</span>
+                <span class="ms-2 text-nowrap">Summary</span>
             </div>
         </li>
     </ul>
@@ -94,7 +94,7 @@
         <div class="form-group col-sm-12">
             <label hidden>Action</label>
             <div class="form-control border-0 px-0">
-                <button id="skip" class="btn btn-light mr-2">Skip</button>
+                <button id="skip" class="btn btn-light me-2">Skip</button>
                 <button type="submit" class="btn btn-primary">Continue</button>
             </div>
         </div>

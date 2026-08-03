@@ -1,4 +1,4 @@
-﻿@using Digital_Services_BD.ViewModels
+@using Digital_Services_BD.ViewModels
 @model FilteredProductStocks
 @{
     Layout = "AdminLayout";
@@ -6,10 +6,10 @@
 
 @{
     var statusClass = new Dictionary<ProductStockStatus, string> {
-        {ProductStockStatus.HALTED, "badge-dark" },
-        {ProductStockStatus.INVALID, "badge-warning" },
-        {ProductStockStatus.DELIVERED, "badge-info" },
-        {ProductStockStatus.ACTIVE, "badge-primary" }
+        {ProductStockStatus.HALTED, "text-bg-dark" },
+        {ProductStockStatus.INVALID, "text-bg-warning" },
+        {ProductStockStatus.DELIVERED, "text-bg-info" },
+        {ProductStockStatus.ACTIVE, "text-bg-primary" }
     };
 
 }
@@ -30,7 +30,7 @@
     <div class="row d-flex justify-content-end mt-4 mx-2">
         <a class="btn btn-light" asp-action="Create" asp-controller="ProductStocks">
             <i class="fas fa-plus"></i>
-            <span class="ml-2">Create</span>
+            <span class="ms-2">Create</span>
         </a>
     </div>
 
@@ -40,7 +40,7 @@
 
         @Html.HiddenFor(m => m.TotalProductStocks)
         @Html.Hidden("pageNo", Model.PageNo)
-        <div class="my-2 form-row justify-content-end">
+        <div class="my-2 row justify-content-end">
             <div class="form-group mb-2 col-sm-3">
                 <label class="pt-1">Page size</label>
                 <select name="ProductStockPerPage" id="productStockPerPage" value="@Model.ProductStockPerPage" class="selectpicker form-control">
@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <div class="form-row">
+        <div class="row">
             <div class="form-group col-sm-6 col-lg-4">
                 <label class="pt-1">Product Group</label>
                 <select id="prodGroup" value="@Model.GroupId" asp-for="GroupId" class="selectpicker form-control">
@@ -86,7 +86,7 @@
     <div class="mx-2px">
         <div class="card w-100">
             <div class="card-header px-3">
-                <h5>Product Stocks <sub class="font-weight-lighter">(Total: @Model.TotalProductStocks product@(Model.TotalProductStocks > 1 ? "s": ""))</sub></h5>
+                <h5>Product Stocks <sub class="fw-lighter">(Total: @Model.TotalProductStocks product@(Model.TotalProductStocks > 1 ? "s": ""))</sub></h5>
             </div>
 
             @using (Html.BeginForm("Details", "ProductStocks", FormMethod.Post, new { id = "productStockDetailForm" }))

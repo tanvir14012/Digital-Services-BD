@@ -1,4 +1,4 @@
-﻿@model ProductItemBundle
+@model ProductItemBundle
 
 @{
     var price = Model.ProductItemBundleJoinProductItem
@@ -50,7 +50,7 @@
             @foreach(var join in Model.ProductItemBundleJoinProductItem)
             {
                 <li class="list-group-item">
-                    <a asp-controller="Detail" asp-action="Index" asp-route-id="@join.ProductItem.Id" class="nav-link">@join.ProductItem.Name <span class="ml-2 badge badge-dark">@join.ProductItemQuantity x</span></a>
+                    <a asp-controller="Detail" asp-action="Index" asp-route-id="@join.ProductItem.Id" class="nav-link">@join.ProductItem.Name <span class="ms-2 badge text-bg-dark">@join.ProductItemQuantity x</span></a>
                 </li>
             }
         </ul>
@@ -59,14 +59,14 @@
     <!-- Right sidebar (cart) -->
     <div class="col-lg-3 col-md-12 col-sm-12">
         <h4 class="mt-3 d-inline-flex">
-            <strong class="mr-2 price-font">Price:</strong>
+            <strong class="me-2 price-font">Price:</strong>
             <strong class="price-font">@string.Format("{0: 0.00}", price + vat - discount - Model.BundleDiscount)<sup>BDT</sup></strong>
         </h4>
         @if (Model.BundleDiscount > 0)
         {
             <h5 class="mt-2 p-1 d-inline-flex">
-                <s class="mr-2">@string.Format("{0: 0.00}", price + vat)</s>
-                <span class="border text-danger border-danger font-weight-bold text-nowrap">@string.Format("{0:0.00}", ((discount + Model.BundleDiscount) * 100) / (price + vat))% OFF</span>
+                <s class="me-2">@string.Format("{0: 0.00}", price + vat)</s>
+                <span class="border text-danger border-danger fw-bold text-nowrap">@string.Format("{0:0.00}", ((discount + Model.BundleDiscount) * 100) / (price + vat))% OFF</span>
             </h5>
         }
         <div class="mt-3 d-sm-flex d-lg-block">
@@ -78,7 +78,7 @@
             </div>
             <form class="d-inline-block" method="post" asp-action="AddBundleToCart" asp-controller="Cart">
                 <button name="addToCart" type="button" class="btn btn-light m-1">
-                    <i class="fas fa-cart-plus text-primary mr-2"></i>Add to Cart
+                    <i class="fas fa-cart-plus text-primary me-2"></i>Add to Cart
                 </button>
                 @Html.AntiForgeryToken()
                 @Html.Hidden("userId", null)
@@ -88,7 +88,7 @@
             </form>
             <form class="d-inline-block" method="post" asp-action="BuyBundleNow" asp-controller="Cart">
                 <button name="buyNow" type="button" class="btn btn-light m-1">
-                    <i class="fas fa-shopping-bag text-info mr-2"></i>Buy Now&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fas fa-shopping-bag text-info me-2"></i>Buy Now&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>
                 @Html.AntiForgeryToken()
                 @Html.Hidden("userId2", null)
