@@ -227,10 +227,17 @@ END");
         return;
     }
 
+    int skippedBatchCount = 0;
     foreach (string batch in Regex.Split(scriptContent, @"^\s*GO\s*(?:--.*)?$", RegexOptions.Multiline | RegexOptions.IgnoreCase))
     {
         if (string.IsNullOrWhiteSpace(batch))
         {
+            continue;
+        }
+
+        if (ShouldSkipSeedBatch(batch))
+        {
+            skippedBatchCount++;
             continue;
         }
 
@@ -244,7 +251,7 @@ END");
     insertSeedCommand.ExecuteNonQuery();
 
     transaction.Commit();
-    logger.LogInformation("Applied SQL seed from {SeedScriptPath}.", seedScriptPath);
+    logger.LogInformation("Applied SQL seed from {SeedScriptPath}. Skipped {SkippedBatchCount} database-level batch(es).", seedScriptPath, skippedBatchCount);
 }
 
 static void SeedIdentityData(WebApplication app, IConfiguration configuration)
@@ -289,6 +296,14 @@ static bool SeedScriptSeedsIdentity(string? scriptContent)
             scriptContent,
             @"INSERT\s+\[dbo\]\.\[(AspNetUsers|AspNetRoles|AspNetUserRoles)\]",
             RegexOptions.IgnoreCase);
+}
+
+static bool ShouldSkipSeedBatch(string batch)
+{
+    string trimmedBatch = batch.Trim();
+    return Regex.IsMatch(trimmedBatch, @"^USE\s+\[", RegexOptions.IgnoreCase)
+        || Regex.IsMatch(trimmedBatch, @"^ALTER\s+DATABASE\s+\[", RegexOptions.IgnoreCase)
+        || Regex.IsMatch(trimmedBatch, @"sp_fulltext_database", RegexOptions.IgnoreCase);
 }
 
 static bool SeedScriptAlreadyApplied(DbConnection connection, DbTransaction transaction, string scriptName)
