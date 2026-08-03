@@ -186,20 +186,13 @@ static void ExecuteSeedSql(WebApplication app)
     ILogger logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("DatabaseSeed");
     AppDbContext dbContext = services.GetRequiredService<AppDbContext>();
 
-    string[] candidatePaths =
-    {
-        Path.Combine(app.Environment.ContentRootPath, "Seed.sql"),
-        Path.Combine(AppContext.BaseDirectory, "Seed.sql")
-    };
-
-    string? seedScriptPath = candidatePaths.FirstOrDefault(File.Exists);
+    string? scriptContent = GetSeedScriptContent(app, out string? seedScriptPath);
     if (seedScriptPath is null)
     {
         logger.LogInformation("Skipping SQL seed because Seed.sql was not found.");
         return;
     }
 
-    string scriptContent = File.ReadAllText(seedScriptPath);
     if (string.IsNullOrWhiteSpace(scriptContent))
     {
         logger.LogInformation("Skipping SQL seed because Seed.sql is empty.");
@@ -267,7 +260,35 @@ static void SeedIdentityData(WebApplication app, IConfiguration configuration)
         return;
     }
 
+    string? seedScriptContent = GetSeedScriptContent(app, out string? seedScriptPath);
+    if (seedScriptPath is not null && SeedScriptSeedsIdentity(seedScriptContent))
+    {
+        logger.LogInformation("Skipping identity seed because {SeedScriptPath} already seeds ASP.NET Identity data.", seedScriptPath);
+        return;
+    }
+
     IdentitySeedData.CreateAdminEntries(services, configuration);
+}
+
+static string? GetSeedScriptContent(WebApplication app, out string? seedScriptPath)
+{
+    string[] candidatePaths =
+    {
+        Path.Combine(app.Environment.ContentRootPath, "Seed.sql"),
+        Path.Combine(AppContext.BaseDirectory, "Seed.sql")
+    };
+
+    seedScriptPath = candidatePaths.FirstOrDefault(File.Exists);
+    return seedScriptPath is null ? null : File.ReadAllText(seedScriptPath);
+}
+
+static bool SeedScriptSeedsIdentity(string? scriptContent)
+{
+    return !string.IsNullOrWhiteSpace(scriptContent)
+        && Regex.IsMatch(
+            scriptContent,
+            @"INSERT\s+\[dbo\]\.\[(AspNetUsers|AspNetRoles|AspNetUserRoles)\]",
+            RegexOptions.IgnoreCase);
 }
 
 static bool SeedScriptAlreadyApplied(DbConnection connection, DbTransaction transaction, string scriptName)
