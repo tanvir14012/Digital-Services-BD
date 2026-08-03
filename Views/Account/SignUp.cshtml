@@ -1,4 +1,4 @@
-﻿@using Digital_Services_BD.ViewModels
+@using Digital_Services_BD.ViewModels
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Customer> signInManager
 @model SignUp
@@ -11,31 +11,31 @@
     <div class="row m-2 flex-column">
         <div class="col-md-8 col-lg-6 border mx-auto p-3 shadow-sm rounded">
             <div class="d-flex justify-content-between">
-                <h4 class="text-secondary"><i class="fas fa-book-open mr-2"></i>Create an account</h4>
+                <h4 class="text-secondary"><i class="fas fa-book-open me-2"></i>Create an account</h4>
                 <a asp-action="SignIn" asp-controller="Account" class="btn btn-sm btn-light text-secondary"><i class="fas fa-sign-in-alt m-2"></i>Sign in</a>
             </div><hr />
             <form method="post" class="form" asp-controller="Account" asp-action="SignUp">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="All"></div>
-                <div class="form-row">
+                <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                        <label class="font-weight-bold" asp-for="FirstName"></label>
+                        <label class="fw-bold" asp-for="FirstName"></label>
                         <input asp-for="FirstName" type="text" class="form-control" />
                         <span asp-validation-for="FirstName" class="d-block alert-warning-color"></span>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                        <label class="font-weight-bold" asp-for="LastName"></label>
+                        <label class="fw-bold" asp-for="LastName"></label>
                         <input asp-for="LastName" type="text" class="form-control" />
                         <span asp-validation-for="LastName" class="d-block alert-warning-color"></span>
                     </div>
                 </div>
                 <div class="col-md-12 p-0">
-                    <label class="font-weight-bold" asp-for="Email"></label>
+                    <label class="fw-bold" asp-for="Email"></label>
                     <input asp-for="Email" type="text" class="form-control" />
                     <span asp-validation-for="Email" class="d-block alert-warning-color"></span>
                 </div>
                 <div class="col-md-12 p-0 mb-1 mt-2">
-                    <label class="font-weight-bold" asp-for="Password"></label>
+                    <label class="fw-bold" asp-for="Password"></label>
                     <div>
                         <i class="fas fa-eye text-secondary position-absolute m-2 right-0 cursor-pointer"></i>
                         <input asp-for="Password" type="password" class="form-control" />
@@ -44,7 +44,7 @@
                     <span asp-validation-for="Password" class="d-block alert-warning-color"></span>
                 </div>
                 <div class="col-md-12 p-0">
-                    <label class="font-weight-bold" asp-for="ConfirmPassword"></label>
+                    <label class="fw-bold" asp-for="ConfirmPassword"></label>
                     <div>
                         <i class="fas fa-eye text-secondary position-absolute m-2 right-0 cursor-pointer"></i>
                         <input asp-for="ConfirmPassword" type="password" class="form-control" />

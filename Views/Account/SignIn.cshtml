@@ -1,4 +1,4 @@
-﻿@using  Digital_Services_BD.ViewModels
+@using  Digital_Services_BD.ViewModels
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Customer> signInManager
 @model SignIn
@@ -10,19 +10,19 @@
     <div class="row m-2 flex-column">
         <div class="col-md-8 col-lg-6 border mx-auto p-3 shadow-sm rounded">
             <div class="d-flex justify-content-between">
-                <h4 class="text-secondary"><i class="fas fa-sign-in-alt mr-2"></i>Sign in to your account</h4>
-                <a asp-action="SignUp" asp-controller="Account" class="btn btn-sm btn-light text-secondary p-2"><i class="fas fa-sign-in mr-2"></i>Sign up</a>
+                <h4 class="text-secondary"><i class="fas fa-sign-in-alt me-2"></i>Sign in to your account</h4>
+                <a asp-action="SignUp" asp-controller="Account" class="btn btn-sm btn-light text-secondary p-2"><i class="fas fa-sign-in me-2"></i>Sign up</a>
             </div><hr />
             <form method="post" class="form" asp-controller="Account" asp-action="SignIn">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="All"></div>
                 <div class="col-md-12 p-0">
-                    <label class="font-weight-bold" asp-for="Email"></label>
+                    <label class="fw-bold" asp-for="Email"></label>
                     <input asp-for="Email" type="text" class="form-control" />
                     <span asp-validation-for="Email" class="d-block alert-warning-color"></span>
                 </div>
                 <div class="col-md-12 p-0 mt-2">
-                    <label class="font-weight-bold" asp-for="Password"></label>
+                    <label class="fw-bold" asp-for="Password"></label>
                     <div>
                         <i class="fas fa-eye text-secondary position-absolute m-2 right-0 cursor-pointer"></i>
                         <input asp-for="Password" type="password" class="form-control" />
@@ -30,14 +30,14 @@
                     <span asp-validation-for="Password" class="d-block alert-warning-color"></span>
                 </div>
                 <div class="w-100 row">
-                    <div class="col-md-6 pl-4 mt-2">
+                    <div class="col-md-6 ps-4 mt-2">
                         <label asp-for="RememberMe">
-                            <input asp-for="RememberMe" type="checkbox" class="custom-checkbox">
-                            <span class="ml-2">@Html.DisplayNameFor(obj => obj.RememberMe)</span>
+                            <input asp-for="RememberMe" type="checkbox" class="form-check-input">
+                            <span class="ms-2">@Html.DisplayNameFor(obj => obj.RememberMe)</span>
                         </label>
                     </div>
-                    <div class="col-md-6 pl-4 mt-2 link-normal ">
-                        <a class="text-decoration-none float-md-right" asp-action="ForgotPassword" asp-controller="Account">
+                    <div class="col-md-6 ps-4 mt-2 link-normal ">
+                        <a class="text-decoration-none float-md-end" asp-action="ForgotPassword" asp-controller="Account">
                             <span class="">Forgot password ?</span>
                         </a>
                     </div>

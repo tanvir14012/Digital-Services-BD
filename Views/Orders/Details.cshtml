@@ -1,13 +1,13 @@
-﻿@model Order
+@model Order
 @{
     var statusClass = new Dictionary<OrderStatus, string> {
-        {OrderStatus.AWAITING, "badge-secondary" },
-        {OrderStatus.CANCELLED, "badge-dark" },
-        {OrderStatus.COMPLETED, "badge-success" },
-        {OrderStatus.DISPUTED, "badge-warning" },
-        {OrderStatus.FAILED, "badge-danger" },
-        {OrderStatus.PROCESSING, "badge-info" },
-        {OrderStatus.REFUNDED, "badge-primary" },
+        {OrderStatus.AWAITING, "text-bg-secondary" },
+        {OrderStatus.CANCELLED, "text-bg-dark" },
+        {OrderStatus.COMPLETED, "text-bg-success" },
+        {OrderStatus.DISPUTED, "text-bg-warning" },
+        {OrderStatus.FAILED, "text-bg-danger" },
+        {OrderStatus.PROCESSING, "text-bg-info" },
+        {OrderStatus.REFUNDED, "text-bg-primary" },
     };
 
     var currencySymbol = new Dictionary<string, char>
@@ -23,15 +23,15 @@
 
 <div class="row p-3 mt-5">
     <div class="col-12 p-0 d-flex">
-        <div class="my-2 mr-2">
-            <a class="nav-link text-dark btn btn-sm btn-light" asp-action="Index" asp-controller="Orders"><i class="fas fa-backward mr-2"></i>Orders</a>
+        <div class="my-2 me-2">
+            <a class="nav-link text-dark btn btn-sm btn-light" asp-action="Index" asp-controller="Orders"><i class="fas fa-backward me-2"></i>Orders</a>
         </div>
         <div class="my-2">
             <form asp-action="ExportInvoice" asp-controller="Orders">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="orderId" value="@Model.Id" />
                 <button class="btn btn-sm btn-light nav-link">
-                    <i class="fas fa-file-export mr-2"></i> Export Invoice
+                    <i class="fas fa-file-export me-2"></i> Export Invoice
                 </button>
             </form>
         </div>
@@ -59,7 +59,7 @@
                                     <li class="list-group-item px-1 py-1 justify-content-between d-flex">
                                         <a class="text-decoration-none" asp-action="Index" asp-controller="Detail" asp-route-id="@item.ProductItemId">
                                             <span class="text-truncate">@item.ProductItem?.Name</span>
-                                            <span class="badge badge-secondary rounded-circle ml-2"><span>x</span>@item.Quantity</span>
+                                            <span class="badge text-bg-secondary rounded-circle ms-2"><span>x</span>@item.Quantity</span>
                                         </a>
                                     </li>
                                 }
@@ -69,7 +69,7 @@
                                     <li class="list-group-item px-1 py-1 justify-content-between d-flex">
                                         <a click="function(e) { e.preventDefault();}" href="#">
                                             <span class="text-truncate">@item.ProductItemBundle?.Name</span>
-                                            <span class="badge badge-secondary rounded-circle ml-2"><span>x</span>@item.Quantity</span>
+                                            <span class="badge text-bg-secondary rounded-circle ms-2"><span>x</span>@item.Quantity</span>
                                         </a>
                                     </li>
                                 }

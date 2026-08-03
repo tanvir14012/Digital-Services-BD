@@ -1,4 +1,4 @@
-﻿@model ProductItemViewModel
+@model ProductItemViewModel
 @using Digital_Services_BD.Services
 
 @{
@@ -12,7 +12,7 @@
               asp-action="CreateProductItem" class="border mt-4 p-4 rounded">
             @Html.AntiForgeryToken()
             <h4 class="mb-3">Create a Product Item</h4>
-            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="alert-danger rounded fw-normal" asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name">@Html.DisplayNameFor(m => m.Name)</label>
                 <input class="form-control" type="text" asp-for="Name" />
@@ -24,9 +24,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Image">@Html.DisplayNameFor(m => m.Image)</label>
-                <div class="custom-file">
-                    <input id="imageFile" class="form-control custom-file-input" type="file" asp-for="Image" />
-                    <label id="fileName" class="custom-file-label" for="imageFile">Choose photo..</label>
+                <div class="d-flex flex-column gap-2">
+                    <input id="imageFile" class="form-control" type="file" asp-for="Image" />
+                    <label id="fileName" class="form-label" for="imageFile">Choose photo..</label>
                 </div>
                 <span class="text-danger" asp-validation-for="Image"></span>
             </div>
@@ -55,7 +55,7 @@
                     </ul>
                 }
             </div>
-            <div class="form-row m-4">
+            <div class="row m-4">
                 <div class="form-check col-sm-6">
                     <input type="checkbox" class="form-check-input" asp-for="IsActive" />
                     <label class="form-check-label" asp-for="IsActive">Is active ?</label>
@@ -123,7 +123,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-12">
                     <h4>Product Features</h4><hr />
                 </div>
@@ -225,8 +225,8 @@
                     <h4>Custom Fields</h4><hr />
                 </div>
             </div>
-            <div class="form-row justify-content-end">
-                <button id="addField" type="button" class="btn btn-light m-2"><i class="fas fa-plus mr-2"></i>Add</button>
+            <div class="row justify-content-end">
+                <button id="addField" type="button" class="btn btn-light m-2"><i class="fas fa-plus me-2"></i>Add</button>
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
@@ -290,7 +290,7 @@
             //Custom fields
             $("#addField").click(function () {
                 let nextIndex = $("#customFields").children("div").length - 1;
-                let template = `<div class="form-group form-row" data-index=${nextIndex}>
+                let template = `<div class="form-group row" data-index=${nextIndex}>
                     <div class="col-5">
                         <input class="form-control" type="text" placeholder="Key" name="ProductItemCustomFieldsViewModel[${nextIndex}].Key" />
                     </div>

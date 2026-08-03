@@ -1,4 +1,4 @@
-﻿@*@using Microsoft.AspNetCore.Mvc.Localization
+@*@using Microsoft.AspNetCore.Mvc.Localization
     @inject IViewLocalizer Localizer*@
 @using Digital_Services_BD.ViewModels
 @model HomePageItems
@@ -11,7 +11,7 @@
 <!-- Carousel -->
 @if (Model.Carousel != null)
 {
-    <div class="row pl-3 pr-3">
+    <div class="row ps-3 pe-3">
         <div id="carousel" class="carousel carousel-fade slide w-100 mt-2" data-ride="carousel" data-interval="90000">
             <ul class="carousel-indicators z-8 bg-dark m-auto">
                 @for (var i = 0; i < Model.Carousel.CarouselJoinCarouselImage.Count; i++)
@@ -48,13 +48,13 @@
     var productItems = productSection.ProductItems.Where(p => p.IsActive).ToList();
     int j = -1;
 
-    <div class="row pl-3 pr-3 mt-4 d-flex justify-content-between">
+    <div class="row ps-3 pe-3 mt-4 d-flex justify-content-between">
         <h4>@productSection.Title</h4>
 
     </div>
     <hr />
-    <div class="row pl-4">
-        <div class="card-deck col-12 p-0 pl-1" id="section_@productSection.Id">
+    <div class="row ps-4">
+        <div class="card-deck col-12 p-0 ps-1" id="section_@productSection.Id">
 
             @foreach (var product in productItems)
             {
@@ -69,7 +69,7 @@
                     12/MaxColumnAllowedInLandingPageSectionRow: 12/productItems.Count())
                      col-md-@(productItems.Count() >= MaxColumnAllowedInLandingPageSectionRow/2 ? 12/(MaxColumnAllowedInLandingPageSectionRow/2): 12/productItems.Count())
                      col-sm-@(productItems.Count() >= 2 ? 6: 12/productItems.Count()) py-0 px-1 m-0">
-                    <div class="card p-0 m-0 mr-1 mt-2 mb-3 h-300" data-serial="@j" @(j > MaxColumnAllowedInLandingPageSectionRow - 1 ? "hidden" : "")>
+                    <div class="card p-0 m-0 me-1 mt-2 mb-3 h-300" data-serial="@j" @(j > MaxColumnAllowedInLandingPageSectionRow - 1 ? "hidden" : "")>
                         <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Detail" asp-route-id="@product.Id">
                             <div class="position-absolute right-0 m-2 px-2 py-1 badge badge-pill badge-@(product.ProductStockCount.Count > 0 ? "info": "danger")">
                                 @(product.ProductStockCount.Count > 0 ? "in stock": "out of stock")
@@ -92,7 +92,7 @@
                                             <div class="text-black">
                                                 <s class="text-muted">@priceObj.Price</s>
                                                 <sup class="text-muted">BDT</sup>
-                                                <span class="ml-1 bg-primary p-1">
+                                                <span class="ms-1 bg-primary p-1">
                                                     <span class="text-white">@string.Format("{0:0.00}", (priceObj.Discount * 100) / priceObj.Price)% OFF</span>
                                                 </span>
                                             </div>
@@ -112,12 +112,12 @@
 }
 
 <!-- Bundles -->
-<div class="row pl-3 pr-3 mt-4 d-flex justify-content-between">
+<div class="row ps-3 pe-3 mt-4 d-flex justify-content-between">
     <h4>Package Deals (Frequently Bought)</h4>
 </div>
 <hr />
-<div class="row pl-4">
-    <div class="card-deck col-12 p-0 pl-1" id="section_9999">
+<div class="row ps-4">
+    <div class="card-deck col-12 p-0 ps-1" id="section_9999">
         @{ 
             int idx = -1;
         }
@@ -140,7 +140,7 @@
                     12/MaxColumnAllowedInLandingPageSectionRow: 12/Model.Bundles.Count())
                      col-md-@(Model.Bundles.Count() >= MaxColumnAllowedInLandingPageSectionRow/2 ? 12/(MaxColumnAllowedInLandingPageSectionRow/2): 12/Model.Bundles.Count())
                      col-sm-@(Model.Bundles.Count() >= 2 ? 6: 12/Model.Bundles.Count()) py-0 px-1 m-0">
-                <div class="card p-0 m-0 mr-1 mt-2 mb-3" data-serial="@idx" @(idx > MaxColumnAllowedInLandingPageSectionRow - 1 ? "hidden" : "")>
+                <div class="card p-0 m-0 me-1 mt-2 mb-3" data-serial="@idx" @(idx > MaxColumnAllowedInLandingPageSectionRow - 1 ? "hidden" : "")>
                     <div class="position-absolute right-0 mx-4 my-2 px-2 py-1 badge badge-pill badge-@(minStock > 0 ? "info": "danger")">
                         @(minStock > 0 ? "in stock": "out of stock")
                     </div>
@@ -164,7 +164,7 @@
                                         @foreach (var join in bundle.ProductItemBundleJoinProductItem)
                                         {
                                             <li class="list-group-item text-truncate p-0">
-                                                <span class="nav-link text-truncate">@join.ProductItem.Name <span class="ml-2 badge badge-dark">@join.ProductItemQuantity x</span></span>
+                                                <span class="nav-link text-truncate">@join.ProductItem.Name <span class="ms-2 badge text-bg-dark">@join.ProductItemQuantity x</span></span>
                                             </li>
                                         }
                                     </ul>
@@ -179,7 +179,7 @@
                                         <div class="text-black">
                                             <s class="text-muted">@(price + vat)</s>
                                             <sup class="text-muted">BDT</sup>
-                                            <span class="ml-1 bg-primary p-1">
+                                            <span class="ms-1 bg-primary p-1">
                                                 <span class="text-white">@string.Format("{0:0.00}", ((discount + bundle.BundleDiscount) * 100) / (price + vat))% OFF</span>
                                             </span>
                                         </div>

@@ -1,10 +1,10 @@
-﻿@model Carousel
+@model Carousel
 @{
     Layout = "AdminLayout";
 }
 
 <div class="row p-2">
-    <h4 class="col-sm-12 text-secondary mb-2 pl-0">Administrator View of a Carousel</h4>
+    <h4 class="col-sm-12 text-secondary mb-2 ps-0">Administrator View of a Carousel</h4>
         <div class="card m-1">
             <div class="card-header">
                 <span>@Model.Name</span>
@@ -19,13 +19,13 @@
             </div>
             <div class="card-footer">
                 <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="EditCarousel" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                     </li>
-                    <li class="list-group-item p-0 mr-2">
+                    <li class="list-group-item p-0 me-2">
                         <a asp-action="DeleteCarousel" asp-controller="Admin" asp-route-id="@Model.Id"
                            class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
                             <i class="fas fa-trash"></i>

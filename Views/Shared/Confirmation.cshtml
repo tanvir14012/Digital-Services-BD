@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "AdminLayout";
 }
 <div class="row p-2 mt-4">
@@ -8,7 +8,7 @@
     </div>
     <form class="col-12" method="post" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller" asp-route-id="@ViewBag.Id">
         @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-primary mr-2">Confirm</button>
+        <button type="submit" class="btn btn-primary me-2">Confirm</button>
         <a class="btn btn-secondary" asp-action="@ViewBag.CancelAction" asp-controller="@ViewBag.CancelController"
            asp-route-id="@ViewBag.CancelId">Cancel</a>
     </form>

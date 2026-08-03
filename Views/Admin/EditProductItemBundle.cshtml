@@ -1,4 +1,4 @@
-﻿@using Newtonsoft.Json
+@using Newtonsoft.Json
 @model ProductItemBundle
 
 
@@ -16,13 +16,13 @@
             @Html.HiddenFor(m => m.Id)
             @Html.HiddenFor(m => m.CreatedOn)
             <h4 class="mb-3">Edit a Product Item Bundle</h4>
-            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="alert-danger rounded fw-normal" asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name">Title</label>
                 <input class="form-control" type="text" asp-for="Name" />
                 <span class="text-danger" asp-validation-for="Name"></span>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-sm-6">
                     <label asp-for="BundleDiscount">Discount</label>
                     <input class="form-control" type="number" asp-for="BundleDiscount" />
@@ -30,8 +30,8 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label asp-for="IsActiveNow" class="form-control border-0 mt-4 pt-3">
-                        <input asp-for="IsActiveNow" type="checkbox" class="custom-checkbox">
-                        <span class="ml-2">Is Active?</span>
+                        <input asp-for="IsActiveNow" type="checkbox" class="form-check-input">
+                        <span class="ms-2">Is Active?</span>
                     </label>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                 </div>
                 @for (var i = 0; i < Model.ProductItemBundleJoinProductItem.Count; i++)
                 {
-                    <div class="form-row" data-index=@i>
+                    <div class="row" data-index=@i>
                         <div class="form-group col-sm-8">
                             <label>Product Item</label>
                             <select name="ProductItemBundleJoinProductItem[@i].ProductItemId"
@@ -70,8 +70,8 @@
                     </div>
                 }
             </div>
-            <div class="form-row justify-content-end">
-                <button id="addField" type="button" class="btn btn-light m-2"><i class="fas fa-plus mr-2"></i>Add</button>
+            <div class="row justify-content-end">
+                <button id="addField" type="button" class="btn btn-light m-2"><i class="fas fa-plus me-2"></i>Add</button>
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>
@@ -116,7 +116,7 @@
 
         $("#addField").click(function () {
             let nextIndex = $("#items").children("div").length - 1;
-            let template = `<div class="form-row" data-index=${nextIndex}>
+            let template = `<div class="row" data-index=${nextIndex}>
                     <div class="form-group col-sm-8">
                         <label>Product Item</label>
                         <select name="ProductItemBundleJoinProductItem[${nextIndex}].ProductItemId"

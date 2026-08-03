@@ -1,4 +1,4 @@
-﻿@model Carousel
+@model Carousel
 @inject ICarouselOps carouselOps
 @{
     Layout = "AdminLayout";
@@ -11,7 +11,7 @@
             @Html.AntiForgeryToken()
             <h4 class="mb-3">Edit a Carousel</h4>
             <h6 class="text-muted">If you select an image file, corresponding image will be updated. Otherwise it will remain unmodified.</h6>
-            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="alert-danger rounded fw-normal" asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name">Name</label>
                 <input class="form-control" type="text" asp-for="Name" />
@@ -34,10 +34,10 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="CarouselJoinCarouselImage[i].Image">Image</label>
-                            <div class="custom-file">
-                                <input id="imageFile0" data-count="@i" class="form-control custom-file-input" type="file"
+                            <div class="d-flex flex-column gap-2">
+                                <input id="imageFile0" data-count="@i" class="form-control" type="file"
                                        asp-for="CarouselJoinCarouselImage[i].Image" />
-                                <label id=@("fileName"+i) class="custom-file-label" for=@("imageFile" + i)>Choose a photo if you want to update..</label>
+                                <label id=@("fileName"+i) class="form-label" for=@("imageFile" + i)>Choose a photo if you want to update..</label>
                             </div>
                             <span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[i].Image"></span>
                         </div>
@@ -51,8 +51,8 @@
 
             </div>
             <div class="form-group">
-                <button id="removeImage" type="button" class="btn btn-light float-right"><i class="fas fa-trash mr-2 text-danger"></i>Remove last image</button>
-                <button id="addImage" type="button" class="btn btn-light float-right"><i class="fas fa-plus mr-2"></i>Add image</button>
+                <button id="removeImage" type="button" class="btn btn-light float-end"><i class="fas fa-trash me-2 text-danger"></i>Remove last image</button>
+                <button id="addImage" type="button" class="btn btn-light float-end"><i class="fas fa-plus me-2"></i>Add image</button>
             </div>
             <button class="btn btn-primary" type="submit">Save</button>
             <!--Add Id, CreatedOn etc. in hidden field-->
@@ -97,9 +97,9 @@
                     '</div>' +
                     '<div class="form-group">' +
                     '<label for="CarouselJoinCarouselImage[' + nextIndex + '].Image">Image</label>' +
-                    '<div class="custom-file">' +
-                    '<input id="imageFile' + nextIndex + '" data-count="' + nextIndex + '" class="form-control custom-file-input" type="file" name="CarouselJoinCarouselImage[' + nextIndex + '].Image" asp-for="CarouselJoinCarouselImage[' + nextIndex + '].Image" />' +
-                    '<label id="fileName' + nextIndex + '" class="custom-file-label" for="imageFile' + nextIndex + '">Choose photo..</label>' +
+                    '<div class="d-flex flex-column gap-2">' +
+                    '<input id="imageFile' + nextIndex + '" data-count="' + nextIndex + '" class="form-control" type="file" name="CarouselJoinCarouselImage[' + nextIndex + '].Image" asp-for="CarouselJoinCarouselImage[' + nextIndex + '].Image" />' +
+                    '<label id="fileName' + nextIndex + '" class="form-label" for="imageFile' + nextIndex + '">Choose photo..</label>' +
                     '</div>' +
                     '<span class="text-danger" asp-validation-for="CarouselJoinCarouselImage[' + nextIndex + '].Image"></span>' +
                     '</div>' +

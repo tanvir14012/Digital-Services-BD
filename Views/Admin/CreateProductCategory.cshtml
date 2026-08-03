@@ -1,4 +1,4 @@
-﻿@model ProductCategory
+@model ProductCategory
 @using Digital_Services_BD.Services
 
 @{
@@ -12,7 +12,7 @@
               asp-action="CreateProductCategory" class="border mt-4 p-4 rounded">
             @Html.AntiForgeryToken()
             <h4 class="mb-3">Create a Product Category</h4>
-            <div class="alert-danger rounded font-weight-normal" asp-validation-summary="All"></div>
+            <div class="alert-danger rounded fw-normal" asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name">@Html.DisplayNameFor(m => m.Name)</label>
                 <input class="form-control" type="text" asp-for="Name" />
@@ -24,9 +24,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Image">@Html.DisplayNameFor(m => m.Image)</label>
-                <div class="custom-file">
-                    <input id="imageFile" class="form-control custom-file-input" type="file" asp-for="Image" />
-                    <label id="fileName" class="custom-file-label" for="imageFile">Choose photo..</label>
+                <div class="d-flex flex-column gap-2">
+                    <input id="imageFile" class="form-control" type="file" asp-for="Image" />
+                    <label id="fileName" class="form-label" for="imageFile">Choose photo..</label>
                 </div>
                 <span class="text-danger" asp-validation-for="Image"></span>
             </div>
