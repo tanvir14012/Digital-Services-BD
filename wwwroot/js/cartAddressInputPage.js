@@ -9,23 +9,23 @@
     //Division change
     $("#BillingAddress_State").change(function () {
         let division = $(this).val();
-        let division_id = $(this).children(`option[value=${division}]`).attr("data-id");
+        let divisionId = $(this).children(`option[value=${division}]`).attr("data-id");
         $(`#BillingAddress_City option`).hide();
-        $(`#BillingAddress_City option[data-division-id=${division_id}]`).show();
-        $(`#BillingAddress_City option[data-division-id=${division_id}]`).first().attr("selected", true);
-        $(`#BillingAddress_City`).val($(`#BillingAddress_City option[data-division-id=${division_id}]`).first().val());
-        let district_id = $(`#BillingAddress_City option[data-division-id=${division_id}]`).first().attr("data-id");
-        $(`#BillingAddress_Zip`).val($(`#BillingAddress_Zip option[data-district-id=${district_id}]`).first().val());
+        $(`#BillingAddress_City option[data-division-id=${divisionId}]`).show();
+        $(`#BillingAddress_City option[data-division-id=${divisionId}]`).first().attr("selected", true);
+        $(`#BillingAddress_City`).val($(`#BillingAddress_City option[data-division-id=${divisionId}]`).first().val());
+        let districtId = $(`#BillingAddress_City option[data-division-id=${divisionId}]`).first().attr("data-id");
+        $(`#BillingAddress_Zip`).val($(`#BillingAddress_Zip option[data-district-id=${districtId}]`).first().val());
     });
 
     //District change
     $("#BillingAddress_City").change(function () {
         let district = $(this).val();
-        let district_id = $(this).children(`option[value=${district}]`).attr("data-id");
+        let districtId = $(this).children(`option[value=${district}]`).attr("data-id");
         $(`#BillingAddress_Zip option`).hide();
-        $(`#BillingAddress_Zip option[data-district-id=${district_id}]`).show();
-        $(`#BillingAddress_Zip option[data-district-id=${district_id}]`).first().attr("selected", true);
-        $(`#BillingAddress_Zip`).val($(`#BillingAddress_Zip option[data-district-id=${district_id}]`).first().val());
+        $(`#BillingAddress_Zip option[data-district-id=${districtId}]`).show();
+        $(`#BillingAddress_Zip option[data-district-id=${districtId}]`).first().attr("selected", true);
+        $(`#BillingAddress_Zip`).val($(`#BillingAddress_Zip option[data-district-id=${districtId}]`).first().val());
     });
 
     //Initial placeholder values

@@ -34,6 +34,12 @@ namespace Digital_Services_BD
 {
     public class Startup
     {
+        private static readonly IReadOnlyList<CultureInfo> SupportedCultures = new[]
+        {
+            new CultureInfo("en-US"),
+            new CultureInfo("bn-BD")
+        };
+
         private readonly IConfiguration configuration;
 
         public Startup(IConfiguration configuration)
@@ -92,6 +98,8 @@ namespace Digital_Services_BD
                 options.AccessDeniedPath = "/Account/Unavailable";
                 //Make cookie unaccessible through client side script
                 options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.SlidingExpiration = true;
             });
@@ -170,24 +178,17 @@ namespace Digital_Services_BD
             }
             else
             {
-                app.UseDeveloperExceptionPage();
-                //app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                //app.UseHsts();
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
             app.UseHttpsRedirection();
 
             //Configure localization middleware, it sets current culture of a request
             app.UseRequestLocalization(options =>
             {
-                var supportedCultures = new List<CultureInfo>
-                                {
-                                    new CultureInfo("en-US"),
-                                    new CultureInfo("bn-BD"),
-                                };
                 options.DefaultRequestCulture = new RequestCulture("en-US");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
+                options.SupportedCultures = SupportedCultures.ToList();
+                options.SupportedUICultures = SupportedCultures.ToList();
                 //options.RequestCultureProviders = new List<IRequestCultureProvider>
                 //{
                 //   new QueryStringRequestCultureProvider
