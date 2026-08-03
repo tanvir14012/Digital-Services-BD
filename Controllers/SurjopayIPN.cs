@@ -1,14 +1,16 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.Services;
-using Digital_Services_BD.Utilities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.Services;
+using Digital_Services_BD.Utilities;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Digital_Services_BD.Controllers
 {
@@ -28,7 +30,7 @@ namespace Digital_Services_BD.Controllers
             this.logger = logger;
         }
 
-        [ServiceFilter(typeof (SurjopayIPNIpFilter))]
+        [ServiceFilter(typeof(SurjopayIPNIpFilter))]
         [HttpPost]
         public async Task<IActionResult> Webhook()
         {
@@ -36,11 +38,11 @@ namespace Digital_Services_BD.Controllers
             {
                 if (!String.IsNullOrEmpty(Request.Form["order_id"]))
                 {
-                    
+
                 }
                 return BadRequest();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Log(LogLevel.Error, $"An exception is thrown in SSLCommerze IPN handler: {ex.Message}");
                 return BadRequest();

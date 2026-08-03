@@ -1,12 +1,15 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
+using Newtonsoft.Json;
 
 namespace Digital_Services_BD.Services
 {
@@ -56,7 +59,7 @@ namespace Digital_Services_BD.Services
             return null;
         }
 
-        public async Task<FilteredProductStocks> FilterProductStocks(int groupId, int categoryId, 
+        public async Task<FilteredProductStocks> FilterProductStocks(int groupId, int categoryId,
             int productId, int pageNo = 1, int ProductStockPerPage = 5, string sortBy = "date_desc")
         {
             var productStocks = context.ProductStocks.AsNoTracking()
@@ -65,19 +68,19 @@ namespace Digital_Services_BD.Services
                         .ThenInclude(join => join.ProductCategory)
                             .ThenInclude(ctg => ctg.ProductCategoryJoinProductGroup).AsQueryable();
 
-            if(groupId != -1)
+            if (groupId != -1)
             {
                 productStocks = productStocks.Where(ps => ps.ProductItem.ProductItemJoinProductCategory
                     .Any(join => join.ProductCategory.ProductCategoryJoinProductGroup.Any(join => join.ProductGroupId == groupId))).AsQueryable();
             }
 
-            if(categoryId != -1)
+            if (categoryId != -1)
             {
                 productStocks = productStocks.Where(ps => ps.ProductItem.ProductItemJoinProductCategory
                    .Any(join => join.ProductCategoryId == categoryId)).AsQueryable();
             }
 
-            if(productId != -1)
+            if (productId != -1)
             {
                 productStocks = productStocks.Where(ps => ps.ProductItem.Id == productId).AsQueryable();
             }

@@ -1,15 +1,17 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.Services;
-using Digital_Services_BD.Utilities;
-using Digital_Services_BD.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.Services;
+using Digital_Services_BD.Utilities;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Controllers
 {
@@ -161,7 +163,7 @@ namespace Digital_Services_BD.Controllers
                 ViewBag.HeadingClass = "alert-success";
                 ViewBag.Message = "The product stock has been deleted successfully.";
             }
-            
+
             ViewBag.Action1 = "Index";
             ViewBag.Controller1 = "ProductStocks";
             ViewBag.LinkText1 = "Product stocks";

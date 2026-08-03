@@ -1,12 +1,14 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -63,7 +65,7 @@ namespace Digital_Services_BD.Services
         public async Task<PaymentTransaction> GetPaymentTransaction(int paymentTransactionId)
         {
             var paymentTransaction = await context.PaymentTransactions
-                .AsNoTracking().FirstOrDefaultAsync(pt => pt.Id  == paymentTransactionId);
+                .AsNoTracking().FirstOrDefaultAsync(pt => pt.Id == paymentTransactionId);
             return paymentTransaction;
         }
 
@@ -85,7 +87,7 @@ namespace Digital_Services_BD.Services
         public async Task<bool> UpdatePaymentTransactionStatus(int trnxId, string status)
         {
             var transaction = await context.PaymentTransactions.FindAsync(trnxId);
-            if(transaction != null)
+            if (transaction != null)
             {
                 transaction.Status = status;
                 try
@@ -93,7 +95,7 @@ namespace Digital_Services_BD.Services
                     await context.SaveChangesAsync();
                     return true;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return false;
                 }

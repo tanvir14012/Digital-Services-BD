@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -6,11 +6,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.Services.Surjopay;
 using Digital_Services_BD.Utilities;
 using Digital_Services_BD.ViewModels;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,8 +23,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using Rotativa.AspNetCore;
 
 namespace Digital_Services_BD.Controllers
@@ -473,7 +477,7 @@ namespace Digital_Services_BD.Controllers
                         //if (orderDetails.Status == OrderStatus.PROCESSING)
                         {
                             var pickResult = await orderOps.PickDeliverables(transaction.OrderId);
-                            
+
 
                             var smtpConfig = await dbContext.SmtpConfigs.AsNoTracking().FirstOrDefaultAsync();
                             var logoLinkedRsrc = new EmailLinkedResource
@@ -531,7 +535,7 @@ namespace Digital_Services_BD.Controllers
                                     logoLinkedRsrc
                                 },
 
-                                Attachments = new List<Stream> { 
+                                Attachments = new List<Stream> {
                                     new MemoryStream(await pdfInvoice.BuildFile(ControllerContext))
                                 },
                                 AttachmentNames = new List<string>

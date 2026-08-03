@@ -1,15 +1,19 @@
-﻿using Digital_Services_BD.Models;
-using MailKit.Net.Smtp;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using MailKit.Net.Smtp;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+using MimeKit;
 
 namespace Digital_Services_BD.Services
 {
@@ -49,9 +53,9 @@ namespace Digital_Services_BD.Services
                 //Body part
                 var bodyBuilder = new BodyBuilder();
 
-                if(email.EmailLinkedResources != null)
+                if (email.EmailLinkedResources != null)
                 {
-                    foreach(var linkedRsrc in email.EmailLinkedResources)
+                    foreach (var linkedRsrc in email.EmailLinkedResources)
                     {
                         var mimeEntity = bodyBuilder.LinkedResources.Add(linkedRsrc.ContentPath, linkedRsrc.ContentBytes,
                             ContentType.Parse(linkedRsrc.ContentType));

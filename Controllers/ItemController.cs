@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.ViewModels;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Services_BD.Controllers
@@ -17,7 +19,7 @@ namespace Digital_Services_BD.Controllers
         private readonly IProductCategoryOps productCategoryOps;
         private readonly IProductItemOps productItemOps;
 
-        public ItemController(IProductGroupOps productGroupOps, 
+        public ItemController(IProductGroupOps productGroupOps,
             IProductCategoryOps productCategoryOps, IProductItemOps productItemOps)
         {
             this.productGroupOps = productGroupOps;

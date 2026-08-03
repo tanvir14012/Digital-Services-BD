@@ -1,14 +1,16 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -77,7 +79,8 @@ namespace Digital_Services_BD.Services
                 {
                     DeleteFile(productGroup.ImageUrl);
                     return productGroup;
-                };
+                }
+                ;
                 return null;
             }
             catch (Exception e)
@@ -267,8 +270,9 @@ namespace Digital_Services_BD.Services
             {
                 decimal minPrice = Convert.ToDecimal(priceRange.Split("to")[0]);
                 decimal maxPrice = Convert.ToDecimal(priceRange.Split("to")[1]);
-                joinTable = joinTable.GroupBy(jt => jt.category.Id).Select(g => 
-                new {
+                joinTable = joinTable.GroupBy(jt => jt.category.Id).Select(g =>
+                new
+                {
                     category = new ProductCategory
                     {
                         Id = g.Key,
@@ -322,18 +326,21 @@ namespace Digital_Services_BD.Services
                         ProductItemId = g.First().prices.ProductItemId,
                         Vat = g.First().prices.Vat
                     }
-                }).Where(jt => (jt.prices.Price - jt.prices.Discount) >= minPrice 
+                }).Where(jt => (jt.prices.Price - jt.prices.Discount) >= minPrice
                     && (jt.prices.Price - jt.prices.Discount) <= maxPrice).ToList();
             }
             if (sortBy != null)
             {
                 switch (sortBy)
                 {
-                    case "name": joinTable = joinTable.OrderBy(jt => jt.category.Name).ToList();
+                    case "name":
+                        joinTable = joinTable.OrderBy(jt => jt.category.Name).ToList();
                         break;
-                    case "p_l_h": joinTable = joinTable.OrderBy(jt => (jt.prices.Price - jt.prices.Discount)).ToList();
+                    case "p_l_h":
+                        joinTable = joinTable.OrderBy(jt => (jt.prices.Price - jt.prices.Discount)).ToList();
                         break;
-                    case "p_h_l": joinTable = joinTable.OrderByDescending(jt => (jt.prices.Price - jt.prices.Discount)).ToList(); 
+                    case "p_h_l":
+                        joinTable = joinTable.OrderByDescending(jt => (jt.prices.Price - jt.prices.Discount)).ToList();
                         break;
                     default:
                         break;
@@ -342,25 +349,25 @@ namespace Digital_Services_BD.Services
             var categories = joinTable.Select(jt => jt.category).Distinct().ToList();
             var totalCategories = categories.Count();
 
-            if(pageNo >= 0 && pageNo < categories.Count)
+            if (pageNo >= 0 && pageNo < categories.Count)
             {
                 var start = pageNo * ProductConfig.NoOfProductCategoryPerPage;
                 try
                 {
                     categories = categories.GetRange(start, ProductConfig.NoOfProductCategoryPerPage);
                 }
-                catch(ArgumentException e)
+                catch (ArgumentException e)
                 {
-                    if(start > categories.Count)
+                    if (start > categories.Count)
                     {
                         categories = categories.TakeLast(ProductConfig.NoOfProductCategoryPerPage).ToList();
                     }
-                    else if(start + ProductConfig.NoOfProductCategoryPerPage >= categories.Count )
+                    else if (start + ProductConfig.NoOfProductCategoryPerPage >= categories.Count)
                     {
                         categories = categories.GetRange(start, categories.Count() - start);
                     }
                 }
-                
+
             }
             var filteredCategories = new FilteredCategories
             {
@@ -378,12 +385,12 @@ namespace Digital_Services_BD.Services
                         .ThenInclude(join => join.ProductCategory)
                         .ThenInclude(pc => pc.ProductItemJoinProductCategory)
                         .ThenInclude(join => join.ProductItem)
-                    .Select(pg => new ProductGroup 
-                    { 
-                        Id = pg.Id, 
+                    .Select(pg => new ProductGroup
+                    {
+                        Id = pg.Id,
                         Name = pg.Name,
                         AllCategories = pg.ProductCategoryJoinProductGroup.Select(join => new ProductCategory
-                        { 
+                        {
                             Id = join.ProductCategory.Id,
                             Name = join.ProductCategory.Name,
                             AllItems = join.ProductCategory.ProductItemJoinProductCategory.Select(join2 => new ProductItem

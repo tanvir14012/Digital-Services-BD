@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Digital_Services_BD.Models
     {
         public ProductItemFeature()
         {
-                
+
         }
         public int Id { get; set; }
         //Foreign key, having it will make delete cascade

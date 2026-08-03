@@ -1,9 +1,11 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Services_BD.ViewModels
 {

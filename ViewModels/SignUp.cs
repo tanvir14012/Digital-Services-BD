@@ -1,10 +1,12 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using Microsoft.AspNetCore.Http;
 
 namespace Digital_Services_BD.ViewModels
 {
@@ -28,7 +30,7 @@ namespace Digital_Services_BD.ViewModels
         [Required]
         [MaxLength(128, ErrorMessage = "Password can not contain more than 128 characters")]
         [MinLength(8, ErrorMessage = "Password must contain at least 8 characters")]
-        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,128}$", ErrorMessage ="The given password is not valid")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,128}$", ErrorMessage = "The given password is not valid")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required]

@@ -1,10 +1,12 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -304,7 +306,7 @@ namespace Digital_Services_BD.Services
                     .ThenInclude(pi => pi.ProductStockCount)
                 .FirstOrDefaultAsync(ci => ci.Id == cartItemId);
 
-            
+
             if (cartItem != null)
             {
                 try
@@ -368,13 +370,13 @@ namespace Digital_Services_BD.Services
                 //Remove cartItems with 0 quantity/out of stock items
                 string message = null;
                 var outOfStockItems = PopulateOutOfStockCartProductItems(cart);
-                if(outOfStockItems.Any())
+                if (outOfStockItems.Any())
                 {
                     cart = await RemoveOutOfStockItemsFromGivenCart(cart);
                     message = "One or more items in your cart went out of stock." +
                         " Some items may have been removed or the quantity has been reduced. We sincerely apologize for this inconvenience.";
                 }
-                
+
                 //Remove out of stock items
 
 
@@ -479,7 +481,7 @@ namespace Digital_Services_BD.Services
             bool exist = await context.CartProductItemBundles.AsNoTracking()
                 .AnyAsync(cpb => cpb.CartId == cartId && cpb.ProductItemBundleId == productItemBundleId);
 
-            return exist; 
+            return exist;
         }
 
         public async Task<AddCartItemBundleViewModel> AddProductItemBundletoCart(int cartId, string userId,
@@ -575,60 +577,60 @@ namespace Digital_Services_BD.Services
                     var cartJoinProductItemBundle = await context.CartProductItemBundles
                         .FirstAsync(bundle => bundle.ProductItemBundleId == productItemBundleId && bundle.CartId == cart.Id);
 
-                        quantity += cartJoinProductItemBundle.Quantity;
-                        bool stockAvailable = true;
-                        bool minStockAvailable = true;
-                        foreach (var join in productItemBundle.ProductItemBundleJoinProductItem)
+                    quantity += cartJoinProductItemBundle.Quantity;
+                    bool stockAvailable = true;
+                    bool minStockAvailable = true;
+                    foreach (var join in productItemBundle.ProductItemBundleJoinProductItem)
+                    {
+                        int countInCartItems = cart.CartItems.Count(ci => ci.ProductItemId == join.ProductItemId);
+                        int countInOtherBundles = cart.CartProductItemBundles
+                            .Where(bundle => bundle.ProductItemBundleId != productItemBundle.Id)
+                            .Sum(bundle => bundle.Quantity * (bundle.ProductItemBundle.ProductItemBundleJoinProductItem
+                            .FirstOrDefault(join2 => join2.ProductItemId == join.ProductItemId)
+                            ?.ProductItemQuantity ?? 0));
+
+                        if (quantity * join.ProductItemQuantity + countInCartItems + countInOtherBundles >
+                            join.ProductItem.ProductStockCount.Count)
                         {
-                            int countInCartItems = cart.CartItems.Count(ci => ci.ProductItemId == join.ProductItemId);
-                            int countInOtherBundles = cart.CartProductItemBundles
-                                .Where(bundle => bundle.ProductItemBundleId != productItemBundle.Id)
-                                .Sum(bundle => bundle.Quantity * (bundle.ProductItemBundle.ProductItemBundleJoinProductItem
-                                .FirstOrDefault(join2 => join2.ProductItemId == join.ProductItemId)
-                                ?.ProductItemQuantity ?? 0));
-
-                            if (quantity * join.ProductItemQuantity + countInCartItems + countInOtherBundles >
-                                join.ProductItem.ProductStockCount.Count)
-                            {
-                                stockAvailable = false;
-                            }
-
-                            if (minStock * join.ProductItemQuantity + countInCartItems + countInOtherBundles >
-                               join.ProductItem.ProductStockCount.Count)
-                            {
-                                minStockAvailable = false;
-                            }
+                            stockAvailable = false;
                         }
 
-                        if (stockAvailable)
+                        if (minStock * join.ProductItemQuantity + countInCartItems + countInOtherBundles >
+                           join.ProductItem.ProductStockCount.Count)
                         {
-                            cartJoinProductItemBundle.Quantity = quantity;
+                            minStockAvailable = false;
                         }
-                        else if (minStockAvailable)
-                        {
-                            cartJoinProductItemBundle.Quantity = minStock;
-                            cartItemBundleViewModel.Message = $"Sorry, we have a shortage of one or more items, the available quantity is {minStock} and added to your cart.";
-                            cartItemBundleViewModel.MessageClass = "alert alert-info alert-dismissible fade show";
-                        }
+                    }
 
-                        if (cartJoinProductItemBundle.Quantity > ProductConfig.MaxItemAllowedInCart)
-                        {
-                            cartJoinProductItemBundle.Quantity = ProductConfig.MaxItemAllowedInCart;
-                            cartItemBundleViewModel.Message = $"We are glad that you like to buy a lot of stuffs but the " +
-                                $"possible maximum quantity of a product in cart is {ProductConfig.MaxItemAllowedInCart}, that" +
-                                $" is added to your cart.";
-                            cartItemBundleViewModel.MessageClass = "alert alert-info alert-dismissible fade show";
-                        }
-                        try
-                        {
-                            await context.SaveChangesAsync();
-                            cartItemBundleViewModel.ProductItemBundle = productItemBundle;
-                            return cartItemBundleViewModel;
-                        }
-                        catch (Exception e)
-                        {
-                            return null;
-                        }
+                    if (stockAvailable)
+                    {
+                        cartJoinProductItemBundle.Quantity = quantity;
+                    }
+                    else if (minStockAvailable)
+                    {
+                        cartJoinProductItemBundle.Quantity = minStock;
+                        cartItemBundleViewModel.Message = $"Sorry, we have a shortage of one or more items, the available quantity is {minStock} and added to your cart.";
+                        cartItemBundleViewModel.MessageClass = "alert alert-info alert-dismissible fade show";
+                    }
+
+                    if (cartJoinProductItemBundle.Quantity > ProductConfig.MaxItemAllowedInCart)
+                    {
+                        cartJoinProductItemBundle.Quantity = ProductConfig.MaxItemAllowedInCart;
+                        cartItemBundleViewModel.Message = $"We are glad that you like to buy a lot of stuffs but the " +
+                            $"possible maximum quantity of a product in cart is {ProductConfig.MaxItemAllowedInCart}, that" +
+                            $" is added to your cart.";
+                        cartItemBundleViewModel.MessageClass = "alert alert-info alert-dismissible fade show";
+                    }
+                    try
+                    {
+                        await context.SaveChangesAsync();
+                        cartItemBundleViewModel.ProductItemBundle = productItemBundle;
+                        return cartItemBundleViewModel;
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
                 }
             }
             return null;
@@ -676,7 +678,7 @@ namespace Digital_Services_BD.Services
                         .First(bundle => bundle.ProductItemBundleId == productItemBundleId);
 
                     var minStock = cartProductItemBundle.ProductItemBundle.ProductItemBundleJoinProductItem
-                .       Min(join => join.ProductItem.ProductStockCount.Count / join.ProductItemQuantity);
+                .Min(join => join.ProductItem.ProductStockCount.Count / join.ProductItemQuantity);
 
                     bool stockAvailable = true;
                     bool minStockAvailable = true;
@@ -715,7 +717,7 @@ namespace Digital_Services_BD.Services
 
                     return cartProductItemBundle;
                 }
-                catch 
+                catch
                 {
                     return null;
                 }
@@ -776,20 +778,20 @@ namespace Digital_Services_BD.Services
                 var outOfStockProductItems = PopulateOutOfStockCartProductItems(cart);
 
                 //Remove out of stock items from cart items
-                if(outOfStockProductItems != null && outOfStockProductItems.Any())
+                if (outOfStockProductItems != null && outOfStockProductItems.Any())
                 {
-                    for(int i = cart.CartItems.Count - 1; i >= 0; i--)
+                    for (int i = cart.CartItems.Count - 1; i >= 0; i--)
                     {
                         var cartItem = cart.CartItems.ElementAt(i);
                         var outOfStockProductItem = outOfStockProductItems.FirstOrDefault(t => t.ProductItem.Id == cartItem.ProductItemId);
-                        if(outOfStockProductItem != null)
+                        if (outOfStockProductItem != null)
                         {
-                            if(outOfStockProductItem.Quantity >= cartItem.Quantity)
+                            if (outOfStockProductItem.Quantity >= cartItem.Quantity)
                             {
                                 outOfStockProductItem.Quantity -= cartItem.Quantity;
                                 cart.CartItems.Remove(cartItem);
 
-                                if(outOfStockProductItem.Quantity == 0)
+                                if (outOfStockProductItem.Quantity == 0)
                                 {
                                     outOfStockProductItems.Remove(outOfStockProductItem);
                                 }
@@ -806,7 +808,7 @@ namespace Digital_Services_BD.Services
                 //Remove out of stock items from cart item bundles
                 if (outOfStockProductItems != null && outOfStockProductItems.Any())
                 {
-                    for(int i = cart.CartProductItemBundles.Count - 1; i >= 0; i--)
+                    for (int i = cart.CartProductItemBundles.Count - 1; i >= 0; i--)
                     {
                         var bundle = cart.CartProductItemBundles.ElementAt(i);
                         bool shouldDelete = false;
@@ -814,16 +816,16 @@ namespace Digital_Services_BD.Services
                         {
                             var outOfStockProductItem = outOfStockProductItems
                                 .FirstOrDefault(t => t.ProductItem.Id == bundleItem.ProductItemId);
-                            if(outOfStockProductItem != null)
+                            if (outOfStockProductItem != null)
                             {
                                 var bundleQty = bundle.Quantity;
-                                while(bundleQty > 0)
+                                while (bundleQty > 0)
                                 {
-                                    if(bundleQty * bundleItem.ProductItemQuantity >= outOfStockProductItem.Quantity)
+                                    if (bundleQty * bundleItem.ProductItemQuantity >= outOfStockProductItem.Quantity)
                                     {
                                         outOfStockProductItem.Quantity -= bundleQty * bundleItem.ProductItemQuantity;
                                         bundleQty--;
-                                        if(outOfStockProductItem.Quantity <= 0)
+                                        if (outOfStockProductItem.Quantity <= 0)
                                         {
                                             outOfStockProductItems.Remove(outOfStockProductItem);
                                             break;
@@ -836,7 +838,7 @@ namespace Digital_Services_BD.Services
                                 }
 
                                 bundle.Quantity = bundleQty;
-                                if(bundle.Quantity <= 0)
+                                if (bundle.Quantity <= 0)
                                 {
                                     shouldDelete = true;
                                     break;
@@ -844,14 +846,14 @@ namespace Digital_Services_BD.Services
                             }
                         }
 
-                        if(shouldDelete)
+                        if (shouldDelete)
                         {
                             cart.CartProductItemBundles.Remove(bundle);
                         }
 
                     }
                 }
-                
+
                 await context.SaveChangesAsync();
                 return cart;
             }

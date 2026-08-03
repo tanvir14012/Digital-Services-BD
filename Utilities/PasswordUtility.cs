@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Digital_Services_BD.Utilities
 {
@@ -111,7 +112,7 @@ namespace Digital_Services_BD.Utilities
         /// </summary>
         public static byte[] PkbDf2(byte[] salt, string data, int size = 32)
         {
-            if(string.IsNullOrEmpty(data) || salt == null || salt.Length == 0)
+            if (string.IsNullOrEmpty(data) || salt == null || salt.Length == 0)
             {
                 return null;
             }

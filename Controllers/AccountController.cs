@@ -1,13 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.ViewModels;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using NLog;
 
 namespace Digital_Services_BD.Controllers
@@ -222,7 +225,7 @@ namespace Digital_Services_BD.Controllers
                         ToAddresses = new List<string> { user.Email },
                         BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel)
                     };
-                    await emailService .SendEmailAsync(email);
+                    await emailService.SendEmailAsync(email);
                     ViewBag.Heading = "Success !";
                     ViewBag.HeadingClass = "alert-success";
                     ViewBag.Message = $"An email with a verfification link is sent to {emailModel.Email}";
@@ -261,7 +264,7 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public async Task<IActionResult> SignIn(SignIn signInModel, string returnUrl = null)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var signInAttempt = await signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.RememberMe, true);
                 var user = await userManager.FindByEmailAsync(signInModel.Email);
@@ -274,7 +277,7 @@ namespace Digital_Services_BD.Controllers
                     if (cartId != null)
                     {
                         var cart = await cartOps.MergeCarts((int)cartId, user.Id);
-                        if(cart != null)
+                        if (cart != null)
                         {
                             await cartOps.RemoveOutOfStockItems(cart.Id);
                             AddCartCookie(cart.Id);
@@ -286,8 +289,8 @@ namespace Digital_Services_BD.Controllers
                         AddCartCookie(cart.Id);
                     }
 
-                    
-                    if (! string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
@@ -296,7 +299,7 @@ namespace Digital_Services_BD.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                 }
-                else if(signInAttempt.IsLockedOut) // If account locked for too many failed logins
+                else if (signInAttempt.IsLockedOut) // If account locked for too many failed logins
                 {
                     ViewBag.Heading = "Account locked !";
                     ViewBag.HeadingClass = "alert-warning";
@@ -308,7 +311,7 @@ namespace Digital_Services_BD.Controllers
                     return View("AlertMessage");
                 }
 
-                if(user != null && ! user.EmailConfirmed)
+                if (user != null && !user.EmailConfirmed)
                 {
                     ViewBag.Heading = "Your email address is not verified yet";
                     ViewBag.HeadingClass = "alert-info";
@@ -320,7 +323,7 @@ namespace Digital_Services_BD.Controllers
                 ModelState.AddModelError(string.Empty, "You entered incorrect email and password pair");
 
             }
-            
+
             return View(signInModel);
         }
 
@@ -345,7 +348,7 @@ namespace Digital_Services_BD.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByEmailAsync(emailModel.Email);
-                if (user != null )
+                if (user != null)
                 {
                     //Generate password reset token
                     var smtpConfig = await dbContext.SmtpConfigs.AsNoTracking().FirstOrDefaultAsync();
@@ -394,9 +397,9 @@ namespace Digital_Services_BD.Controllers
                 }
                 else
                 {
-                        ViewBag.Heading = "Oops !";
-                        ViewBag.HeadingClass = "alert-info";
-                        ViewBag.Message = $"The email address {emailModel.Email} is not associated with any account. Please sign up to create an account.";
+                    ViewBag.Heading = "Oops !";
+                    ViewBag.HeadingClass = "alert-info";
+                    ViewBag.Message = $"The email address {emailModel.Email} is not associated with any account. Please sign up to create an account.";
 
                 }
 
@@ -419,16 +422,16 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPasswordModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await userManager.FindByIdAsync(resetPasswordModel.Id);
-                if(user != null)
+                if (user != null)
                 {
                     var resetResult = await userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
-                    if(resetResult.Succeeded)
+                    if (resetResult.Succeeded)
                     {
                         //Unlock account if it was locked
-                        if(await userManager.IsLockedOutAsync(user))
+                        if (await userManager.IsLockedOutAsync(user))
                         {
                             await userManager.SetLockoutEndDateAsync(user, DateTime.UtcNow);
                         }
@@ -442,7 +445,7 @@ namespace Digital_Services_BD.Controllers
                     }
                     else
                     {
-                        foreach(var error in resetResult.Errors)
+                        foreach (var error in resetResult.Errors)
                         {
                             ModelState.AddModelError(string.Empty, error.Description);
                             return View(resetPasswordModel);
@@ -456,9 +459,9 @@ namespace Digital_Services_BD.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
-        public async Task<IActionResult> SignOut(string returnUrl ="/")
+        public async Task<IActionResult> SignOut(string returnUrl = "/")
         {
-            if(signInManager.IsSignedIn(User))
+            if (signInManager.IsSignedIn(User))
             {
                 // Merge carts if applicable
                 string cartIdCookie = Request.Cookies["CartId"];
@@ -478,7 +481,7 @@ namespace Digital_Services_BD.Controllers
             }
 
             return Redirect("~/");
-            
+
         }
 
         private void AddCartCookie(int cartId)

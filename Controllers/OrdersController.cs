@@ -1,14 +1,17 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.Services;
-using Digital_Services_BD.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Rotativa.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.Services;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+
+using Rotativa.AspNetCore;
 
 namespace Digital_Services_BD.Controllers
 {
@@ -28,13 +31,13 @@ namespace Digital_Services_BD.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if(userId != null)
+            if (userId != null)
             {
                 try
                 {
                     var total = await orderOps.GetOrderCount(userId);
                     var model = await orderOps.FilterOrders(userId, total);
-                    
+
                     model.TotalOrders = total;
                     return View(model);
                 }
@@ -49,10 +52,10 @@ namespace Digital_Services_BD.Controllers
                     ViewBag.LinkText1 = "Home";
                     return View("AlertMessage");
                 }
-                
+
             }
             var referer = Request.Headers["Referer"].ToString();
-            return Redirect(string.IsNullOrEmpty(referer) ? "/": referer);
+            return Redirect(string.IsNullOrEmpty(referer) ? "/" : referer);
         }
 
         [HttpPost]
@@ -87,11 +90,11 @@ namespace Digital_Services_BD.Controllers
         public async Task<IActionResult> Details(int Id)
         {
             var order = await orderOps.GetOrder(Id);
-            if(order == null)
+            if (order == null)
             {
                 return View("NotFound");
             }
-            if(order.CustomerId != User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
+            if (order.CustomerId != User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
             {
                 return Unauthorized();
             }

@@ -1,8 +1,3 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +5,17 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
+using Digital_Services_BD.Models;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace Digital_Services_BD.Services.Surjopay
 {
-    public class SurjopayService: ISurjopayService
+    public class SurjopayService : ISurjopayService
     {
         private readonly AppDbContext context;
         private readonly IHttpClientFactory httpClientFactory;
@@ -43,7 +46,7 @@ namespace Digital_Services_BD.Services.Surjopay
 
             var httpClient = this.httpClientFactory.CreateClient();
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-            if(httpResponseMessage.IsSuccessStatusCode)
+            if (httpResponseMessage.IsSuccessStatusCode)
             {
                 var respContent = await httpResponseMessage.Content.ReadAsStringAsync();
                 JObject responseObj = JsonConvert.DeserializeObject<JObject>(respContent);
@@ -86,7 +89,7 @@ namespace Digital_Services_BD.Services.Surjopay
                 .Include(trnx => trnx.Order)
                 .FirstOrDefaultAsync(trnx => trnx.SurjoPayOrderId == sujopayOrderId);
 
-            if(transaction != null && transaction.Order != null)
+            if (transaction != null && transaction.Order != null)
             {
                 var json = JsonConvert.SerializeObject(new
                 {
@@ -111,13 +114,13 @@ namespace Digital_Services_BD.Services.Surjopay
                     var respContent = await httpResponseMessage.Content.ReadAsStringAsync();
                     JObject[] responseData = JsonConvert.DeserializeObject<JObject[]>(respContent);
                     JObject responseObj = responseData[0];
-                    if(responseObj["customer_order_id"].ToString() == transaction.OrderId.ToString() &&
+                    if (responseObj["customer_order_id"].ToString() == transaction.OrderId.ToString() &&
                         (Convert.ToDecimal(responseObj["payable_amount"].ToString()) == transaction.Amount &&
                         transaction.Amount == transaction.Order.GrandTotal) &&
                         (responseObj["currency"].ToString().ToUpper() == "BDT"))
 
                     {
-                        if(transaction.SurjoPayCode == 0)
+                        if (transaction.SurjoPayCode == 0)
                         {
                             switch (Convert.ToInt32(responseObj["sp_code"].ToString()))
                             {
@@ -155,7 +158,7 @@ namespace Digital_Services_BD.Services.Surjopay
                             transaction.UserVerificationToken = responseObj["value2"].ToString();
                             await context.SaveChangesAsync();
                         }
-                       
+
                         return transaction;
                     }
                 }

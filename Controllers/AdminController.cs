@@ -1,15 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.Utilities;
 using Digital_Services_BD.ViewModels;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
+
 using Newtonsoft.Json;
 
 namespace Digital_Services_BD.Controllers
@@ -74,7 +77,7 @@ namespace Digital_Services_BD.Controllers
         }
         public IActionResult ViewProductGroup(int id)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var productGroup = productGroupOps.GetProductGroup(id);
                 if (productGroup != null)
@@ -350,7 +353,7 @@ namespace Digital_Services_BD.Controllers
         }
         public IActionResult CreateProductItem()
         {
-            ViewBag.Categories = productCategoryOps.GetAllProductCategories().ToList(); 
+            ViewBag.Categories = productCategoryOps.GetAllProductCategories().ToList();
             return View();
         }
 
@@ -665,10 +668,10 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public IActionResult CreateCarousel(Carousel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var carousel = carouselOps.AddCarousel(model);
-                if(carousel != null)
+                if (carousel != null)
                 {
                     return RedirectToAction("Carousel");
                 }
@@ -804,7 +807,7 @@ namespace Digital_Services_BD.Controllers
             var model = dbContext.PaymentGwConfigs.OrderBy(gwc => gwc.CreatedOn)
                 .FirstOrDefault();
 
-            if(model == null)
+            if (model == null)
             {
                 model = new PaymentGwConfig
                 {
@@ -819,7 +822,7 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult PaymentGw(PaymentGwConfig model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -834,11 +837,11 @@ namespace Digital_Services_BD.Controllers
                     dbContext.SaveChanges();
                     ModelState.Clear();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError(string.Empty, "An error occurred while saving");
                 }
-                
+
             }
 
             return View(model);
@@ -848,7 +851,7 @@ namespace Digital_Services_BD.Controllers
         [HttpGet]
         public IActionResult EmailConfig()
         {
-            var model = dbContext.SmtpConfigs.OrderByDescending(cfg=> cfg.CreatedDateTime)
+            var model = dbContext.SmtpConfigs.OrderByDescending(cfg => cfg.CreatedDateTime)
                 .FirstOrDefault();
 
             if (model == null)
@@ -901,7 +904,7 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public IActionResult CheckEncryptionKey(Key model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -963,7 +966,7 @@ namespace Digital_Services_BD.Controllers
                     {
                         ModelState.AddModelError(string.Empty, "Could not find the entry in database.");
                     }
-                   
+
                 }
                 catch
                 {
@@ -991,7 +994,7 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public IActionResult CreateProductItemBundle(ProductItemBundle model)
         {
-            if (ModelState.IsValid && model.ProductItemBundleJoinProductItem.Count > 1 
+            if (ModelState.IsValid && model.ProductItemBundleJoinProductItem.Count > 1
                 && model.ProductItemBundleJoinProductItem.Count == model.ProductItemBundleJoinProductItem.GroupBy(join => join.ProductItemId).Count())
             {
                 var ProductItemBundle = productItemBundleOps.AddProductItemBundle(model);
@@ -1047,7 +1050,7 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public IActionResult EditProductItemBundle(ProductItemBundle model)
         {
-            if (ModelState.IsValid && model.ProductItemBundleJoinProductItem.Count > 1 && 
+            if (ModelState.IsValid && model.ProductItemBundleJoinProductItem.Count > 1 &&
                 model.ProductItemBundleJoinProductItem.Count == model.ProductItemBundleJoinProductItem.GroupBy(join => join.ProductItemId).Count())
             {
                 var ProductItemBundle = productItemBundleOps.UpdateProductItemBundle(model);

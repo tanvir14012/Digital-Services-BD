@@ -1,4 +1,4 @@
-﻿namespace Digital_Services_BD.Models
+namespace Digital_Services_BD.Models
 {
     public enum IdCardType
     {

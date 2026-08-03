@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Linq;
 using System.Reflection;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Digital_Services_BD.Utilities
 {
@@ -27,7 +28,7 @@ namespace Digital_Services_BD.Utilities
                 {
                     // Check if the property has the [Encrypted] attribute
                     var propertyInfo = property.PropertyInfo;
-                    if (propertyInfo != null && 
+                    if (propertyInfo != null &&
                         propertyInfo.PropertyType == typeof(string) &&
                         Attribute.IsDefined(propertyInfo, typeof(EncryptedAttribute)))
                     {
