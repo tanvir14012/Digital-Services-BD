@@ -230,18 +230,18 @@ END");
     int skippedBatchCount = 0;
     foreach (string batch in Regex.Split(scriptContent, @"^\s*GO\s*(?:--.*)?$", RegexOptions.Multiline | RegexOptions.IgnoreCase))
     {
-        if (string.IsNullOrWhiteSpace(batch))
+        string executableBatch = RemoveUnsupportedSeedStatements(batch);
+        if (string.IsNullOrWhiteSpace(executableBatch))
         {
+            if (!string.IsNullOrWhiteSpace(batch))
+            {
+                skippedBatchCount++;
+            }
+
             continue;
         }
 
-        if (ShouldSkipSeedBatch(batch))
-        {
-            skippedBatchCount++;
-            continue;
-        }
-
-        ExecuteNonQuery(connection, dbTransaction, batch);
+        ExecuteNonQuery(connection, dbTransaction, executableBatch);
     }
 
     using DbCommand insertSeedCommand = connection.CreateCommand();
@@ -298,12 +298,21 @@ static bool SeedScriptSeedsIdentity(string? scriptContent)
             RegexOptions.IgnoreCase);
 }
 
-static bool ShouldSkipSeedBatch(string batch)
+static string RemoveUnsupportedSeedStatements(string batch)
 {
-    string trimmedBatch = batch.Trim();
-    return Regex.IsMatch(trimmedBatch, @"^USE\s+\[", RegexOptions.IgnoreCase)
-        || Regex.IsMatch(trimmedBatch, @"^ALTER\s+DATABASE\s+\[", RegexOptions.IgnoreCase)
-        || Regex.IsMatch(trimmedBatch, @"sp_fulltext_database", RegexOptions.IgnoreCase);
+    string sanitizedBatch = Regex.Replace(
+        batch,
+        @"^\s*USE\s+\[[^\]]+\]\s*$",
+        string.Empty,
+        RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+    if (Regex.IsMatch(sanitizedBatch, @"^\s*ALTER\s+DATABASE\s+\[", RegexOptions.IgnoreCase)
+        || Regex.IsMatch(sanitizedBatch, @"sp_fulltext_database", RegexOptions.IgnoreCase))
+    {
+        return string.Empty;
+    }
+
+    return sanitizedBatch.Trim();
 }
 
 static bool SeedScriptAlreadyApplied(DbConnection connection, DbTransaction transaction, string scriptName)
