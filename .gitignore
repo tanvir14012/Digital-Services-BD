@@ -361,9 +361,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# exclude wwwroot images
-/wwwroot/ImageResources/*
-
 # Modern .NET and tooling artifacts
 /.idea/
 /.vscode/
