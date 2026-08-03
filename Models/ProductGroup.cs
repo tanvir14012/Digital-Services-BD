@@ -1,12 +1,14 @@
-﻿using Digital_Services_BD.Utilities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Utilities;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Services_BD.Models
 {
@@ -31,7 +33,7 @@ namespace Digital_Services_BD.Models
         public string ImageUrl { get; set; }
         [Required]
         [Display(Name = "Product Group Overview")]
-        [MaxLength(256,ErrorMessage = "Product group overview field should contain no more than 256 characters")]
+        [MaxLength(256, ErrorMessage = "Product group overview field should contain no more than 256 characters")]
         public string Overview { get; set; }
         [StringLength(256, ErrorMessage = "What can be done field should contain no more than 256 characters")]
         [Display(Name = "What Can Be Done")]

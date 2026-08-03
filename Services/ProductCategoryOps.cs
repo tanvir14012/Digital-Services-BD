@@ -1,8 +1,3 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -78,7 +80,8 @@ namespace Digital_Services_BD.Services
                 {
                     DeleteFile(productCategory.ImageUrl);
                     return productCategory;
-                };
+                }
+                ;
                 return null;
             }
             catch (Exception e)
@@ -240,10 +243,10 @@ namespace Digital_Services_BD.Services
         private List<ProductItem> GetAllProdItemByProdCatgId(int catgId)
         {
             var query = from item in context.ProductItems
-            join categoryitemmap in context.ProductItemJoinProductCategory
-            on item.Id equals categoryitemmap.ProductItemId
-            where categoryitemmap.ProductCategoryId == catgId
-            select item;
+                        join categoryitemmap in context.ProductItemJoinProductCategory
+                        on item.Id equals categoryitemmap.ProductItemId
+                        where categoryitemmap.ProductCategoryId == catgId
+                        select item;
 
             return query.ToList();
         }
@@ -350,7 +353,8 @@ namespace Digital_Services_BD.Services
         public async Task<IEnumerable<ProductCategory>> GetAllProductCategoriesIdName()
         {
             return await context.ProductCategories.AsNoTracking()
-                .Select(c => new ProductCategory { 
+                .Select(c => new ProductCategory
+                {
                     Id = c.Id,
                     Name = c.Name
                 }).ToListAsync();

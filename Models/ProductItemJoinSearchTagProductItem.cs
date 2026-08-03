@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +15,6 @@ namespace Digital_Services_BD.Models
         public int SearchTagProductItemId { get; set; }
         //Navigation properties
         public virtual ProductItem ProductItem { get; set; }
-        public virtual SearchTagProductItem SearchTagProductItem { get; set;}
+        public virtual SearchTagProductItem SearchTagProductItem { get; set; }
     }
 }

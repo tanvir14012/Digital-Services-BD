@@ -1,11 +1,14 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.EntityFrameworkCore;
+
 using static Digital_Services_BD.ViewModels.ProductConfig;
 
 namespace Digital_Services_BD.Services
@@ -32,7 +35,7 @@ namespace Digital_Services_BD.Services
 
             model.TotalItems = products.Count();
 
-            products = products.Skip((model.PageNo-1) * NoOfProductItemPerPage)
+            products = products.Skip((model.PageNo - 1) * NoOfProductItemPerPage)
                                 .Take(NoOfProductItemPerPage)
                                 .OrderBy(item => item.Name)
                                 .ToList();
@@ -43,13 +46,13 @@ namespace Digital_Services_BD.Services
                 decimal maxPrice = Convert.ToDecimal(model.PriceRange.Split("to")[1]);
 
                 var skipProducts = new List<ProductItem>();
-                foreach(var product in products)
+                foreach (var product in products)
                 {
                     var priceObject = product.ProductItemPrice.FirstOrDefault(pr => pr.PriceCurrency == "BDT");
                     if (priceObject != null)
                     {
                         var price = priceObject.Price - priceObject.Discount;
-                        if(!(price >= minPrice && price <= maxPrice))
+                        if (!(price >= minPrice && price <= maxPrice))
                         {
                             skipProducts.Add(product);
                         }

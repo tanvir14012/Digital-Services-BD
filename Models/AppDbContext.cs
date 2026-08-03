@@ -1,11 +1,13 @@
-using Digital_Services_BD.Utilities;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Utilities;
+
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Models
 {
@@ -130,7 +132,7 @@ namespace Digital_Services_BD.Models
             //ProductItemPrice table property design
             builder.Entity<ProductItemPrice>(entity =>
             {
-                
+
                 entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.PriceCurrency).IsRequired().HasMaxLength(16);
                 entity.Property(e => e.Discount).IsRequired().HasColumnType("decimal(19, 4)");
@@ -142,7 +144,7 @@ namespace Digital_Services_BD.Models
             //ProductCategory table property design
             builder.Entity<ProductCategory>(entity =>
             {
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
                 entity.Property(e => e.HowToConsume).HasMaxLength(256);
@@ -175,7 +177,7 @@ namespace Digital_Services_BD.Models
             //ProductGroup table property design
             builder.Entity<ProductGroup>(entity =>
             {
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Property(e => e.Overview).IsRequired().HasMaxLength(256);
@@ -208,7 +210,7 @@ namespace Digital_Services_BD.Models
             //SearchTagProductItem table property design
             builder.Entity<SearchTagProductItem>(entity =>
             {
-                
+
                 entity.Property(e => e.TagName).IsRequired().HasMaxLength(128);
             });
 
@@ -228,7 +230,7 @@ namespace Digital_Services_BD.Models
             //PromoOffer table property design
             builder.Entity<PromoOffer>(entity =>
             {
-                
+
                 entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.PromoCode).IsRequired().HasMaxLength(16);
                 entity.Property(e => e.OfferCurrency).IsRequired().HasMaxLength(16);
@@ -254,7 +256,7 @@ namespace Digital_Services_BD.Models
 
             builder.Entity<ProductItemFeature>(entity =>
             {
-                
+
                 entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.Company).HasMaxLength(64);
                 entity.Property(e => e.Developer).HasMaxLength(64);
@@ -287,7 +289,7 @@ namespace Digital_Services_BD.Models
             //Product section for landing page like featured, you may like, hot deals etc.
             builder.Entity<ProductSection>(entity =>
             {
-                
+
                 entity.Property(e => e.Title).HasMaxLength(128);
                 entity.Property(e => e.Overview).HasMaxLength(512);
                 entity.Ignore(e => e.ProductItemIds);
@@ -312,12 +314,12 @@ namespace Digital_Services_BD.Models
             //Carousel
             builder.Entity<Carousel>(entity =>
             {
-                
+
                 entity.Property(e => e.Name).HasMaxLength(128);
             });
             builder.Entity<CarouselJoinCarouselImage>(entity =>
             {
-                
+
                 entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Ignore(e => e.Image);
                 entity.HasOne(e => e.Carousel)
@@ -329,7 +331,7 @@ namespace Digital_Services_BD.Models
             //Cart
             builder.Entity<Cart>(entity =>
             {
-                
+
                 entity.Property(e => e.IsCheckedOut).IsRequired();
                 entity.Property(e => e.UserId).HasDefaultValue(null);
 
@@ -349,7 +351,7 @@ namespace Digital_Services_BD.Models
 
             builder.Entity<CartItem>(entity =>
             {
-                
+
                 entity.Property(e => e.CartId).IsRequired();
                 entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.Quantity).IsRequired();
@@ -362,14 +364,16 @@ namespace Digital_Services_BD.Models
 
 
             //Product Bundle
-            builder.Entity<ProductItemBundle>(entity => {
-                
+            builder.Entity<ProductItemBundle>(entity =>
+            {
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(128);
                 entity.Property(e => e.BundleDiscount).IsRequired().HasColumnType("decimal(19, 4)");
                 entity.Property(e => e.IsActiveNow).IsRequired();
             });
 
-            builder.Entity<ProductItemBundleJoinProductItem>(entity => {
+            builder.Entity<ProductItemBundleJoinProductItem>(entity =>
+            {
                 entity.HasKey(e => new { e.ProductItemBundleId, e.ProductItemId });
                 entity.Property(e => e.ProductItemQuantity).IsRequired().HasDefaultValue(1);
                 entity.HasOne(e => e.ProductItemBundle)
@@ -385,7 +389,8 @@ namespace Digital_Services_BD.Models
 
             });
             //CartProductItemBundle
-            builder.Entity<CartProductItemBundle>(entity => {
+            builder.Entity<CartProductItemBundle>(entity =>
+            {
                 entity.HasKey(e => new { e.CartId, e.ProductItemBundleId });
                 entity.Property(e => e.Quantity).IsRequired().HasDefaultValue(1);
                 entity.HasOne(e => e.Cart)
@@ -400,8 +405,9 @@ namespace Digital_Services_BD.Models
                       .OnDelete(DeleteBehavior.Cascade);
             });
             //Order
-            builder.Entity<Order>(entity => {
-                
+            builder.Entity<Order>(entity =>
+            {
+
                 entity.Property(e => e.ConfirmEmail).IsRequired().HasMaxLength(64);
                 entity.Property(e => e.SendOfferInMail).HasDefaultValue(false);
                 entity.Property(e => e.GrandTotal).IsRequired().HasColumnType("decimal(19, 4)");
@@ -427,14 +433,15 @@ namespace Digital_Services_BD.Models
 
             builder.Entity<OrderItem>(entity =>
             {
-                
+
                 entity.Property(e => e.OrderId).IsRequired();
                 entity.Property(e => e.ProductItemId).IsRequired();
                 entity.Property(e => e.Quantity).IsRequired();
             });
 
             //OrderProductItemBundle
-            builder.Entity<OrderProductItemBundle>(entity => {
+            builder.Entity<OrderProductItemBundle>(entity =>
+            {
                 entity.HasKey(e => new { e.OrderId, e.ProductItemBundleId });
                 entity.Property(e => e.Quantity).IsRequired().HasDefaultValue(1);
                 entity.HasOne(e => e.Order)
@@ -474,7 +481,7 @@ namespace Digital_Services_BD.Models
 
             builder.Entity<PaymentGwConfig>(entity =>
             {
-                
+
                 entity.Property(e => e.GwName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Username).IsRequired();
                 entity.Property(e => e.Password).IsRequired();

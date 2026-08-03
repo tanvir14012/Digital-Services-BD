@@ -1,9 +1,11 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -23,11 +25,11 @@ namespace Digital_Services_BD.Services
             {
                 context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
-            
+
             return model;
         }
 
@@ -38,9 +40,9 @@ namespace Digital_Services_BD.Services
                 var bundle = new ProductItemBundle { Id = ProductItemBundleId };
                 context.ProductItemBundles.Remove(bundle);
                 var deleted = context.SaveChanges() > 0;
-                return deleted ? bundle: null;
+                return deleted ? bundle : null;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -106,7 +108,7 @@ namespace Digital_Services_BD.Services
                 bundle = context.ProductItemBundles
                 .Include(bndl => bndl.ProductItemBundleJoinProductItem)
                 .FirstOrDefault(bndl => bndl.Id == model.Id);
-                if(bundle != null)
+                if (bundle != null)
                 {
                     bundle.ProductItemBundleJoinProductItem.Clear();
                     bundle.Name = model.Name;
@@ -116,7 +118,7 @@ namespace Digital_Services_BD.Services
                     bundle.ProductItemBundleJoinProductItem = model.ProductItemBundleJoinProductItem;
 
                     context.SaveChanges();
-                }   
+                }
             }
             catch (Exception ex)
             {

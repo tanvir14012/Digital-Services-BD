@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Digital_Services_BD.Migrations

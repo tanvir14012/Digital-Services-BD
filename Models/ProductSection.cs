@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Services_BD.Models
 {
@@ -26,8 +27,8 @@ namespace Digital_Services_BD.Models
         public ICollection<int> ProductItemIds { get; set; }
         public virtual ICollection<ProductItem> ProductItems { get; set; }
         //Navigation property
-        public virtual ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set;}
+        public virtual ICollection<ProductSectionJoinProductItem> ProductSectionJoinProductItem { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
-}
+    }
 }

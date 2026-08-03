@@ -1,13 +1,15 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -34,7 +36,7 @@ namespace Digital_Services_BD.Services
             }
             productItem.CreatedOn = DateTime.UtcNow;
             productItem.LastModifiedOn = DateTime.UtcNow;
-            if(productItem.ProductItemFeature != null)
+            if (productItem.ProductItemFeature != null)
             {
                 productItem.ProductItemFeature.CreatedOn = DateTime.UtcNow;
                 productItem.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
@@ -52,7 +54,7 @@ namespace Digital_Services_BD.Services
             try
             {
                 var isSaved = context.SaveChanges() > 0;
-                if(productItem.CategoryIds != null && productItem.CategoryIds.Count() > 0)
+                if (productItem.CategoryIds != null && productItem.CategoryIds.Count() > 0)
                 {
                     AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
                 }
@@ -86,7 +88,8 @@ namespace Digital_Services_BD.Services
                 {
                     DeleteFile(productItem.ImageUrl);
                     return productItem;
-                };
+                }
+                ;
                 return null;
             }
             catch (Exception e)
@@ -157,7 +160,7 @@ namespace Digital_Services_BD.Services
                     .Include(pi => pi.ProductItemCustomFields)
                     .FirstOrDefault(pi => pi.Id == productItem.Id);
 
-                if(prodItemEntity != null)
+                if (prodItemEntity != null)
                 {
                     if (productItem.Image != null)
                     {
@@ -170,26 +173,26 @@ namespace Digital_Services_BD.Services
                         prodItemEntity.ImageUrl = SaveProductImage(productItem.Image);
                     }
 
-                        //Delete all category entries for this product item
-                        RemoveAllCategoryEntriesByItemId(productItem.Id);
+                    //Delete all category entries for this product item
+                    RemoveAllCategoryEntriesByItemId(productItem.Id);
 
-                        //Add categories sent from ui
-                        if (productItem.CategoryIds != null && productItem.CategoryIds.Count > 0)
-                        {
-                            AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
-                        }
-                        if (productItem.ProductItemFeature != null)
-                        {
-                            prodItemEntity.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
-                        }
-                        prodItemEntity.LastModifiedOn = DateTime.UtcNow;
+                    //Add categories sent from ui
+                    if (productItem.CategoryIds != null && productItem.CategoryIds.Count > 0)
+                    {
+                        AddProdItemToCategories(productItem.Id, productItem.CategoryIds);
+                    }
+                    if (productItem.ProductItemFeature != null)
+                    {
+                        prodItemEntity.ProductItemFeature.LastModifiedOn = DateTime.UtcNow;
+                    }
+                    prodItemEntity.LastModifiedOn = DateTime.UtcNow;
 
-                        prodItemEntity.ProductItemCustomFields.Clear();
-                        productItem.ProductItemCustomFields.ToList()
-                            .ForEach(item => prodItemEntity.ProductItemCustomFields.Add(item));
-                        context.ProductItems.Update(prodItemEntity);
-                        context.SaveChanges();
-                    
+                    prodItemEntity.ProductItemCustomFields.Clear();
+                    productItem.ProductItemCustomFields.ToList()
+                        .ForEach(item => prodItemEntity.ProductItemCustomFields.Add(item));
+                    context.ProductItems.Update(prodItemEntity);
+                    context.SaveChanges();
+
                 }
                 return prodItemEntity;
             }
@@ -273,7 +276,8 @@ namespace Digital_Services_BD.Services
         }
         private IEnumerable<ProductCategory> GetProductItemCategories(int productItemId)
         {
-            var query = from category in context.ProductCategories join
+            var query = from category in context.ProductCategories
+                        join
                         itemcategoryjoin in context.ProductItemJoinProductCategory
                         on category.Id equals itemcategoryjoin.ProductCategoryId
                         where itemcategoryjoin.ProductItemId == productItemId
@@ -292,7 +296,7 @@ namespace Digital_Services_BD.Services
 
         private bool AddProductPrice(int productItemId, IEnumerable<ProductItemPrice> prices)
         {
-            foreach(var priceObj in prices)
+            foreach (var priceObj in prices)
             {
                 context.ProductItemPrices.Add(new ProductItemPrice
                 {
@@ -305,7 +309,7 @@ namespace Digital_Services_BD.Services
                     Vat = priceObj.Vat
                 });
             }
-            
+
             try
             {
                 return context.SaveChanges() > 0;
@@ -322,11 +326,11 @@ namespace Digital_Services_BD.Services
             //Add rows from the set
             foreach (var catgId in prodCategoryIds)
             {
-                    context.ProductItemJoinProductCategory.Add(new ProductItemJoinProductCategory
-                    {
-                        ProductCategoryId = catgId,
-                        ProductItemId = productItemId
-                    });
+                context.ProductItemJoinProductCategory.Add(new ProductItemJoinProductCategory
+                {
+                    ProductCategoryId = catgId,
+                    ProductItemId = productItemId
+                });
             }
             try
             {
@@ -347,7 +351,7 @@ namespace Digital_Services_BD.Services
             {
                 context.SaveChanges();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }

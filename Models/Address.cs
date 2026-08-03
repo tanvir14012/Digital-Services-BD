@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Digital_Services_BD.Models
         public string CustomerId { get; set; }
         //True means home address
         public AddressType AddressType { get; set; }
-        [Display(Name ="Address 1")]
+        [Display(Name = "Address 1")]
         public string AddressLineOne { get; set; }
         [Display(Name = "Address 2")]
         public string AddressLineTwo { get; set; }

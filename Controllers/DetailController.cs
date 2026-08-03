@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Digital_Services_BD.Services;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Services_BD.Controllers
@@ -22,10 +24,10 @@ namespace Digital_Services_BD.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromRoute] int id)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var productItem = await productItemOps.GetProductItemAsync(id);
-                if(productItem != null)
+                if (productItem != null)
                 {
                     ViewBag.Message = TempData["Message"];
                     ViewBag.AlertClass = TempData["AlertClass"];

@@ -1,13 +1,15 @@
-﻿using Digital_Services_BD.Models;
-using Digital_Services_BD.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -413,7 +415,7 @@ namespace Digital_Services_BD.Services
                                .ThenInclude(dbi => dbi.ProductStock)
                   .FirstOrDefaultAsync(o => o.Id == orderId);
 
-                
+
                 if (order != null && order.Transaction.SurjoPayCode == 1000 && order.Deliverable != null && !order.Deliverable.Completed)
                 {
                     //Order items
@@ -478,8 +480,8 @@ namespace Digital_Services_BD.Services
                                         }
                                         else
                                         {
-                                            unpickedDeliverables[join.ProductItem.Id] = new ProductItemAndQty 
-                                            { 
+                                            unpickedDeliverables[join.ProductItem.Id] = new ProductItemAndQty
+                                            {
                                                 ProductItem = join.ProductItem,
                                                 Quantity = count
                                             };
@@ -537,12 +539,12 @@ namespace Digital_Services_BD.Services
                         order.Deliverable.Completed = true;
                         order.Status = OrderStatus.COMPLETED;
                     }
-                    else if(unpickedDeliverables.Any())
+                    else if (unpickedDeliverables.Any())
                     {
                         order.Status = OrderStatus.PARTIAL_COMPLETED;
                     }
                     await context.SaveChangesAsync();
-                    
+
                 }
 
                 await transaction.CommitAsync();
@@ -589,7 +591,8 @@ namespace Digital_Services_BD.Services
                             order.Deliverable.DeliverableItems.Count(di => di.OrderItemId == orderItem.Id);
                         if (required > 0)
                         {
-                            unpickedDeliverables.Add(orderItem.ProductItem.Id, new ProductItemAndQty { 
+                            unpickedDeliverables.Add(orderItem.ProductItem.Id, new ProductItemAndQty
+                            {
                                 ProductItem = orderItem.ProductItem,
                                 Quantity = required
                             });

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +17,7 @@ namespace Digital_Services_BD.Models
         }
         public int Id { get; set; }
         public string PromoCode { get; set; }
-        public string OfferCurrency  { get; set; }
+        public string OfferCurrency { get; set; }
         public string CurrencyCountry { get; set; }
         public decimal Discount { get; set; }
         //Foreign key

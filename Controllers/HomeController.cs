@@ -1,16 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+
 using Digital_Services_BD.Models;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.ViewModels;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Digital_Services_BD.Controllers
 {
@@ -39,7 +41,7 @@ namespace Digital_Services_BD.Controllers
         public async Task<IActionResult> Index()
         {
             var productSections = await productSectionOps.GetAllProductSectionsWithNavigation();
-            foreach(var ps in productSections)
+            foreach (var ps in productSections)
             {
                 ps.ProductItems = ps.ProductSectionJoinProductItem
                     .Select(join => join.ProductItem).Distinct().ToList();
@@ -95,7 +97,7 @@ namespace Digital_Services_BD.Controllers
         {
             return View();
         }
-       
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -105,7 +107,7 @@ namespace Digital_Services_BD.Controllers
 
         public async Task<IActionResult> Search(SearchView model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var products = await searchService.SearchProducts(model);
                 return View(products);

@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
 using Digital_Services_BD.ViewModels;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digital_Services_BD.Controllers
@@ -24,7 +26,7 @@ namespace Digital_Services_BD.Controllers
         public IActionResult Index([FromRoute] int id, [FromQuery] int pageNo = 1,
             [FromQuery] string sortBy = null, [FromQuery] string priceRange = null)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var productGroup = productGroupOps.GetProductGroup(id);
                 if (productGroup != null)
@@ -35,10 +37,10 @@ namespace Digital_Services_BD.Controllers
                     ViewBag.TotalCategory = filteredCategories.TotalCategories;
                     ViewBag.PageNo = pageNo;
                     ViewBag.SortBy = sortBy ?? "m_p";
-                    if(priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$") && priceRange.Length <= 10 )
+                    if (priceRange != null && Regex.IsMatch(priceRange, @"^\d+to\d+$") && priceRange.Length <= 10)
                     {
-                        ViewBag.PriceMin =  Convert.ToInt32(priceRange.Split("to")[0]);
-                        ViewBag.PriceMax =  Convert.ToInt32(priceRange.Split("to")[1]);
+                        ViewBag.PriceMin = Convert.ToInt32(priceRange.Split("to")[0]);
+                        ViewBag.PriceMax = Convert.ToInt32(priceRange.Split("to")[1]);
                     }
                     else
                     {

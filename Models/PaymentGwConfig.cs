@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Digital_Services_BD.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Utilities;
 
 namespace Digital_Services_BD.Models
 {

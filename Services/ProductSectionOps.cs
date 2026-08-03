@@ -1,9 +1,11 @@
-﻿using Digital_Services_BD.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Digital_Services_BD.Models;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Digital_Services_BD.Services
 {
@@ -52,7 +54,8 @@ namespace Digital_Services_BD.Services
                 if (context.SaveChanges() > 0)
                 {
                     return productSection;
-                };
+                }
+                ;
                 return null;
             }
             catch (Exception e)
@@ -166,7 +169,7 @@ namespace Digital_Services_BD.Services
         public IEnumerable<int> GetAvailableRanks()
         {
             var ranks = new List<int>();
-            for(var i = 0; i <= context.ProductSections.Count(); i++)
+            for (var i = 0; i <= context.ProductSections.Count(); i++)
             {
                 ranks.Add(i + 1);
             }

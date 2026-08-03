@@ -1,5 +1,6 @@
-﻿using Digital_Services_BD.Models;
 using System.Collections.Generic;
+
+using Digital_Services_BD.Models;
 
 public class FilteredProductStocks
 {
