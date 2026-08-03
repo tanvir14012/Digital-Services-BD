@@ -388,3 +388,4 @@ coverage-reports/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/appsettings.Development.json

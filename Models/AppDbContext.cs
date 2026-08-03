@@ -1,15 +1,11 @@
-﻿using Digital_Services_BD.Utilities;
+using Digital_Services_BD.Utilities;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SoftFluent.EntityFrameworkCore.DataEncryption;
-using SoftFluent.EntityFrameworkCore.DataEncryption.Providers;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 
 namespace Digital_Services_BD.Models
 {
@@ -19,13 +15,13 @@ namespace Digital_Services_BD.Models
         private readonly byte[] _encryptionKey = new byte[] { 175, 53, 213, 191, 20, 245, 21, 171, 206, 43, 210, 121, 128, 212, 139, 192, 165, 20, 236, 255, 183, 68, 175, 169, 96, 20, 151, 219, 116, 45, 62, 235 };
         private readonly byte[] _encryptionIV = new byte[] { 244, 244, 195, 197, 87, 186, 25, 127, 217, 130, 169, 205, 145, 72, 105, 210 };
         private readonly byte[] _salt = new byte[] { 6, 8, 137, 144, 221, 39, 87, 101, 208, 52, 75, 26, 149, 76, 217, 235 };
-        private readonly IEncryptionProvider _provider;
+        private readonly EncryptionHelper _encryptionHelper;
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             var key = PasswordUtility.PkbDf2(_salt, Convert.ToBase64String(_encryptionKey));
             var iv = PasswordUtility.PkbDf2(_salt, Convert.ToBase64String(_encryptionIV), 16);
-            this._provider = new AesProvider(key, iv);
+            this._encryptionHelper = new EncryptionHelper(key, iv);
         }
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
@@ -69,8 +65,8 @@ namespace Digital_Services_BD.Models
         {
             base.OnModelCreating(builder);
 
-            //Enable encryption
-            builder.UseEncryption(this._provider);
+            //Enable encryption for properties marked with [Encrypted] attribute
+            builder.ApplyEncryption(this._encryptionHelper);
 
             //Address table property design
             builder.Entity<Address>(entity =>
