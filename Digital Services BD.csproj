@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RollForward>LatestMajor</RollForward>
 	  <RootNamespace>Digital_Services_BD</RootNamespace>
     <UserSecretsId>031258c6-6624-4fca-81e6-352758e13c09</UserSecretsId>
   </PropertyGroup>
