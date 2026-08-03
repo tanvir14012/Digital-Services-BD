@@ -227,6 +227,8 @@ END");
         return;
     }
 
+    SetAllConstraintsEnabled(connection, dbTransaction, enabled: false);
+
     int skippedBatchCount = 0;
     foreach (string batch in Regex.Split(scriptContent, @"^\s*GO\s*(?:--.*)?$", RegexOptions.Multiline | RegexOptions.IgnoreCase))
     {
@@ -249,6 +251,8 @@ END");
     insertSeedCommand.CommandText = "INSERT INTO dbo.__SeedScripts (ScriptName) VALUES (@scriptName);";
     AddParameter(insertSeedCommand, "@scriptName", seedScriptName);
     insertSeedCommand.ExecuteNonQuery();
+
+    SetAllConstraintsEnabled(connection, dbTransaction, enabled: true);
 
     transaction.Commit();
     logger.LogInformation("Applied SQL seed from {SeedScriptPath}. Skipped {SkippedBatchCount} database-level batch(es).", seedScriptPath, skippedBatchCount);
@@ -313,6 +317,25 @@ static string RemoveUnsupportedSeedStatements(string batch)
     }
 
     return sanitizedBatch.Trim();
+}
+
+static void SetAllConstraintsEnabled(DbConnection connection, DbTransaction transaction, bool enabled)
+{
+    string commandVerb = enabled ? "WITH CHECK CHECK" : "NOCHECK";
+
+    ExecuteNonQuery(connection, transaction, $@"
+DECLARE @sql NVARCHAR(MAX) = N'';
+
+SELECT @sql += N'ALTER TABLE '
+    + QUOTENAME(SCHEMA_NAME([schema_id]))
+    + N'.'
+    + QUOTENAME([name])
+    + N' {commandVerb} CONSTRAINT ALL;'
+    + CHAR(10)
+FROM sys.tables
+WHERE is_ms_shipped = 0;
+
+EXEC sp_executesql @sql;");
 }
 
 static bool SeedScriptAlreadyApplied(DbConnection connection, DbTransaction transaction, string scriptName)
