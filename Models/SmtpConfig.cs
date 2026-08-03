@@ -20,9 +20,9 @@ namespace Digital_Services_BD.Models
         public short Port { get; set; }
         public bool UseAuthentication { get; set; }
         public bool UseSecureConnection { get; set; }
-        public string CreatedUserId { get; set; }
+        public string? CreatedUserId { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public string UpdatedUserId { get; set; }
+        public string? UpdatedUserId { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
     }
 }

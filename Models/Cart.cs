@@ -13,7 +13,7 @@ namespace Digital_Services_BD.Models
             CartProductItemBundles = new HashSet<CartProductItemBundle>();
         }
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool IsCheckedOut { get; set; } = false;
         //Navigation Property

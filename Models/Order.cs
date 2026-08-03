@@ -25,7 +25,7 @@ namespace Digital_Services_BD.Models
         public int? BillingAddressId { get; set; }
         public virtual Address BillingAddress { get; set; }
         public decimal Subtotal { get; set; }
-        public string PromoCode { get; set; }
+        public string? PromoCode { get; set; }
         public decimal PromoCodeDiscount { get; set; }
         public decimal DiscountTotal { get; set; }
         public decimal TaxesAndFees { get; set; }

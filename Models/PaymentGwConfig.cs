@@ -48,12 +48,12 @@ namespace Digital_Services_BD.Models
         public string FailCallbackUrl { get; set; }
 
         [MaxLength(150)]
-        public string ApiRoot { get; set; }
-        public string Data_a { get; set; }
-        public string Data_b { get; set; }
-        public string Data_c { get; set; }
-        public string Data_d { get; set; }
-        public string Data_e { get; set; }
+        public string? ApiRoot { get; set; }
+        public string? Data_a { get; set; }
+        public string? Data_b { get; set; }
+        public string? Data_c { get; set; }
+        public string? Data_d { get; set; }
+        public string? Data_e { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
     }

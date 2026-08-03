@@ -17,32 +17,32 @@ namespace Digital_Services_BD.Models
         [Encrypted]
         public string SurjoPayOrderId { get; set; }
         public int SurjoPayCode { get; set; }
-        public string SurjoPayMsg { get; set; }
-        public string TrnxMethod { get; set; }
-        public string CardHolderName { get; set; }
-        public string CardNo { get; set; }
-        public string BankTrnxId { get; set; }
-        public string CardIssuerBank { get; set; }
-        public string CardIssuerCountry { get; set; }
-        public string BankStatus { get; set; }
-        public string InvoiceId { get; set; }
-        public string Name { get; set; }
+        public string? SurjoPayMsg { get; set; }
+        public string? TrnxMethod { get; set; }
+        public string? CardHolderName { get; set; }
+        public string? CardNo { get; set; }
+        public string? BankTrnxId { get; set; }
+        public string? CardIssuerBank { get; set; }
+        public string? CardIssuerCountry { get; set; }
+        public string? BankStatus { get; set; }
+        public string? InvoiceId { get; set; }
+        public string? Name { get; set; }
 
         [Encrypted]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Encrypted]
-        public string Phone { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
-        public string Currency { get; set; }
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Currency { get; set; }
         public decimal Amount { get; set; }
-        public string RiskLevel { get; set; }
+        public string? RiskLevel { get; set; }
         public decimal AmountInUSD { get; set; }
         public decimal RateOfUSD { get; set; }
 
         [Encrypted]
-        public string UserVerificationToken { get; set; }
+        public string? UserVerificationToken { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
 

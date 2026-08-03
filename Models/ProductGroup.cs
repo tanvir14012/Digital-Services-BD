@@ -37,13 +37,13 @@ namespace Digital_Services_BD.Models
         public string Overview { get; set; }
         [StringLength(256, ErrorMessage = "What can be done field should contain no more than 256 characters")]
         [Display(Name = "What Can Be Done")]
-        public string WhatCanBeDone { get; set; }
+        public string? WhatCanBeDone { get; set; }
         [StringLength(256, ErrorMessage = "How to consume field should contain no more than 256 characters")]
         [Display(Name = "How To Consume")]
-        public string HowToConsume { get; set; }
+        public string? HowToConsume { get; set; }
 
         [StringLength(256, ErrorMessage = "Limitations field should contain no more than 256 characters")]
-        public string Limitations { get; set; }
+        public string? Limitations { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         //Not mapped to database
