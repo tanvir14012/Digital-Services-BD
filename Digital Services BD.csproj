@@ -45,10 +45,6 @@
     <Content Update="wwwroot\Rotativa\wkhtmltox.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Seed.sql" Condition="Exists('Seed.sql')">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
 	<ItemGroup>
