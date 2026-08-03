@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Data.Common;
+using System.Text.RegularExpressions;
 
 using Digital_Services_BD.Models;
 using Digital_Services_BD.Services;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 using NLog.Web;
 
@@ -164,6 +167,7 @@ app.MapControllerRoute(
 RotativaConfiguration.Setup(app.Environment.WebRootPath);
 
 EnsureDatabaseCreated(app);
+ExecuteSeedSql(app);
 SeedIdentityData(app, configuration);
 
 app.Run();
@@ -173,6 +177,81 @@ static void EnsureDatabaseCreated(WebApplication app)
     using IServiceScope scope = app.Services.CreateScope();
     AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
+}
+
+static void ExecuteSeedSql(WebApplication app)
+{
+    using IServiceScope scope = app.Services.CreateScope();
+    IServiceProvider services = scope.ServiceProvider;
+    ILogger logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("DatabaseSeed");
+    AppDbContext dbContext = services.GetRequiredService<AppDbContext>();
+
+    string[] candidatePaths =
+    {
+        Path.Combine(app.Environment.ContentRootPath, "Seed.sql"),
+        Path.Combine(AppContext.BaseDirectory, "Seed.sql")
+    };
+
+    string? seedScriptPath = candidatePaths.FirstOrDefault(File.Exists);
+    if (seedScriptPath is null)
+    {
+        logger.LogInformation("Skipping SQL seed because Seed.sql was not found.");
+        return;
+    }
+
+    string scriptContent = File.ReadAllText(seedScriptPath);
+    if (string.IsNullOrWhiteSpace(scriptContent))
+    {
+        logger.LogInformation("Skipping SQL seed because Seed.sql is empty.");
+        return;
+    }
+
+    const string seedScriptName = "Seed.sql";
+
+    DbConnection connection = dbContext.Database.GetDbConnection();
+    if (connection.State != System.Data.ConnectionState.Open)
+    {
+        connection.Open();
+    }
+
+    using IDbContextTransaction transaction = dbContext.Database.BeginTransaction();
+    DbTransaction dbTransaction = transaction.GetDbTransaction();
+
+    ExecuteNonQuery(connection, dbTransaction, @"
+IF OBJECT_ID(N'dbo.__SeedScripts', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.__SeedScripts
+    (
+        ScriptName NVARCHAR(260) NOT NULL PRIMARY KEY,
+        AppliedOn DATETIME2 NOT NULL CONSTRAINT DF___SeedScripts_AppliedOn DEFAULT SYSUTCDATETIME()
+    );
+END");
+
+    if (SeedScriptAlreadyApplied(connection, dbTransaction, seedScriptName))
+    {
+        transaction.Commit();
+        logger.LogInformation("Skipping SQL seed because {SeedScriptName} was already applied.", seedScriptName);
+        return;
+    }
+
+    foreach (string batch in Regex.Split(scriptContent, @"^\s*GO\s*(?:--.*)?$", RegexOptions.Multiline | RegexOptions.IgnoreCase))
+    {
+        if (string.IsNullOrWhiteSpace(batch))
+        {
+            continue;
+        }
+
+        ExecuteNonQuery(connection, dbTransaction, batch);
+    }
+
+    using DbCommand insertSeedCommand = connection.CreateCommand();
+    insertSeedCommand.Transaction = dbTransaction;
+    insertSeedCommand.CommandText = "INSERT INTO dbo.__SeedScripts (ScriptName) VALUES (@scriptName);";
+    AddParameter(insertSeedCommand, "@scriptName", seedScriptName);
+    insertSeedCommand.ExecuteNonQuery();
+
+    transaction.Commit();
+    logger.LogInformation("Applied SQL seed from {SeedScriptPath}.", seedScriptPath);
 }
 
 static void SeedIdentityData(WebApplication app, IConfiguration configuration)
@@ -189,4 +268,30 @@ static void SeedIdentityData(WebApplication app, IConfiguration configuration)
     }
 
     IdentitySeedData.CreateAdminEntries(services, configuration);
+}
+
+static bool SeedScriptAlreadyApplied(DbConnection connection, DbTransaction transaction, string scriptName)
+{
+    using DbCommand command = connection.CreateCommand();
+    command.Transaction = transaction;
+    command.CommandText = "SELECT COUNT(1) FROM dbo.__SeedScripts WHERE ScriptName = @scriptName;";
+    AddParameter(command, "@scriptName", scriptName);
+
+    return Convert.ToInt32(command.ExecuteScalar()) > 0;
+}
+
+static void ExecuteNonQuery(DbConnection connection, DbTransaction transaction, string sql)
+{
+    using DbCommand command = connection.CreateCommand();
+    command.Transaction = transaction;
+    command.CommandText = sql;
+    command.ExecuteNonQuery();
+}
+
+static void AddParameter(DbCommand command, string name, object value)
+{
+    DbParameter parameter = command.CreateParameter();
+    parameter.ParameterName = name;
+    parameter.Value = value;
+    command.Parameters.Add(parameter);
 }
