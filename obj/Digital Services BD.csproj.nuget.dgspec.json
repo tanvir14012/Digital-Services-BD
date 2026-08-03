@@ -52,10 +52,6 @@
           "framework": "net8.0",
           "targetAlias": "net8.0",
           "dependencies": {
-            "EntityFrameworkCore.DataEncryption": {
-              "target": "Package",
-              "version": "[3.0.1, )"
-            },
             "MailKit": {
               "target": "Package",
               "version": "[4.17.0, )"

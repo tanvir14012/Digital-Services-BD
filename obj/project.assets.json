@@ -60,22 +60,6 @@
           }
         }
       },
-      "EntityFrameworkCore.DataEncryption/3.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "6.0.0"
-        },
-        "compile": {
-          "lib/net6.0/EntityFrameworkCore.DataEncryption.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/EntityFrameworkCore.DataEncryption.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -2339,26 +2323,6 @@
         "lib/netstandard2.0/BouncyCastle.Cryptography.dll",
         "lib/netstandard2.0/BouncyCastle.Cryptography.xml",
         "packageIcon.png"
-      ]
-    },
-    "EntityFrameworkCore.DataEncryption/3.0.1": {
-      "sha512": "69Fc9EzMczikJyThMWOSKuxlyZuRLpYpHHjoFjIXJt1Qr2qlJlI3Qm+Tbs1ZWueu7k2PXgTyVDa5QgTo+3GGgg==",
-      "type": "package",
-      "path": "entityframeworkcore.dataencryption/3.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE",
-        "README.md",
-        "entityframeworkcore.dataencryption.3.0.1.nupkg.sha512",
-        "entityframeworkcore.dataencryption.nuspec",
-        "icon.png",
-        "lib/net5.0/EntityFrameworkCore.DataEncryption.dll",
-        "lib/net5.0/EntityFrameworkCore.DataEncryption.xml",
-        "lib/net6.0/EntityFrameworkCore.DataEncryption.dll",
-        "lib/net6.0/EntityFrameworkCore.DataEncryption.xml",
-        "lib/netstandard2.0/EntityFrameworkCore.DataEncryption.dll",
-        "lib/netstandard2.0/EntityFrameworkCore.DataEncryption.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -5715,7 +5679,6 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EntityFrameworkCore.DataEncryption >= 3.0.1",
       "MailKit >= 4.17.0",
       "Microsoft.AspNetCore.DataProtection.EntityFrameworkCore >= 8.0.19",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.19",
@@ -5782,10 +5745,6 @@
         "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
-          "EntityFrameworkCore.DataEncryption": {
-            "target": "Package",
-            "version": "[3.0.1, )"
-          },
           "MailKit": {
             "target": "Package",
             "version": "[4.17.0, )"
