@@ -217,8 +217,23 @@ namespace Digital_Services_BD
             //Configure Rotativa for PDF generation
             RotativaConfiguration.Setup(env.WebRootPath);
 
-            //Create admin account and role
-            IdentitySeedData.CreateAdminEntries(app.ApplicationServices, configuration);
+            SeedIdentityData(app);
+        }
+
+        private void SeedIdentityData(IApplicationBuilder app)
+        {
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
+            IServiceProvider services = scope.ServiceProvider;
+            ILogger<Startup> logger = services.GetRequiredService<ILogger<Startup>>();
+            AppDbContext dbContext = services.GetRequiredService<AppDbContext>();
+
+            if (!dbContext.Database.CanConnect())
+            {
+                logger.LogWarning("Skipping identity seed because SQL Server is unavailable.");
+                return;
+            }
+
+            IdentitySeedData.CreateAdminEntries(services, configuration);
         }
     }
 }
