@@ -19,19 +19,19 @@ namespace Digital_Services_BD.Models
         [Encrypted]
         public string MainCode { get; set; }
         [Encrypted]
-        public string AuxiliaryCode { get; set; }
+        public string? AuxiliaryCode { get; set; }
         [Encrypted]
-        public string OptionA { get; set; }
+        public string? OptionA { get; set; }
         [Encrypted]
-        public string OptionB { get; set; }
+        public string? OptionB { get; set; }
         [Encrypted]
-        public string OptionC { get; set; }
+        public string? OptionC { get; set; }
         public int? DeliverableItemId { get; set; }
         public int? DeliverableBundleItemId { get; set; }
-        public string VendorInfo { get; set; }
+        public string? VendorInfo { get; set; }
 
         [MaxLength(500)]
-        public string Remark { get; set; }
+        public string? Remark { get; set; }
         public ProductStockStatus Status { get; set; } = ProductStockStatus.ACTIVE;
         public DateTime CreateTime { get; set; }
         public DateTime LastUpdateTime { get; set; }

@@ -95,8 +95,8 @@ namespace Digital_Services_BD.Models
             //Customer table property design
             builder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.FirstName).IsUnicode().IsRequired().HasMaxLength(16);
-                entity.Property(e => e.LastName).IsUnicode().IsRequired().HasMaxLength(16);
+                entity.Property(e => e.FirstName).IsUnicode().HasMaxLength(16);
+                entity.Property(e => e.LastName).IsUnicode().HasMaxLength(16);
                 entity.Property(e => e.ProfilePicLink).HasMaxLength(64);
                 entity.Property(e => e.BirthDate).IsUnicode();
                 entity.Property(e => e.IdCardNo).IsUnicode().HasMaxLength(16);
