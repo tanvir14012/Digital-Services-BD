@@ -77,6 +77,19 @@ namespace Digital_Services_BD.Seeding
                 return false;
             }
 
+            // Validate that all rows have the expected number of columns
+            int expectedColumnCount = batch.Columns.Length;
+            foreach (string[] row in batch.Rows)
+            {
+                if (row.Length != expectedColumnCount)
+                {
+                    throw new InvalidOperationException(
+                        $"Seed data integrity error for table '{batch.TableName}': " +
+                        $"Expected {expectedColumnCount} columns but found a row with {row.Length} values. " +
+                        $"The seed data file may be corrupted or incomplete. Please regenerate the seed data.");
+                }
+            }
+
             List<int> applicableIndexes = new();
             for (int index = 0; index < batch.Columns.Length; index++)
             {
