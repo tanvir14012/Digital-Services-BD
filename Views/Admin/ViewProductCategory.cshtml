@@ -81,19 +81,19 @@
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item p-0 me-2">
                         <a asp-action="EditProductCategory" asp-controller="Admin" asp-route-id="@Model.Id"
-                           class="btn btn-info text-white" data-bs-toggle="tooltip" data-bs-placement="auto" title="Edit">
+                           class="btn btn-info text-white" data-toggle="tooltip" data-placement="auto" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                     </li>
                     <li class="list-group-item p-0 me-2">
                         <a asp-action="DeleteProductCategory" asp-controller="Admin" asp-route-id="@Model.Id"
-                           class="btn btn-danger text-white" data-bs-toggle="tooltip" data-bs-placement="auto" title="Delete">
+                           class="btn btn-danger text-white" data-toggle="tooltip" data-placement="auto" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
                     </li>
                     <li class="list-group-item p-0 me-2">
                         <a asp-action="ProductCategory" asp-controller="Admin"
-                           class="btn btn-secondary text-white" data-bs-toggle="tooltip" data-bs-placement="auto" title="Back to product category">
+                           class="btn btn-secondary text-white" data-toggle="tooltip" data-placement="auto" title="Back to product category">
                             <i class="fas fa-backward"></i>
                         </a>
                     </li>
@@ -106,7 +106,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 }

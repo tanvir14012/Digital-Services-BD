@@ -24,7 +24,7 @@ namespace Digital_Services_BD.Utilities
         {
             var remoteIp = context.HttpContext.Connection.RemoteIpAddress;
             _logger.LogDebug("Surjopay IPN Remote IpAddress: {RemoteIp}", remoteIp);
-            var ip = (_safelist ?? string.Empty).Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var ip = _safelist.Split(';');
             var badIp = true;
 
             if (remoteIp != null && remoteIp.IsIPv4MappedToIPv6)
@@ -34,7 +34,7 @@ namespace Digital_Services_BD.Utilities
 
             foreach (var address in ip)
             {
-                if (!IPAddress.TryParse(address, out var testIp)) continue;
+                var testIp = IPAddress.Parse(address);
 
                 if (testIp.Equals(remoteIp))
                 {

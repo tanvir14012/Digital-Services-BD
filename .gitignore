@@ -386,13 +386,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /appsettings.Development.json
-
-# Restored from libman.json; CI restores these before building.
-/wwwroot/lib/
-# Local verification logs
-/build.log
-/test.log
-/preview.log
-/publish.log
-/audit.log
-/artifacts/

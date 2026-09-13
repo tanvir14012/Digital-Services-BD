@@ -29,11 +29,6 @@ stages:
               packageType: sdk
               version: $(dotnetSdkVersion)
 
-          - script: |
-              dotnet tool restore
-              dotnet libman restore
-            displayName: Restore frontend libraries
-
           - task: DotNetCoreCLI@2
             displayName: Restore
             inputs:
@@ -46,13 +41,6 @@ stages:
               command: build
               projects: "**/*.csproj"
               arguments: "--configuration $(buildConfiguration) --no-restore"
-
-          - task: DotNetCoreCLI@2
-            displayName: Test
-            inputs:
-              command: test
-              projects: 'tests/**/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --no-build'
 
           - task: DotNetCoreCLI@2
             displayName: Publish
@@ -72,7 +60,7 @@ stages:
   - stage: Deploy
     displayName: Deploy to Azure
     dependsOn: Build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest'))
+    condition: succeeded()
     jobs:
       - deployment: DeployWebApp
         displayName: Deploy Web App

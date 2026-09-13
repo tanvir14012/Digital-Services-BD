@@ -1,4 +1,3 @@
-using Digital_Services_BD.Infrastructure.Security;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,14 +33,13 @@ namespace Digital_Services_BD.Controllers
         private readonly ICompositeViewEngine viewEngine;
         private readonly IEmailService emailService;
         private readonly ICartOps cartOps;
-        private readonly CartCookie cartCookie;
         private readonly IConfiguration configuration;
         private readonly AppDbContext dbContext;
         private readonly IWebHostEnvironment webHostingEnvironment;
 
         public AccountController(SignInManager<Customer> signInManager, UserManager<Customer> userManager, ILogger<AccountController> logger,
             ICompositeViewEngine viewEngine, IEmailService emailService, ICartOps cartOps, IConfiguration configuration, AppDbContext dbContext,
-            IWebHostEnvironment webHostingEnvironment, CartCookie cartCookie)
+            IWebHostEnvironment webHostingEnvironment)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
@@ -49,7 +47,6 @@ namespace Digital_Services_BD.Controllers
             this.viewEngine = viewEngine;
             this.emailService = emailService;
             this.cartOps = cartOps;
-            this.cartCookie = cartCookie;
             this.configuration = configuration;
             this.dbContext = dbContext;
             this.webHostingEnvironment = webHostingEnvironment;
@@ -90,7 +87,7 @@ namespace Digital_Services_BD.Controllers
                         ViewBag.HeadingClass = "alert-success";
                         ViewBag.Message = "We have sent a confirmation email with a link to " + model.Email +
                             ". Please click on the link to activate your account. You can log in after successful activation";
-                        ViewBag.DynamicMarkup = await ConvertRazorToString.RenderRazorViewToStringAsync(this, viewEngine, "EmailNotSentMsg", null);
+                        ViewBag.DynamicMarkup = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "EmailNotSentMsg", null);
                         ViewBag.Action1 = "SignIn";
                         ViewBag.Controller1 = "Account";
                         ViewBag.LinkText1 = "Sign In";
@@ -134,7 +131,7 @@ namespace Digital_Services_BD.Controllers
                             FromName = configuration["Contact:Name"],
                             Subject = "Email verification",
                             ToAddresses = new List<string> { model.Email },
-                            BodyHtmlPart = await ConvertRazorToString.RenderRazorViewToStringAsync(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel),
+                            BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel),
                             EmailLinkedResources = new List<EmailLinkedResource>
                             {
                                 logoLinkedRsrc
@@ -226,7 +223,7 @@ namespace Digital_Services_BD.Controllers
                         FromName = "Verification",
                         Subject = "Email verification",
                         ToAddresses = new List<string> { user.Email },
-                        BodyHtmlPart = await ConvertRazorToString.RenderRazorViewToStringAsync(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel)
+                        BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "SignUpEmailConfirmTemplate", tempModel)
                     };
                     await emailService.SendEmailAsync(email);
                     ViewBag.Heading = "Success !";
@@ -275,7 +272,8 @@ namespace Digital_Services_BD.Controllers
                 if (signInAttempt.Succeeded)
                 {
                     // Merge carts if applicable
-                    int? cartId = cartCookie.Read(Request);
+                    string cartIdCookie = Request.Cookies["CartId"];
+                    int? cartId = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
                     if (cartId != null)
                     {
                         var cart = await cartOps.MergeCarts((int)cartId, user.Id);
@@ -385,7 +383,7 @@ namespace Digital_Services_BD.Controllers
                         FromName = configuration["Contact:Name"],
                         Subject = "Reset you password",
                         ToAddresses = new List<string> { user.Email },
-                        BodyHtmlPart = await ConvertRazorToString.RenderRazorViewToStringAsync(this, viewEngine, "ResetPasswordEmailTemplate", tempModel),
+                        BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine, "ResetPasswordEmailTemplate", tempModel),
                         EmailLinkedResources = new List<EmailLinkedResource>
                         {
                             logoLinkedRsrc
@@ -466,7 +464,8 @@ namespace Digital_Services_BD.Controllers
             if (signInManager.IsSignedIn(User))
             {
                 // Merge carts if applicable
-                int? cartId = cartCookie.Read(Request);
+                string cartIdCookie = Request.Cookies["CartId"];
+                int? cartId = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$")) ? Convert.ToInt32(cartIdCookie) : (int?)null;
                 if (cartId != null)
                 {
                     var cart = await cartOps.MergeCarts((int)cartId, User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -478,7 +477,7 @@ namespace Digital_Services_BD.Controllers
 
                 await signInManager.SignOutAsync();
                 Response.Cookies.Delete("CartId");
-                return LocalRedirect(Url.IsLocalUrl(returnUrl) ? returnUrl : "/");
+                return LocalRedirect(returnUrl);
             }
 
             return Redirect("~/");
@@ -487,7 +486,9 @@ namespace Digital_Services_BD.Controllers
 
         private void AddCartCookie(int cartId)
         {
-            cartCookie.Write(Response, cartId);
+            var option = new CookieOptions();
+            option.Expires = DateTime.Now.AddMonths(6);
+            Response.Cookies.Append("CartId", cartId.ToString(), option);
         }
 
     }

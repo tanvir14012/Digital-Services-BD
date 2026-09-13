@@ -8,20 +8,15 @@
     ViewData["Title"] = "Nilu Digital";
 }
 
-<section class="store-hero" aria-labelledby="store-title">
-    <p class="eyebrow">Nilu Digital Store</p>
-    <h1 id="store-title">Your digital essentials, all in one place.</h1>
-    <p class="mb-0 mt-3">Explore digital products and service packages. Find the right fit for work, learning, and everyday life.</p>
-</section>
 <!-- Carousel -->
 @if (Model.Carousel != null)
 {
     <div class="row ps-3 pe-3">
-        <div id="carousel" class="carousel carousel-fade slide w-100 mt-2" data-bs-ride="carousel" data-bs-interval="90000">
+        <div id="carousel" class="carousel carousel-fade slide w-100 mt-2" data-ride="carousel" data-interval="90000">
             <ul class="carousel-indicators z-8 bg-dark m-auto">
                 @for (var i = 0; i < Model.Carousel.CarouselJoinCarouselImage.Count; i++)
                 {
-                    <li class='@(i == 0 ? "active": "")' data-bs-target="#carousel" data-bs-slide-to="@i"></li>
+                    <li class='@(i == 0 ? "active": "")' data-target="#carousel" data-slide-to="@i"></li>
                 }
 
             </ul>
@@ -36,10 +31,10 @@
                 }
             </div>
             <!-- Prev, Next Buttons -->
-            <a class="carousel-control-prev" href="#carousel" role="button" data-bs-slide="prev">
+            <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon bg-light rounded-circle scale-2x"></span>
             </a>
-            <a class="carousel-control-next" href="#carousel" role="button" data-bs-slide="next">
+            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
                 <span class="carousel-control-next-icon bg-light rounded-circle scale-2x"></span>
             </a>
             <!-- Prev, Next Buttons -->
@@ -75,7 +70,37 @@
                      col-md-@(productItems.Count() >= MaxColumnAllowedInLandingPageSectionRow/2 ? 12/(MaxColumnAllowedInLandingPageSectionRow/2): 12/productItems.Count())
                      col-sm-@(productItems.Count() >= 2 ? 6: 12/productItems.Count()) py-0 px-1 m-0">
                     <div class="card p-0 m-0 me-1 mt-2 mb-3 h-300" data-serial="@j" @(j > MaxColumnAllowedInLandingPageSectionRow - 1 ? "hidden" : "")>
-                        <partial name="_ProductCardContent" model="product" />
+                        <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Detail" asp-route-id="@product.Id">
+                            <div class="position-absolute right-0 m-2 px-2 py-1 badge badge-pill badge-@(product.ProductStockCount.Count > 0 ? "info": "danger")">
+                                @(product.ProductStockCount.Count > 0 ? "in stock": "out of stock")
+                            </div>
+                            <div class="overflow-hidden max-h-240">
+                                <img class="img-fluid" src="\@product.ImageUrl" />
+                            </div>
+                            <div class="d-flex flex-grow-1">
+                                <div class="w-100 align-self-end">
+                                    <div class="p-1">
+                                        <strong>@product.Name</strong>
+                                    </div>
+                                    <div class="p-1 bg-light-gray">
+                                        <div class="price-font">
+                                            <strong>@string.Format("{0:0.00}", priceObj.Price - priceObj.Discount)</strong>
+                                            <sup>BDT</sup>
+                                        </div>
+                                        @if (priceObj.Discount > 0)
+                                        {
+                                            <div class="text-black">
+                                                <s class="text-muted">@priceObj.Price</s>
+                                                <sup class="text-muted">BDT</sup>
+                                                <span class="ms-1 bg-primary p-1">
+                                                    <span class="text-white">@string.Format("{0:0.00}", (priceObj.Discount * 100) / priceObj.Price)% OFF</span>
+                                                </span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             }
@@ -93,7 +118,7 @@
 <hr />
 <div class="row ps-4">
     <div class="card-deck row p-0 ps-1" id="section_9999">
-        @{
+        @{ 
             int idx = -1;
         }
         @foreach (var bundle in Model.Bundles)

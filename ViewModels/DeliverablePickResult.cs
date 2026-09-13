@@ -15,6 +15,5 @@ namespace Digital_Services_BD.ViewModels
         }
         public IList<ProductItemAndQty> UnpickedProducts { get; set; }
         public Order Order { get; set; }
-        public bool IsNewDelivery { get; set; }
     }
 }

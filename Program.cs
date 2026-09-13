@@ -1,4 +1,3 @@
-using Digital_Services_BD.Constants;
 using System.Globalization;
 
 using Digital_Services_BD.Models;
@@ -32,12 +31,7 @@ builder.Host.UseNLog();
 IConfiguration configuration = builder.Configuration;
 IServiceCollection services = builder.Services;
 
-services.AddControllersWithViews(options =>
-{
-    options.Filters.Add<Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute>();
-    options.Filters.Add<Digital_Services_BD.Infrastructure.Filters.LayoutDataFilter>();
-});
-services.AddScoped<Digital_Services_BD.Infrastructure.Security.CartCookie>();
+services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 services.AddDbContextPool<AppDbContext>(options =>
 {
@@ -115,7 +109,7 @@ services.Configure<AwsSesConfig>(configuration.GetSection("AwsSesConfig"));
 
 services.AddAuthorization(options =>
 {
-    options.AddPolicy(StoreDefaults.AdminPolicy, policy => policy.RequireAssertion(context =>
+    options.AddPolicy("AdminFullAccess", policy => policy.RequireAssertion(context =>
     {
         return AuthorizePolicyAssertions.AdminFullAccess(context, configuration);
     }));
@@ -150,13 +144,6 @@ else
     app.UseHsts();
 }
 
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.XContentTypeOptions = "nosniff";
-    context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
-    context.Response.Headers.XFrameOptions = "SAMEORIGIN";
-    await next();
-});
 app.UseHttpsRedirection();
 
 app.UseRequestLocalization(options =>
@@ -177,9 +164,8 @@ app.MapControllerRoute(
 
 RotativaConfiguration.Setup(app.Environment.WebRootPath);
 
-if (configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup")) EnsureDatabaseCreated(app);
-if (app.Environment.IsDevelopment() && configuration.GetValue<bool>("Database:ImportSnapshot"))
-    ApplicationSnapshotSeeder.Seed(app.Services);
+EnsureDatabaseCreated(app);
+ApplicationSnapshotSeeder.Seed(app.Services);
 
 app.Run();
 
