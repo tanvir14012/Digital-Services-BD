@@ -32,6 +32,7 @@ namespace Digital_Services_BD.Controllers
 
         [ServiceFilter(typeof(SurjopayIPNIpFilter))]
         [HttpPost]
+        [IgnoreAntiforgeryToken] // Server callback is authenticated by the gateway/IP filter, not a browser cookie.
         public async Task<IActionResult> Webhook()
         {
             try

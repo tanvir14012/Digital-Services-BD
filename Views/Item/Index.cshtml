@@ -38,7 +38,7 @@
 <div class="row p-2">
     <div class="col-lg-3 col-md-4 col-sm-12 ps-0">
         <div class="navbar-expand-md">
-            <button class="btn btn-light navbar-toggler m-2" data-toggle="collapse" data-target="#filterContent">
+            <button class="btn btn-light navbar-toggler m-2" data-bs-toggle="collapse" data-bs-target="#filterContent">
                 <i class="fas fa-filter"></i>
                 <span>Filter</span>
             </button>
@@ -46,12 +46,12 @@
                 <div id="accordion" class="w-100 link-normal ms-1">
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter1" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-bs-target="#filter1" data-bs-toggle="collapse">
                                 Price Range
                                 <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
-                        <div class="collapse show" @*data-parent="#accordion"*@ id="filter1">
+                        <div class="collapse show" @*data-bs-parent="#accordion"*@ id="filter1">
                             <div class="card-body">
                                 <div id="priceRange"></div>
                                 <div id="priceLabel" for="priceRange" class="text-center mt-2">@ViewBag.PriceMin<sup>BDT</sup>&nbsp;&mdash;&nbsp;@ViewBag.PriceMax<sup>BDT</sup></div>
@@ -62,12 +62,12 @@
 
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter2" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-bs-target="#filter2" data-bs-toggle="collapse">
                                 Subcategory
                                 <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
-                        <div class="collapse show" @*data-parent="#accordion"*@ id="filter2">
+                        <div class="collapse show" @*data-bs-parent="#accordion"*@ id="filter2">
                             <div class="card-body p-0 ps-2 pe-2">
                                 <ul class="list-group list-group-flush link-normal">
                                     @foreach (var productCategory in Categories)
@@ -86,12 +86,12 @@
 
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter3" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-bs-target="#filter3" data-bs-toggle="collapse">
                                 Category
                                 <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
-                        <div class="collapse show" @*data-parent="#accordion"*@ id="filter3">
+                        <div class="collapse show" @*data-bs-parent="#accordion"*@ id="filter3">
                             <div class="card-body p-0 ps-2 pe-2">
                                 <ul class="list-group list-group-flush link-normal">
                                     @foreach (var productGroup in allProductGroups)
@@ -133,7 +133,7 @@
                             <a class="text-decoration-none text-black d-flex flex-column h-100" asp-action="Index" asp-controller="Detail" asp-route-id="@Model[i].Id">
                                 <div class="position-absolute right-0 mx-4 my-2 px-2 py-1 badge badge-pill badge-@(Model[i].ProductStockCount.Count > 0 ? "info": "danger")">
                                     @(Model[i].ProductStockCount.Count > 0 ? "in stock": "out of stock")
-                                </div>    
+                                </div>
                                 <div class="overflow-hidden max-h-240">
                                         <img class="img-fluid" src="\@Model[i].ImageUrl" />
                                 </div>
@@ -251,7 +251,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-bs-toggle="tooltip"]').tooltip();
             //Select change
             $("#sortBy").change(function () {
                 window.location.href = locationOrigin + "?sortBy=" + $(this).val() + "&priceRange=" +
