@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ using Rotativa.AspNetCore;
 
 namespace Digital_Services_BD.Controllers
 {
+    [Authorize]
     [Route("[controller]/{action=Index}")]
     public class OrdersController : Controller
     {
@@ -107,7 +109,7 @@ namespace Digital_Services_BD.Controllers
         public async Task<IActionResult> ExportInvoice(int orderId)
         {
             var order = await orderOps.GetOrder(orderId);
-            if (order != null)
+            if (order != null && order.CustomerId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 ViewData["Shopname"] = configuration["Contact:Name"];
                 ViewData["ShopAddress1"] = configuration["Contact:Address1"];

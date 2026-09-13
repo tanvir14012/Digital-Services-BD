@@ -1,24 +1,20 @@
-﻿$(document).ready(function () {
-    //Price submit
-    $("#goPrice").click(function () {
-        let priceRange = $("#priceRange").slider("option", "values")[0].toString().concat("to").concat($("#priceRange").slider("option", "values")[1].toString());
-        $("#priceRangeInput").val(priceRange);
-        $("#pageNoInput").val("1");
-        $("#searchForm").submit();
+(function () {
+    "use strict";
+    const form = document.getElementById("searchForm");
+    if (!form) return;
+    const page = document.getElementById("pageNoInput");
+    document.getElementById("goPrice").addEventListener("click", () => {
+        const from = document.getElementById("priceFrom");
+        const to = document.getElementById("priceTo");
+        to.setCustomValidity(Number(to.value) < Number(from.value) ? "Maximum price must be at least the minimum price." : "");
+        if (!form.reportValidity()) return;
+        document.getElementById("priceRangeInput").value = `${from.value}to${to.value}`;
+        page.value = "1";
+        form.requestSubmit();
     });
-
-    //Pagination
-    $(".pagination li").click(function (evt) {
-        let page = $(evt.target).closest("a").attr("value");
-        if (parseInt(page)) {
-            $("#pageNoInput").val(page);
-            $("#searchForm").submit();
-        }
-    });
-
-    //Sort by filter change 
-    $("#sortBy").change(function () {
-        $("#pageNoInput").val("1");
-        $("#searchForm").submit();
-    });
-});
+    document.getElementById("sortBy").addEventListener("change", () => { page.value = "1"; form.requestSubmit(); });
+    form.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => {
+        page.value = button.dataset.page;
+        form.requestSubmit();
+    }));
+})();

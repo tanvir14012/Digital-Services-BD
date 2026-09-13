@@ -1,10 +1,10 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     $("#skip").click(function () {
         $("#isAnonymous").val(true);
         $("form").submit();
     });
 
-    $("[data-toggle='tooltip']").tooltip();
+    $("[data-bs-toggle='tooltip']").tooltip();
 
     //Division change
     $("#BillingAddress_State").change(function () {

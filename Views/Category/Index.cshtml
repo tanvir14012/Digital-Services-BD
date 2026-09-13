@@ -34,7 +34,7 @@
     <!-- Left sidebar -->
     <div class="col-lg-3 col-md-4 col-sm-12 ps-0">
         <div class="navbar-expand-md">
-            <button class="btn btn-light navbar-toggler m-2" data-toggle="collapse" data-target="#filterContent">
+            <button class="btn btn-light navbar-toggler m-2" data-bs-toggle="collapse" data-bs-target="#filterContent">
                 <i class="fas fa-filter"></i>
                 <span>Filter</span>
             </button>
@@ -42,12 +42,12 @@
                 <div id="accordion" class="w-100 link-normal ms-1">
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter1" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-bs-target="#filter1" data-bs-toggle="collapse">
                                 Price Range
                                 <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
-                        <div class="collapse show" @*data-parent="#accordion"*@ id="filter1">
+                        <div class="collapse show" @*data-bs-parent="#accordion"*@ id="filter1">
                             <div class="card-body">
                                 <div id="priceRange"></div>
                                 <div id="priceLabel" for="priceRange" class="text-center mt-2">@ViewBag.PriceMin<sup>BDT</sup>&nbsp;&mdash;&nbsp;@ViewBag.PriceMax<sup>BDT</sup></div>
@@ -58,12 +58,12 @@
 
                     <div class="card">
                         <div class="card-header p-0">
-                            <button class="btn btn-light w-100 text-start ps-2" data-target="#filter2" data-toggle="collapse">
+                            <button class="btn btn-light w-100 text-start ps-2" data-bs-target="#filter2" data-bs-toggle="collapse">
                                 Category
                                 <i class="float-end fas fa-angle-down text-muted"></i>
                             </button>
                         </div>
-                        <div class="collapse show" @*data-parent="#accordion"*@ id="filter2">
+                        <div class="collapse show" @*data-bs-parent="#accordion"*@ id="filter2">
                             <div class="card-body p-0 ps-2 pe-2">
                                 <ul class="list-group list-group-flush link-normal">
                                     @foreach (var productGroup in productGroups)
@@ -113,24 +113,24 @@
                                             <h5>@Model[i].Name</h5>
                                             <ul class="list-group list-group-horizontal m-1 justify-content-between">
                                                 <li class="list-group-item list-unstyled p-0 border-0">
-                                                    <span class="p-2 mx-2" data-popper-arrow data-toggle="tooltip" data-placement="auto" title="@Model[i].Overview">
+                                                    <span class="p-2 mx-2" data-popper-arrow data-bs-toggle="tooltip" data-bs-placement="auto" title="@Model[i].Overview">
                                                         <i class="fas fa-book"></i>
                                                     </span>
                                                 </li>
                                                 <li class="list-group-item list-unstyled p-0 border-0">
-                                                    <span class="p-2" data-toggle="tooltip" data-placement="auto" title="@Model[i].WhatCanBeDone">
+                                                    <span class="p-2" data-bs-toggle="tooltip" data-bs-placement="auto" title="@Model[i].WhatCanBeDone">
                                                         <i class="fas fa-info-circle"></i>
 
                                                     </span>
                                                 </li>
                                                 <li class="list-group-item list-unstyled p-0 border-0">
-                                                    <span class="p-2 mx-2" data-toggle="tooltip" data-placement="auto" title="@Model[i].HowToConsume">
+                                                    <span class="p-2 mx-2" data-bs-toggle="tooltip" data-bs-placement="auto" title="@Model[i].HowToConsume">
                                                         <i class="fas fa-comment"></i>
 
                                                     </span>
                                                 </li>
                                                 <li class="list-group-item list-unstyled p-0 border-0">
-                                                    <span class="p-2" data-toggle="tooltip" data-placement="auto" title="@Model[i].Limitations">
+                                                    <span class="p-2" data-bs-toggle="tooltip" data-bs-placement="auto" title="@Model[i].Limitations">
                                                         <i class="fas fa-exclamation-circle"></i>
 
                                                     </span>
@@ -241,7 +241,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip({
+            $('[data-bs-toggle="tooltip"]').tooltip({
                 position: {
                     my: 'center top',
                     at: 'center bottom+10'

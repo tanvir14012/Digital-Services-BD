@@ -19,8 +19,8 @@ namespace Digital_Services_BD.Models
         public int Id { get; set; }
         public int CartId { get; set; }
         public string ConfirmEmail { get; set; }
-        public string CustomerId { get; set; }
-        public virtual Customer Customer { get; set; }
+        public string? CustomerId { get; set; }
+        public virtual Customer? Customer { get; set; }
 
         public int? BillingAddressId { get; set; }
         public virtual Address BillingAddress { get; set; }
