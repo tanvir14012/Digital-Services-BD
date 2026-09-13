@@ -1,3 +1,4 @@
+using Digital_Services_BD.Infrastructure.Security;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -36,6 +37,7 @@ namespace Digital_Services_BD.Controllers
     {
         private readonly ILogger<CartController> logger;
         private readonly ICartOps cartOps;
+        private readonly CartCookie cartCookie;
         private readonly IOrderOps orderOps;
         private readonly IPaymentTransactionOps paymentTransactionOps;
         private readonly IConfiguration configuration;
@@ -49,10 +51,11 @@ namespace Digital_Services_BD.Controllers
         public CartController(ILogger<CartController> logger, ICartOps cartOps, IOrderOps orderOps,
             IPaymentTransactionOps paymentTransactionOps, IConfiguration configuration, AppDbContext dbContext,
             ISurjopayService surjopayService, IEmailService emailService, ICompositeViewEngine viewEngine,
-            IEncryptionService encryptionService, IWebHostEnvironment webHostEnvironment)
+            IEncryptionService encryptionService, IWebHostEnvironment webHostEnvironment, CartCookie cartCookie)
         {
             this.logger = logger;
             this.cartOps = cartOps;
+            this.cartCookie = cartCookie;
             this.orderOps = orderOps;
             this.paymentTransactionOps = paymentTransactionOps;
             this.configuration = configuration;
@@ -69,11 +72,10 @@ namespace Digital_Services_BD.Controllers
         {
             if (ModelState.IsValid)
             {
-                string cartIdCookie = Request.Cookies["CartId"];
-                int? cartId = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$"))
-                    ? Convert.ToInt32(cartIdCookie) : (int?)null;
+                int? cartId = cartCookie.Read(Request);
 
                 var cartView = await cartOps.GetCart(cartId);
+                if (cartView == null) return View(null);
                 cartView.Message = TempData["Message"]?.ToString() ?? cartView.Message;
                 cartView.UserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
@@ -81,9 +83,7 @@ namespace Digital_Services_BD.Controllers
                 {
                     if (cartView.IsCreatedNow)
                     {
-                        var option = new CookieOptions();
-                        option.Expires = DateTime.Now.AddMonths(6);
-                        Response.Cookies.Append("CartId", cartView.CartId.ToString(), option);
+                        cartCookie.Write(Response, cartView.CartId);
                     }
                     return View(cartView);
                 }
@@ -98,7 +98,7 @@ namespace Digital_Services_BD.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await cartOps.DoesCartExist(cartId))
+                if (cartCookie.Read(Request) == cartId && await cartOps.DoesCartExist(cartId))
                 {
                     //Delete item
                     if (cartItemIdToBeDeleted != null)
@@ -113,7 +113,8 @@ namespace Digital_Services_BD.Controllers
                     {
                         foreach (var itemIdQty in cartItemIdNquantity)
                         {
-                            await cartOps.UpdateQuantity(itemIdQty.CartItemId, itemIdQty.Quantity);
+                            if (await dbContext.CartItems.AnyAsync(item => item.Id == itemIdQty.CartItemId && item.CartId == cartId))
+                                await cartOps.UpdateQuantity(itemIdQty.CartItemId, itemIdQty.Quantity);
                         }
                     }
                     //Delete bundle
@@ -144,9 +145,7 @@ namespace Digital_Services_BD.Controllers
         {
             if (ModelState.IsValid)
             {
-                string cartIdCookie = Request.Cookies["CartId"];
-                int cartIdFromCookie = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$"))
-                    ? Convert.ToInt32(cartIdCookie) : -1;
+                int cartIdFromCookie = cartCookie.Read(Request) ?? -1;
 
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var cartItemView = await cartOps.AddCartItemtoCart(cartIdFromCookie, userId, itemId, addToCartQuantity);
@@ -154,9 +153,7 @@ namespace Digital_Services_BD.Controllers
                 {
                     if (cartItemView.IsCartCreatedWhenAdded)
                     {
-                        var cookieOps = new CookieOptions();
-                        cookieOps.Expires = DateTime.UtcNow.AddMonths(6);
-                        Response.Cookies.Append("CartId", cartItemView.CreatedCartId.ToString(), cookieOps);
+                        cartCookie.Write(Response, cartItemView.CreatedCartId);
                     }
                     if (cartItemView.Message != null)
                     {
@@ -174,9 +171,9 @@ namespace Digital_Services_BD.Controllers
                     TempData["Message"] = "Sorry, the item could not be added to your cart. Please try again later.";
                     TempData["AlertClass"] = "alert alert-warning alert-dismissible fade show";
                 }
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(Url.IsLocalUrl(returnUrl) ? returnUrl : "/");
             }
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -185,17 +182,13 @@ namespace Digital_Services_BD.Controllers
         {
             if (ModelState.IsValid)
             {
-                string cartIdCookie = Request.Cookies["CartId"];
-                int cartIdFromCookie = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$"))
-                    ? Convert.ToInt32(cartIdCookie) : -1;
-                var cartItemView = await cartOps.AddCartItemtoCart(cartIdFromCookie, userId2, itemId2, buyNowQuantity);
+                int cartIdFromCookie = cartCookie.Read(Request) ?? -1;
+                var cartItemView = await cartOps.AddCartItemtoCart(cartIdFromCookie, User.FindFirstValue(ClaimTypes.NameIdentifier), itemId2, buyNowQuantity);
                 if (cartItemView != null)
                 {
                     if (cartItemView.IsCartCreatedWhenAdded)
                     {
-                        var cookieOps = new CookieOptions();
-                        cookieOps.Expires = DateTime.UtcNow.AddMonths(6);
-                        Response.Cookies.Append("CartId", cartItemView.CreatedCartId.ToString(), cookieOps);
+                        cartCookie.Write(Response, cartItemView.CreatedCartId);
                     }
 
                     return RedirectToAction("Index", new { userId = userId2 });
@@ -204,10 +197,10 @@ namespace Digital_Services_BD.Controllers
                 {
                     TempData["Message"] = "Sorry, the item could not be added to your cart. Please try again later.";
                     TempData["AlertClass"] = "alert alert-warning alert-dismissible fade show";
-                    return LocalRedirect(returnUrl2);
+                    return LocalRedirect(Url.IsLocalUrl(returnUrl2) ? returnUrl2 : "/");
                 }
             }
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -216,9 +209,7 @@ namespace Digital_Services_BD.Controllers
         {
             if (ModelState.IsValid)
             {
-                string cartIdCookie = Request.Cookies["CartId"];
-                int cartIdFromCookie = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$"))
-                    ? Convert.ToInt32(cartIdCookie) : -1;
+                int cartIdFromCookie = cartCookie.Read(Request) ?? -1;
 
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var cartItemView = await cartOps.AddProductItemBundletoCart(cartIdFromCookie, userId, itemId, addToCartQuantity);
@@ -226,9 +217,7 @@ namespace Digital_Services_BD.Controllers
                 {
                     if (cartItemView.IsCartCreatedWhenAdded)
                     {
-                        var cookieOps = new CookieOptions();
-                        cookieOps.Expires = DateTime.UtcNow.AddMonths(6);
-                        Response.Cookies.Append("CartId", cartItemView.CreatedCartId.ToString(), cookieOps);
+                        cartCookie.Write(Response, cartItemView.CreatedCartId);
                     }
                     if (cartItemView.Message != null)
                     {
@@ -246,9 +235,9 @@ namespace Digital_Services_BD.Controllers
                     TempData["Message"] = "Sorry, the package could not be added to your cart. Please try again later.";
                     TempData["AlertClass"] = "alert alert-warning alert-dismissible fade show";
                 }
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(Url.IsLocalUrl(returnUrl) ? returnUrl : "/");
             }
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -257,17 +246,13 @@ namespace Digital_Services_BD.Controllers
         {
             if (ModelState.IsValid)
             {
-                string cartIdCookie = Request.Cookies["CartId"];
-                int cartIdFromCookie = (cartIdCookie != null && Regex.IsMatch(cartIdCookie, @"^\d{0,2147483647}$"))
-                    ? Convert.ToInt32(cartIdCookie) : -1;
-                var cartItemView = await cartOps.AddProductItemBundletoCart(cartIdFromCookie, userId2, itemId2, buyNowQuantity);
+                int cartIdFromCookie = cartCookie.Read(Request) ?? -1;
+                var cartItemView = await cartOps.AddProductItemBundletoCart(cartIdFromCookie, User.FindFirstValue(ClaimTypes.NameIdentifier), itemId2, buyNowQuantity);
                 if (cartItemView != null)
                 {
                     if (cartItemView.IsCartCreatedWhenAdded)
                     {
-                        var cookieOps = new CookieOptions();
-                        cookieOps.Expires = DateTime.UtcNow.AddMonths(6);
-                        Response.Cookies.Append("CartId", cartItemView.CreatedCartId.ToString(), cookieOps);
+                        cartCookie.Write(Response, cartItemView.CreatedCartId);
                     }
 
                     return RedirectToAction("Index", new { userId = userId2 });
@@ -276,16 +261,17 @@ namespace Digital_Services_BD.Controllers
                 {
                     TempData["Message"] = "Sorry, the package could not be added to your cart. Please try again later.";
                     TempData["AlertClass"] = "alert alert-warning alert-dismissible fade show";
-                    return LocalRedirect(returnUrl2);
+                    return LocalRedirect(Url.IsLocalUrl(returnUrl2) ? returnUrl2 : "/");
                 }
             }
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
         public async Task<IActionResult> EmptyCart(int cartId, string userId)
         {
+            if (cartCookie.Read(Request) != cartId) return Forbid();
             var isEmpty = await cartOps.EmptyCart(cartId);
             if (!isEmpty)
             {
@@ -299,6 +285,7 @@ namespace Digital_Services_BD.Controllers
         [ValidateAntiForgeryToken()]
         public async Task<IActionResult> Checkout(CartConfirm model)
         {
+            if (!ModelState.IsValid || cartCookie.Read(Request) != model.CartId) return BadRequest();
             var cartViewModel = await cartOps.GetCart(model.CartId);
             if (cartViewModel != null && (cartViewModel.CartItems.Count() + cartViewModel.CartItemBundlesViewModel.Count() > 0))
             {
@@ -320,6 +307,7 @@ namespace Digital_Services_BD.Controllers
                     Id = 0,
                     CartId = model.CartId,
                     CustomerId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    IsAnonymousOrder = User.Identity?.IsAuthenticated != true,
                     ConfirmEmail = model.Email,
                     SendOfferInMail = model.SendOffers,
                     PriceCurrency = cartViewModel.PriceCurrency,
@@ -363,12 +351,13 @@ namespace Digital_Services_BD.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
-        public async Task<IActionResult> Payment(Order order)
+        public async Task<IActionResult> Payment(PaymentRequest request)
         {
+            var order = new Order { Id = request.Id, BillingAddress = request.BillingAddress.ToAddress() };
             if (ModelState.IsValid)
             {
                 var orderFromDb = await orderOps.GetOrder(order.Id);
-                if (orderFromDb != null)
+                if (orderFromDb != null && orderFromDb.CartId == cartCookie.Read(Request) && orderFromDb.Status == OrderStatus.AWAITING)
                 {
                     try
                     {
@@ -383,9 +372,9 @@ namespace Digital_Services_BD.Controllers
                         var storeId = (int)tokenResp["store_id"];
                         // CREATING LIST OF POST DATA
                         var postData = new Dictionary<string, dynamic>();
-                        float amount = (float)(orderFromDb.GrandTotal + orderFromDb.DiscountTotal);
-                        float discount = (float)orderFromDb.DiscountTotal;
-                        decimal disPercent = ((100 * orderFromDb.DiscountTotal) / (orderFromDb.GrandTotal + orderFromDb.DiscountTotal));
+                        decimal amount = orderFromDb.GrandTotal + orderFromDb.DiscountTotal;
+                        decimal discount = orderFromDb.DiscountTotal;
+                        decimal disPercent = amount > 0 ? 100 * discount / amount : 0;
                         var returnUrlVerificationToken = encryptionService.Encrypt(PasswordUtility.GenerateSecuredGuid());
 
                         postData.Add("token", token);
@@ -417,7 +406,7 @@ namespace Digital_Services_BD.Controllers
 
                         JObject checkoutResp = await surjopayService.Pay(postData);
                         if (checkoutResp["customer_order_id"].ToString() == order.Id.ToString() &&
-                            Convert.ToDouble(checkoutResp["amount"].ToString()) == Convert.ToDouble(amount - discount) &&
+                            checkoutResp["amount"].Value<decimal>() == amount - discount &&
                             checkoutResp["currency"].ToString().ToUpper() == "BDT" &&
                             !string.IsNullOrEmpty(checkoutResp["checkout_url"].ToString()))
                         {
@@ -426,7 +415,8 @@ namespace Digital_Services_BD.Controllers
                                 SurjoPayOrderId = checkoutResp["sp_order_id"].ToString(),
                                 OrderId = orderFromDb.Id,
                                 Amount = orderFromDb.GrandTotal,
-                                Status = "Initiated"
+                                Status = "Initiated",
+                                UserVerificationToken = returnUrlVerificationToken
                             };
                             var dbTrnx = await paymentTransactionOps.AddPaymentTransaction(transaction);
                             if (dbTrnx != null)
@@ -469,14 +459,16 @@ namespace Digital_Services_BD.Controllers
                     var decryptedUserVerfToken = encryptionService.Decrypt(verificationToken);
                     var decryptedUserVerfToken2 = encryptionService.Decrypt(transaction.UserVerificationToken);
                     //If successful payment, dispatch deliverables
-                    if (transaction.SurjoPayCode == 1000 && decryptedUserVerfToken == decryptedUserVerfToken2)
+                    if (transaction.SurjoPayCode == 1000 && PaymentVerification.Matches(decryptedUserVerfToken, decryptedUserVerfToken2))
                     {
-                        var orderDetails = await dbContext.Orders.AsNoTracking()
+                        var orderDetails = await dbContext.Orders.AsNoTracking().Include(o => o.Customer)
                             .FirstOrDefaultAsync(o => o.Id == transaction.OrderId);
 
-                        //if (orderDetails.Status == OrderStatus.PROCESSING)
+                        // Allocation returns whether this request performed the initial delivery.
                         {
                             var pickResult = await orderOps.PickDeliverables(transaction.OrderId);
+                            if (pickResult?.Order == null) throw new InvalidOperationException("Order allocation failed.");
+                            if (!pickResult.IsNewDelivery) return View(pickResult.Order);
 
 
                             var smtpConfig = await dbContext.SmtpConfigs.AsNoTracking().FirstOrDefaultAsync();
@@ -521,14 +513,14 @@ namespace Digital_Services_BD.Controllers
                                 }
                             };
 
-                            //Order Summary 
+                            //Order Summary
                             var email = new Email
                             {
                                 FromAddress = smtpConfig?.FromAddress,
                                 FromName = configuration["Contact:Name"],
                                 Subject = "Order summary",
                                 ToAddresses = new List<string> { orderDetails.ConfirmEmail },
-                                BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine,
+                                BodyHtmlPart = await ConvertRazorToString.RenderRazorViewToStringAsync(this, viewEngine,
                                     "OrderInvoiceEmailTemplate", templateModel),
                                 EmailLinkedResources = new List<EmailLinkedResource>
                                 {
@@ -552,7 +544,7 @@ namespace Digital_Services_BD.Controllers
                                 FromName = configuration["Contact:Name"],
                                 Subject = "Order delivery",
                                 ToAddresses = new List<string> { orderDetails.ConfirmEmail },
-                                BodyHtmlPart = ConvertRazorToString.RenderRazorViewToString(this, viewEngine,
+                                BodyHtmlPart = await ConvertRazorToString.RenderRazorViewToStringAsync(this, viewEngine,
                                     "OrderDispatchEmailTemplate", templateModel),
                                 EmailLinkedResources = new List<EmailLinkedResource>
                                 {
@@ -580,7 +572,7 @@ namespace Digital_Services_BD.Controllers
             }
             catch (Exception ex)
             {
-
+                logger.LogError(ex, "Unable to process the payment return.");
             }
 
             ViewBag.Heading = "Incomplete Payment!";

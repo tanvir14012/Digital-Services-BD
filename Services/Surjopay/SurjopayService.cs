@@ -19,17 +19,20 @@ namespace Digital_Services_BD.Services.Surjopay
     {
         private readonly AppDbContext context;
         private readonly IHttpClientFactory httpClientFactory;
-        private readonly PaymentGwConfig paymentGwConfig;
+        private PaymentGwConfig? cachedConfig;
+        private async Task<PaymentGwConfig> GetConfigurationAsync() => cachedConfig ??= await context.PaymentGwConfigs.AsNoTracking().FirstOrDefaultAsync()
+            ?? throw new InvalidOperationException("Payment gateway is not configured.");
 
         public SurjopayService(AppDbContext context, IHttpClientFactory httpClientFactory)
         {
             this.context = context;
             this.httpClientFactory = httpClientFactory;
-            this.paymentGwConfig = context.PaymentGwConfigs.AsNoTracking().FirstOrDefault();
+
         }
 
         public async Task<JObject> InitAndGetToken()
         {
+            var paymentGwConfig = await GetConfigurationAsync();
             var login = new
             {
                 username = paymentGwConfig.Username,
@@ -38,14 +41,14 @@ namespace Digital_Services_BD.Services.Surjopay
             var json = JsonConvert.SerializeObject(login);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
             $"{paymentGwConfig.ApiRoot}{paymentGwConfig.Data_a}")
             {
                 Content = content
             };
 
             var httpClient = this.httpClientFactory.CreateClient();
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+            using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 var respContent = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -60,17 +63,18 @@ namespace Digital_Services_BD.Services.Surjopay
 
         public async Task<JObject> Pay(IDictionary<string, dynamic> postData)
         {
+            var paymentGwConfig = await GetConfigurationAsync();
             var json = JsonConvert.SerializeObject(postData);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+            using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
             $"{paymentGwConfig.ApiRoot}{paymentGwConfig.Data_b}")
             {
                 Content = content
             };
 
             var httpClient = this.httpClientFactory.CreateClient();
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+            using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 var respContent = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -85,6 +89,7 @@ namespace Digital_Services_BD.Services.Surjopay
 
         public async Task<PaymentTransaction> ValidateOrder(string sujopayOrderId, string authToken)
         {
+            var paymentGwConfig = await GetConfigurationAsync();
             var transaction = await context.PaymentTransactions
                 .Include(trnx => trnx.Order)
                 .FirstOrDefaultAsync(trnx => trnx.SurjoPayOrderId == sujopayOrderId);
@@ -97,7 +102,7 @@ namespace Digital_Services_BD.Services.Surjopay
                 });
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
+                using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post,
                         $"{paymentGwConfig.ApiRoot}{paymentGwConfig.Data_c}")
                 {
                     Headers =
@@ -108,7 +113,7 @@ namespace Digital_Services_BD.Services.Surjopay
                 };
 
                 var httpClient = this.httpClientFactory.CreateClient();
-                var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+                using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     var respContent = await httpResponseMessage.Content.ReadAsStringAsync();

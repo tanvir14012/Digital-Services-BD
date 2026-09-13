@@ -1,137 +1,109 @@
 # Digital Services BD
 
-Digital Services BD is an ASP.NET Core MVC e-commerce-style platform for selling digital products and bundled service items, with account management, cart/checkout, order workflows, admin management, search, and payment gateway integration.
+ASP.NET Core MVC e-commerce store for digital products and bundles, with guest and customer carts, order management, stock delivery, admin management, email, and ShurjoPay integration.
 
-## Current Stack
+## Stack
 
-- **Backend:** ASP.NET Core MVC on **.NET 10**
-- **ORM/Data:** Entity Framework Core (SQL Server)
-- **Auth:** ASP.NET Core Identity
-- **UI:** Razor Views + Bootstrap **5.3.3** (+ compatibility layer for legacy Bootstrap 4-style attributes/classes)
-- **Client libs:** LibMan-managed assets under `wwwroot/lib`
-- **Logging:** NLog
-- **PDF:** Rotativa + wkhtmltopdf runtime assets
+- .NET 10; ASP.NET Core Identity; Entity Framework Core / SQL Server 10.0.12.
+- Razor views, [Bootstrap 5.3.8](https://getbootstrap.com/docs/5.3/), [jQuery 4.0.0](https://jquery.com/upgrade-guide/4.0/).
+- jQuery Migrate 4.0.2 supports the remaining third-party widgets; validation 1.22.1, unobtrusive validation 4.0.0, jQuery UI 1.14.2.
+- LibMan restores frontend dependencies from pinned versions in `libman.json`.
+- NLog, MailKit, Rotativa/wkhtmltopdf.
 
-## Solution Architecture
+## Folder structure
 
-The project follows a layered, MVC-centric architecture:
-
-- `Controllers/`  
-  HTTP endpoints and request orchestration.
-- `Services/`  
-  Business/use-case services (cart, orders, catalog ops, payment transaction ops, search, email, encryption, gateway clients).
-- `Models/`  
-  Domain entities, EF Core model configuration, identity entities.
-- `ViewModels/`  
-  View-specific DTOs and request/response models.
-- `Views/`  
-  Razor UI for storefront, account, admin, and shared layouts.
-- `Utilities/`  
-  Cross-cutting helpers, custom attributes, policy/assertion helpers, filters.
-- `Resources/`  
-  Localization resources.
-- `wwwroot/`  
-  Static assets (CSS/JS/images/libman libraries).
-
-## Request Pipeline and Platform Behavior
-
-Configured in `Startup.cs` and `Program.cs`:
-
-- SQL Server context registration with pooling (`AppDbContext`)
-- ASP.NET Identity with token providers and cookie policy
-- Localization support (`en-US`, `bn-BD`)
-- Authorization policy: `AdminFullAccess`
-- Data protection keys persisted in DB
-- Rotativa setup for PDF generation
-- Production middleware hardening:
-  - exception handler route (`/Home/Error`)
-  - HSTS + HTTPS redirection
-
-## Prerequisites
-
-- .NET SDK **10.x**
-- SQL Server instance
-- Git
-
-## Local Development Setup
-
-1. Clone and restore:
-   ```bash
-   dotnet restore "Digital Services BD.csproj"
-   ```
-2. Restore client libraries:
-   ```bash
-   dotnet tool restore
-   dotnet libman restore
-   ```
-3. Configure secrets/settings (recommended via environment variables or user secrets; avoid hardcoding secrets in committed files):
-   - `ConnectionStrings__SqlServerConn`
-   - `SeedIdentity__Admin__UserName`
-   - `SeedIdentity__Admin__Email`
-   - `SeedIdentity__Admin__Password`
-   - `Encryption__Key`
-   - Payment/email provider sections as needed
-4. Apply migrations:
-   ```bash
-   dotnet ef database update
-   ```
-5. Run:
-   ```bash
-   dotnet run --project "Digital Services BD.csproj"
-   ```
-
-## Build
-
-```bash
-dotnet build "Digital Services BD.csproj" -c Release
+```text
+Controllers/                 MVC endpoints, authorization and request handling
+Constants/                   Shared store defaults
+Extensions/                  Pagination and SQL-translatable query helpers
+Infrastructure/
+  Data/                      AppDbContext and existing EF mappings
+  Filters/                   Layout data preparation outside Razor views
+  Security/                  Protected, HttpOnly, Secure cart cookies
+Models/                      Domain, identity and configuration models
+Services/
+  Catalog/                   Products, groups, categories, search and carousel
+  Checkout/                  Cart operations, pricing and stock normalization
+  Communication/             Email and asynchronous Razor rendering
+  Orders/                    Order management and stock fulfillment
+  Payments/                  Payment transaction persistence
+  Security/                  Existing encryption service
+  Surjopay/                  Gateway HTTP integration
+ViewModels/                  Presentation models and restricted checkout inputs
+Views/                       MVC views and reusable product-card content
+Utilities/                   Existing validation, localization and encryption helpers
+Migrations/                  Existing migration history
+Seeding/                     Optional development snapshot importer
+Resources/                   Localization resources
+wwwroot/css/                 Shared styles and responsive storefront theme
+wwwroot/js/                  Page scripts
+wwwroot/lib/                 Generated by LibMan; excluded from Git
+wwwroot/Rotativa/             Existing native PDF runtime assets
+tests/Store.Tests/           Commerce regression tests
 ```
 
-## Database and Identity Notes
+Existing public namespaces, controller routes and migration identities are retained when moving files. The solution stays a single MVC application with a separate test project: services own business logic; filters prepare shared layout data; views render it. New abstractions are limited to concrete reuse needs.
 
-- On startup, admin identity seeding is performed by `IdentitySeedData.CreateAdminEntries(...)`.
-- Ensure seed credentials are provided securely per environment.
+## Setup
 
-## Frontend Notes (Bootstrap 5 Migration)
+Requires .NET SDK 10.x, SQL Server and HTTPS for authentication/cart cookies.
 
-- Layouts now reference Bootstrap 5.
-- Compatibility helpers are intentionally included:
-  - `wwwroot/js/site.js` (legacy `data-toggle/data-target/...` bridging)
-  - `wwwroot/css/bootstrap4-compat.css` (legacy utility aliases)
-- This preserves existing UI behavior while allowing gradual modernization of legacy markup.
+```powershell
+dotnet tool restore
+dotnet libman restore
+dotnet restore "Digital Services BD.sln"
+dotnet build "Digital Services BD.sln" -c Release
+dotnet test "Digital Services BD.sln" -c Release --no-build
+```
 
-## CI/CD: Azure DevOps Pipeline
+Build outputs and downloaded client libraries are no longer tracked in Git. Restore LibMan assets before building or publishing a clean checkout. Do not rely on an old `bin/`, `obj/` or `wwwroot/lib/` directory.
 
-Pipeline file: `azure-pipelines.yml`
+Configure the SQL connection through user secrets or environment variables:
 
-### Stages
+```powershell
+dotnet user-secrets set "ConnectionStrings:SqlServerConn" "Server=YOUR_SERVER;Database=StoreDb;Integrated Security=True;Encrypt=True"
+```
 
-1. **Build**
-   - Install .NET SDK
-   - Restore, Build, Publish
-   - Publish artifact (`drop`)
-2. **Deploy**
-   - Download build artifact
-   - Deploy ZIP package to Azure App Service via `AzureWebApp@1`
+Set `AllowedHosts` to the deployment hostname. Use a trusted SQL Server certificate in production. HTTPS termination and forwarded headers must match your trusted proxy configuration.
 
-### Required Pipeline Variable Updates
+The existing gateway and SMTP settings are managed through the application configuration/admin flows. Seed admin username, email and password must be supplied explicitly if using the identity seeding utility; there is no built-in password fallback.
 
-Set these in Azure DevOps before deployment:
+Apply database changes through the deployment workflow after reviewing the generated migration script:
 
-- `azureSubscription`: Azure service connection name
-- `appName`: Azure Web App name
+```powershell
+dotnet ef migrations script --idempotent --output migration.sql
+dotnet ef database update
+dotnet run --project "Digital Services BD.csproj"
+```
 
-## Deployment Targets
+Startup **does not migrate or import data by default**. `Database__ApplyMigrationsOnStartup=true` explicitly enables startup migrations. The existing snapshot importer deletes/replaces data; it requires both the Development environment and `Database__ImportSnapshot=true`. Use it only with a disposable development database. No database migration or snapshot import is performed by the regression tests.
 
-The current pipeline deploys to **Azure App Service**. If Azure Cloud Services (classic/extended support) is required, replace deploy tasks with the appropriate packaging/deployment tasks for that hosting model.
+## Commerce changes
 
-## Security and Operations Recommendations
+- Guest carts are independent. First sign-in adopts/merges the guest cart; repeat merges do not duplicate quantities, and another customer's cart cannot be claimed.
+- Cart IDs use authenticated data-protection cookies. Posted cart IDs must match the protected cookie; item deletion/update also checks the owning cart. Buy-now customer identity comes from authenticated claims.
+- Old unsigned guest cart cookies are intentionally rejected. Those visitors receive a new cart; signed-in customers recover their saved cart on sign-in. Keep the data-protection key store persistent across deployments and instances.
+- Emptying a cart removes its lines, preserving the cart record and order references. Pending gateway transactions are excluded from orphan-order cleanup.
+- Bundle component discounts and quantities are counted once. Missing/invalid prices are removed from carts; pricing is centralized in `CartPricing`.
+- Stock normalization shares availability across standalone and bundled lines. Fulfillment uses serializable transactions, stable stock ordering and a per-request exclusion list to avoid allocating the same code twice. SQL deadlocks can still require a retry; failure rolls back the transaction.
+- Payment amounts remain decimal throughout checkout. Payment input accepts only order ID and billing fields; totals and ownership come from stored data. Invoice export requires the authenticated order owner.
+- Payment return verification rejects null/empty decrypted tokens and compares valid tokens in constant time.
+- Repeat completed delivery callbacks do not resend the initial delivery emails. Email delivery is still synchronous and has no durable outbox: failed SMTP/PDF delivery needs operational follow-up.
+- Search filters and counts before pagination, sorts by discounted price, and uses stable ordering. Catalog pagination is bounded without exception-based slicing.
+- Razor email rendering is asynchronous and does not overwrite the controller's view model.
 
-- Move all credentials and secret keys to secret stores (Azure Key Vault / pipeline secret variables / user secrets for local).
-- Keep `appsettings*.json` environment-safe and non-sensitive.
-- Restrict production IP safelists and payment callbacks to trusted ranges only.
+## UI
 
-## Repository Hygiene
+Shared layouts contain no service injections. A result filter supplies navigation, account state and cart counts. Product cards share a partial; storefront and search use responsive grids, accessible controls, visible focus indicators and lazy-loaded product images. Bootstrap data attributes use the Bootstrap 5 names. Search uses native price inputs and a native sort selector, reducing widget dependencies on that page. Other legacy widgets retain jQuery Migrate compatibility.
 
-- `.editorconfig` enforces consistent formatting for C#, Razor/HTML, JSON/YAML/XML.
-- `.gitignore` includes modern .NET/IDE/build/test artifacts.
+## Validation and release checks
 
+Run the regression suite above (25 tests). It covers guest isolation, cart ownership, merging, empty-cart persistence, protected cookies, bundle totals, stock normalization, single-order stock allocation, search ordering/filtering and SQL Server query translation.
+
+Most business tests use EF InMemory. They **do not prove SQL Server concurrency behavior**; the SQL translation test generates SQL without executing it. Before production release, exercise simultaneous purchases against a staging SQL Server, gateway success/failure/cancel/replay, partial fulfillment, SMTP delivery, PDF generation, customer sign-in and admin CRUD. No real payment or customer email is sent during this refactor's checks.
+
+Legacy nullable-reference warnings remain across existing models/controllers/services. Legacy encryption keys and encrypted stock data require a planned, reversible key migration; do not simply replace keys or existing values will become unreadable. The native wkhtmltopdf engine also remains a deployment dependency. These are known remaining risks, not covered by a guarantee of zero bugs or a performance benchmark.
+
+## CI/CD
+
+`azure-pipelines.yml` restores frontend libraries, restores/builds .NET projects, runs tests and publishes the web artifact. Deployment is restricted to successful builds of `master`, excluding pull-request builds. Configure `azureSubscription`, `appName`, production secrets and the .NET 10 hosting runtime. Keep production environment approvals enabled in Azure DevOps.

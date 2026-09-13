@@ -25,15 +25,16 @@ namespace Digital_Services_BD.Models
         /// <returns></returns>
         public static async Task CreateAdminAccountAndRole(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            serviceProvider = serviceProvider.CreateScope().ServiceProvider;
+            using var scope = serviceProvider.CreateScope();
+            serviceProvider = scope.ServiceProvider;
             UserManager<Customer> userManager = serviceProvider.GetRequiredService<UserManager<Customer>>();
             RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var cartOps = serviceProvider.GetRequiredService<ICartOps>();
 
             //Get admin details from config file
-            string userName = configuration["SeedIdentity:Admin:UserName"] ?? "tanvir14012@gmail.com";
-            string email = configuration["SeedIdentity:Admin:Email"] ?? "tanvir14012@gmail.com";
-            string password = configuration["SeedIdentity:Admin:Password"] ?? "TaNvIr14012!@#";
+            string userName = configuration["SeedIdentity:Admin:UserName"] ?? throw new InvalidOperationException("Seed admin credentials must be configured explicitly.");
+            string email = configuration["SeedIdentity:Admin:Email"] ?? throw new InvalidOperationException("Seed admin credentials must be configured explicitly.");
+            string password = configuration["SeedIdentity:Admin:Password"] ?? throw new InvalidOperationException("Seed admin credentials must be configured explicitly.");
             string adminRole = configuration["SeedIdentity:Admin:Role"] ?? "Admin";
 
             if (await userManager.FindByNameAsync(userName) == null)

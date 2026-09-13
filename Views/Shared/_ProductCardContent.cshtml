@@ -1,0 +1,30 @@
+@model ProductItem
+@{
+    var price = Model.ProductItemPrice.FirstOrDefault(p => p.PriceCurrency == "BDT");
+}
+@if (price != null)
+{
+    <a class="product-card-link text-decoration-none d-flex flex-column h-100" asp-controller="Detail" asp-action="Index" asp-route-id="@Model.Id">
+        <div class="product-card-image">
+            <img src="/@Model.ImageUrl?.TrimStart('/', '\\')" alt="@Model.Name" loading="lazy" decoding="async" width="320" height="220" />
+            @if (Model.ProductStockCount != null)
+            {
+                <span class="badge @(Model.ProductStockCount.Count > 0 ? "text-bg-success" : "text-bg-secondary")">
+                    @(Model.ProductStockCount.Count > 0 ? "In stock" : "Out of stock")
+                </span>
+            }
+        </div>
+        <div class="p-3 d-flex flex-column flex-grow-1">
+            <h3 class="h6 mb-3">@Model.Name</h3>
+            <div class="mt-auto">
+                <strong class="fs-5">@((price.Price - price.Discount).ToString("N2")) <span class="small">BDT</span></strong>
+                @if (price.Discount > 0 && price.Price > 0)
+                {
+                    <div class="small mt-1"><s class="text-secondary">@price.Price.ToString("N2") BDT</s>
+                        <span class="badge text-bg-success ms-2">@((price.Discount * 100 / price.Price).ToString("0.#"))% off</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </a>
+}
